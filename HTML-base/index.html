@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ExpireWise</title>
+  <style>
+
+
+    		@font-face { font-family: g1; src: url('hwyuenei64.ttf'); }
+			
+
+			.g1{
+				font-family: g1;
+			}
+
+			
+    .coverAll {
+      z-index: 1000;
+      position: fixed;
+      bottom: 5%; 
+      right: 5%;
+    }
+
+    
+    .bgimg {
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      height: 130%;
+      top: 0;
+      left: 0;
+     object-fit: cover;
+    }
+
+    
+    .login-stuff {
+      position: relative;
+      z-index: 2;
+      color: black;
+    }
+
+    .logoslog {
+    	 position: relative;
+    	 bottom: -220px;
+    	 text-align: center;
+    }
+
+   
+    .w3-animate-slide-up {
+      animation: slideUp 1.4s forwards;
+    }
+
+    @keyframes slideUp {
+      from { top: 0; }
+      to { top: -105%; } 
+    }
+
+    
+    body {
+      background-color: #BFCBCE;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+   
+    button {
+      z-index: 1000;
+    }
+
+    .buttonLOL:hover {
+ 	 cursor: pointer;
+	}
+   
+    #login-part {
+      position: relative;
+      width: 100%;
+      height: 100vh;
+    }
+  </style>
+</head>
+<body>
+  <div id="login-part">
+    <img class="bgimg" src="./img/bgdrop.png" alt="Background">
+    <div class="login-stuff">
+    	<div class="logoslog">
+    		<img class="topimg" style="width: 80%;" src="./img/logo.png" alt="Background">
+    		<h4 class="g1" style="color: #BFCBCE;">Cook smart, waste less.</h4>
+    	</div>
+     <div class="buttonLOL" onclick="animateSlide();" style="text-align: center; position: relative; left: 10%; width: 80%; height: 60px; border-radius: 30px; top: 250px; background-color: #7DA7BD;">
+     	<h3 class="g1" style="line-height: 50px;font-size: 100%; position: relative; vertical-align: middle; margin-top: 20px; color: white;">START SAVING FOOD NOW</h3>
+     	<img class="topimg" style="width: 30px; position: relative; top: -35px;" src="./img/down.png" >
+     </div>
+    </div>
+  </div>
+
+  <!--
+  <div class="coverAll">
+    <button onclick="animateSlide();">Animate</button>
+    <button onclick="location.reload()">Reset</button>
+  </div>
+-->
+  <script>
+    function animateSlide() {
+      document.getElementById("login-part").classList.add("w3-animate-slide-up");
+    }
+  </script>
+</body>
+</html>
