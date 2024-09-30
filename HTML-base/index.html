@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
   <title>ExpireWise</title>
   <style>
 
@@ -18,14 +19,14 @@
     .coverAll {
       z-index: 1000;
       position: fixed;
-      bottom: 5%; 
-      right: 5%;
+      top: 20px; 
+      right: 16px;
     }
 
     
     .bgimg {
       position: absolute;
-      z-index: 1;
+      z-index: 10;
       width: 100%;
       height: 130%;
       top: 0;
@@ -36,8 +37,18 @@
     
     .login-stuff {
       position: relative;
-      z-index: 2;
+      z-index: 50;
       color: black;
+    }
+
+    .underScreen {
+      
+      position: absolute;
+      z-index: 1;
+      width: 100%;
+      height: 130%;
+      top: 0;
+      left: 0;
     }
 
     .logoslog {
@@ -68,7 +79,6 @@
       align-items: center;
     }
 
-   
     button {
       z-index: 1000;
     }
@@ -99,12 +109,18 @@
     </div>
   </div>
 
-  <!--
-  <div class="coverAll">
-    <button onclick="animateSlide();">Animate</button>
-    <button onclick="location.reload()">Reset</button>
+
+  <div class="underScreen">
+    <br>
+  <h1>test</h1>
   </div>
--->
+
+
+
+  <div class="coverAll">
+    <i class="fa-solid fa-circle-question fa-xl" style="color: #BFCBCE;" onclick="info()"></i>   
+  </div>
+
   <script>
     function animateSlide() {
       document.getElementById("login-part").classList.add("w3-animate-slide-up");
