@@ -8,11 +8,11 @@
   <style>
 
 
-    		@font-face { font-family: g1; src: url('hwyuenei64.ttf'); }
+    		@font-face { font-family: g; src: url('hwyuenei64.ttf'); }
 			
 
-			.g1{
-				font-family: g1;
+			.g{
+				font-family: g;
 			}
 
 			
@@ -92,6 +92,14 @@
       width: 100%;
       height: 100vh;
     }
+
+    .text-part {
+      position: relative;
+      top: 15%;
+      text-align: center;
+      align-items: center;
+      line-height: 2px;
+    }
   </style>
 </head>
 <body>
@@ -100,10 +108,10 @@
     <div class="login-stuff">
     	<div class="logoslog">
     		<img class="topimg" style="width: 80%;" src="./img/logo.png" alt="Background">
-    		<h4 class="g1" style="color: #BFCBCE;">Cook smart, waste less.</h4>
+    		<h4 class="g" style="color: #BFCBCE;">Cook smart, waste less.</h4>
     	</div>
      <div class="buttonLOL" onclick="animateSlide();" style="text-align: center; position: relative; left: 10%; width: 80%; height: 60px; border-radius: 30px; top: 250px; background-color: #7DA7BD;">
-     	<h3 class="g1" style="line-height: 50px;font-size: 100%; position: relative; vertical-align: middle; margin-top: 20px; color: white;">START SAVING FOOD NOW</h3>
+     	<h3 class="g" style="line-height: 50px;font-size: 100%; position: relative; vertical-align: middle; margin-top: 20px; color: white;">START SAVING FOOD NOW</h3>
      	<img class="topimg" style="width: 30px; position: relative; top: -35px;" src="./img/down.png" >
      </div>
     </div>
@@ -111,8 +119,12 @@
 
 
   <div class="underScreen">
-    <br>
-  <h1>test</h1>
+  
+    <div class="text-part" style="color: white;">
+      <h1 class="g" style="font-size: 250%;">Log In</h1>
+      <div style="width: 60%; height: 3px; background-color: white; position: relative; display: flex; left: 20%; border-radius: 5px;"></div>
+      <h5 class="g" style="margin: 10px; font-size: 80%">You are just few clicks away from saving food</h5>
+    </div>
   </div>
 
 
