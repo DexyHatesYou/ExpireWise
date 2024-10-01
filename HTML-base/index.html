@@ -100,6 +100,41 @@
       align-items: center;
       line-height: 2px;
     }
+
+    .inputs {
+      position: relative;
+      top: 20%;
+      text-align: left;
+      align-items: center;
+      margin-left: 10% ;
+      color: white;
+    }
+
+    input {
+      height: 45px;
+      width: 85%;
+      border-radius: 15px;
+      border: none;
+    }
+
+    label {
+      font-size: 100%;
+    }
+
+    
+
+    .o0 {
+      opacity: 0%;
+    }
+
+    .change {
+      position: absolute;
+      top: 40%;
+      text-align: left;
+      align-items: center;
+      margin-left: 10% ;
+      color: white;
+    }
   </style>
 </head>
 <body>
@@ -125,6 +160,23 @@
       <div style="width: 60%; height: 3px; background-color: white; position: relative; display: flex; left: 20%; border-radius: 5px;"></div>
       <h5 class="g" style="margin: 10px; font-size: 80%">You are just few clicks away from saving food</h5>
     </div>
+
+    <div class="inputs g">
+      <label for="username">Username:</label><br>
+      <input type="text" name="username" id="username"><br><br>
+      <label for="password">Password:</label><br>
+      <input type="password" name="password" id="password"><br>
+
+      
+      <!--
+      <input type="checkbox" name="showPass" onclick="show()">
+      -->
+      <div class="change" onclick="change()">
+        <i class="fa-solid fa-eye-slash fa-xl" id="hidden" style="color: #BFCBCE; color: black;"></i>
+        <i class="fa-solid fa-eye fa-xl o0" id="showed" style="color: #BFCBCE; margin-left: -32px; color: black;";></i>
+      </div>
+      
+    </div>
   </div>
 
 
@@ -137,6 +189,35 @@
     function animateSlide() {
       document.getElementById("login-part").classList.add("w3-animate-slide-up");
     }
+
+    let hidden = true;
+
+    function change() {
+      if (hidden == true) {
+        document.getElementById("showed").classList.remove("o0");
+        document.getElementById("hidden").classList.add("o0");
+        hidden = false;
+         var x = document.getElementById("password");
+    x.type = "text";
+      } else if (hidden == false) {
+        document.getElementById("showed").classList.add("o0");
+        document.getElementById("hidden").classList.remove("o0");
+        hidden = true;
+        var x = document.getElementById("password");
+    x.type = "password";
+      }
+
+
+    }
+
+    function show() {
+  var x = document.getElementById("password");
+  if (x.type === "password") {
+    x.type = "text";
+  } else {
+    x.type = "password";
+  }
+}
   </script>
 </body>
 </html>
