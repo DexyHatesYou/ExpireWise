@@ -58,7 +58,7 @@
     }
 
    
-    .w3-animate-slide-up {
+    .slide-up {
       animation: slideUp 1.4s forwards;
     }
 
@@ -106,7 +106,7 @@
       top: 20%;
       text-align: left;
       align-items: center;
-      margin-left: 10% ;
+      margin-left: 9% ;
       color: white;
     }
 
@@ -115,6 +115,8 @@
       width: 85%;
       border-radius: 15px;
       border: none;
+      font-size: 120%;
+      color: #303655;
     }
 
     label {
@@ -129,12 +131,58 @@
 
     .change {
       position: absolute;
-      top: 40%;
       text-align: left;
       align-items: center;
-      margin-left: 10% ;
+      color: white;
+      color: ;
+    }
+
+    .loginB {
+      position: absolute;
+      align-self: center;
+      text-align: center;
+      align-items: center;
+      top: 49%;
+      width: 50%;
+      height: 5%;
+      color: #BFCBCE;
+      font-size: 160%;
+      border-radius: 30px;
+      border: none;
+      left: 25%;
+    }
+
+    .regB {
+      position: absolute;
+      align-self: center;
+      text-align: center;
+      align-items: center;
+      top: 61%;
+      width: 50%;
+      height: 5%;
+      color: #BFCBCE;
+      font-size: 160%;
+      border-radius: 30px;
+      border: none;
+      left: 25%;
+    }
+
+    .ico {
+      position: absolute;
+      left: 245px;
+      top: -23px;
+    }
+
+    .policy {
+      font-size: 80%;
+      text-decoration: underline;
+      text-align: center;
+      position: relative;
+      top: 47%;
       color: white;
     }
+
+    
   </style>
 </head>
 <body>
@@ -163,23 +211,33 @@
 
     <div class="inputs g">
       <label for="username">Username:</label><br>
-      <input type="text" name="username" id="username"><br><br>
+      <input type="text" name="username" id="username" class="g" style="padding-left: 10px;"><br><br>
       <label for="password">Password:</label><br>
-      <input type="password" name="password" id="password"><br>
+      <input type="password" name="password" id="password" class="g" style="padding-left: 10px;"><br>
 
       
       <!--
       <input type="checkbox" name="showPass" onclick="show()">
       -->
       <div class="change" onclick="change()">
-        <i class="fa-solid fa-eye-slash fa-xl" id="hidden" style="color: #BFCBCE; color: black;"></i>
-        <i class="fa-solid fa-eye fa-xl o0" id="showed" style="color: #BFCBCE; margin-left: -32px; color: black;";></i>
-      </div>
-      
+        <i class="fa-solid ico fa-eye-slash fa-xl" id="hidden" style="color: #BFCBCE;"></i>
+        <i class="fa-solid ico fa-eye fa-xl o0" id="showed" style="color: #BFCBCE; padding-left: 2px;"></i>
+      </div><p style="font-size: 20%;"></p>
+      <label style="font-size: 75%; text-decoration: underline 2px;">Need help logging in?</label>
+
     </div>
-  </div>
-
-
+    <button class="loginB g">LOG IN</button>
+<div class="differentor">
+    <div style="width: 25%; height: 3px; background-color: white; position: absolute; top: 57%; left: 5%; border-radius: 15px;"></div>
+    <g class="g" style="position: absolute; top: 56.3%; font-size: 90%; color: white; left: 32%;">OTHER OPTIONS</g>
+    <div style="width: 25%; height: 3px; background-color: white; position: absolute; top: 57%; left: 70%; border-radius: 15px;"></div>
+</div>
+  <button class="regB g">REGISTER</button>
+ 
+<div class="policy g">
+  <p>Agreement policy</p>
+</div>
+ </div>
 
   <div class="coverAll">
     <i class="fa-solid fa-circle-question fa-xl" style="color: #BFCBCE;" onclick="info()"></i>   
@@ -187,7 +245,7 @@
 
   <script>
     function animateSlide() {
-      document.getElementById("login-part").classList.add("w3-animate-slide-up");
+      document.getElementById("login-part").classList.add("slide-up");
     }
 
     let hidden = true;
@@ -210,14 +268,6 @@
 
     }
 
-    function show() {
-  var x = document.getElementById("password");
-  if (x.type === "password") {
-    x.type = "text";
-  } else {
-    x.type = "password";
-  }
-}
   </script>
 </body>
 </html>
