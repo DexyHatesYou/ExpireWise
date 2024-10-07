@@ -77,6 +77,7 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      user-select: none;
     }
 
     button {
@@ -150,6 +151,7 @@
       border-radius: 30px;
       border: none;
       left: 25%;
+      transition: all 0.5s ease-out;
     }
 
     .regB {
@@ -165,6 +167,7 @@
       border-radius: 30px;
       border: none;
       left: 25%;
+      transition: all 0.5s ease-out;
     }
 
     .ico {
@@ -182,10 +185,30 @@
       color: white;
     }
 
-    
+.loginB:hover,
+.loginB:focus {
+  color: #303655;
+}
+
+.regB:hover,
+.regB:focus {
+  color: #303655;
+}
+
+    .load {
+      animation: load 0.6s ease-in forwards;
+    }
+
+    @keyframes load {
+      from { opacity: 100%; }
+      to { opacity: 0% } 
+    }
+
+.
+ 
   </style>
 </head>
-<body>
+<body id="body1">
   <div id="login-part">
     <img class="bgimg" src="./img/bgdrop.png" alt="Background">
     <div class="login-stuff">
@@ -226,13 +249,13 @@
       <label style="font-size: 75%; text-decoration: underline 2px;">Need help logging in?</label>
 
     </div>
-    <button class="loginB g">LOG IN</button>
+    <button class="loginB g" onclick="loadI()" >LOG IN</button>
 <div class="differentor">
     <div style="width: 25%; height: 3px; background-color: white; position: absolute; top: 57%; left: 5%; border-radius: 15px;"></div>
     <g class="g" style="position: absolute; top: 56.3%; font-size: 90%; color: white; left: 32%;">OTHER OPTIONS</g>
     <div style="width: 25%; height: 3px; background-color: white; position: absolute; top: 57%; left: 70%; border-radius: 15px;"></div>
 </div>
-  <button class="regB g">REGISTER</button>
+  <button class="regB g" onclick="loadE()">REGISTER</button>
  
 <div class="policy g">
   <p>Agreement policy</p>
@@ -246,6 +269,14 @@
   <script>
     function animateSlide() {
       document.getElementById("login-part").classList.add("slide-up");
+    }
+
+    function loadE() {
+      document.getElementById("body1").classList.add("load");
+      setTimeout(function() {
+        window.location.href = "./home.html";
+    }, 800);
+      
     }
 
     let hidden = true;
