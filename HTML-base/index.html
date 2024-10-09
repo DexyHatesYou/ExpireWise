@@ -118,6 +118,7 @@
       border: none;
       font-size: 120%;
       color: #303655;
+      border: 2px solid transparent;
     }
 
     label {
@@ -173,7 +174,7 @@
     .ico {
       position: absolute;
       left: 245px;
-      top: -23px;
+      top: -25px;
     }
 
     .policy {
@@ -257,7 +258,10 @@
       to { opacity: 0% } 
     }
 
-.
+ input:focus {
+       outline: 2px dashed #303655;  
+       box-shadow: inset 0 0 0 2px white;
+    }
  
   </style>
 </head>

@@ -46,12 +46,45 @@ body, html {
     transition: 0.3s;
 }
 
+.refresh-btn {
+    position: absolute;
+    top: 30px;
+    left: 105px;
+    padding: 10px 20px;
+    background-color: #7DA7BD;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.3);
+    transition: 0.3s;
+}
+
+.cache-btn {
+    position: absolute;
+    top: 78px;
+    left: 30px;
+    padding: 10px 20px;
+    background-color: #7DA7BD;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 16px;
+    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.3);
+    transition: 0.3s;
+}
+
+
+
 .pip-btn:hover {
     background-color: #6F90AF;
 }
 
 	</style>
 	<meta charset="utf-8">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>ExpireWise - DevTools</title>
 </head>
@@ -60,16 +93,33 @@ body, html {
 
 
   <div class="ifr-con">
-        <iframe src="./index.html" class="fixed" style="background-color: #BFCBCE;"></iframe>
+        <iframe src="./index.html" id="site" tag="iframe" class="fixed" style="background-color: #BFCBCE;"></iframe>
     </div>
 
 <button class="pip-btn" onclick="PiP();">PiP</button>
+<button class="refresh-btn" onclick="refresh()">Refresh</button>
+<button class="cache-btn" onclick="clearCache()">Cache</button>
+
 <script>
 
 	function PiP() {
 		window.open("./index.html", "MsgWindow", "width=360,height=760");
 	}
+
+    function refresh() {
+        document.getElementById('site').src += '';
+    }
 	
+    function clearCache() {
+        const iframe = document.querySelector('iframe');
+        const src = iframe.src;
+        iframe.src = '';  
+        setTimeout(() => iframe.src = src + '?cacheBust=' + new Date().getTime(), 100);
+        console.log("cache cleared");
+    }
+    
+   
+
 </script>
 </body>
 </html>
