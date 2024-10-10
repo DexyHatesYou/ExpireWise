@@ -15,10 +15,8 @@ body, html {
 
 .ifr-con {
     position: relative;
-
     width: 360px; 
     height: 760px; 
-
     box-shadow: 1px 4px 30px rgba(0, 0, 0, 0.5);
 	border-radius: 20px;
 }
@@ -32,39 +30,22 @@ body, html {
 }
 
 .pip-btn {
-    position: absolute;
     top: 30px;
     left: 30px;
-    padding: 10px 20px;
-    background-color: #7DA7BD;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.3);
-    transition: 0.3s;
 }
 
 .refresh-btn {
-    position: absolute;
     top: 30px;
     left: 105px;
-    padding: 10px 20px;
-    background-color: #7DA7BD;
-    color: white;
-    border: none;
-    border-radius: 10px;
-    cursor: pointer;
-    font-size: 16px;
-    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.3);
-    transition: 0.3s;
 }
 
 .cache-btn {
-    position: absolute;
     top: 78px;
     left: 30px;
+}
+
+button {
+    position: absolute;
     padding: 10px 20px;
     background-color: #7DA7BD;
     color: white;
@@ -72,24 +53,22 @@ body, html {
     border-radius: 10px;
     cursor: pointer;
     font-size: 16px;
-    box-shadow: 1px 2px 10px rgba(0, 0, 0, 0.3);
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
     transition: 0.3s;
 }
 
 
-
-.pip-btn:hover {
+button:hover {
     background-color: #6F90AF;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
 }
 
 	</style>
 	<meta charset="utf-8">
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>ExpireWise - DevTools</title>
 </head>
 <body>
-
 
 
   <div class="ifr-con">
@@ -119,7 +98,6 @@ body, html {
     }
     
    
-
 </script>
 </body>
 </html>
