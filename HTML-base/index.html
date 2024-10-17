@@ -252,6 +252,9 @@
     .load {
       animation: load 0.6s ease-in forwards;
     }
+    .loadF {
+      animation: load 0.4s ease-in forwards;
+    }
 
     @keyframes load {
       from { opacity: 100%; }
@@ -345,10 +348,10 @@
     }
 
     function loadI() {
-      document.getElementById("body1").classList.add("load");
+      document.getElementById("body1").classList.add("loadF");
       setTimeout(function() {
         window.location.href = "./home.html";
-    }, 800);
+    }, 500);
     }
       
       function loadE() {
