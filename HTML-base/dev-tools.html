@@ -3,6 +3,12 @@
 <head>
 	<style>
 		
+@font-face { font-family: g; src: url('hwyuenei64.ttf'); }
+.g{
+                font-family: g;
+            }
+
+
 body, html {
     margin: 0;
     padding: 0;
@@ -11,6 +17,7 @@ body, html {
     justify-content: center;
     align-items: center;
     background-color: #f0f0f0;
+    user-select: none;
 }
 
 .ifr-con {
@@ -44,6 +51,23 @@ body, html {
     left: 30px;
 }
 
+.list-btn {
+    top: 78px;
+    left: 128px;
+}
+
+.list {
+    float:left;
+    left: -350px;
+    position: absolute;
+    text-align: center;
+    width: 300px;
+    height: 400px;
+    background-color: #BFCBCE;
+    border-radius: 30px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
 button {
     position: absolute;
     padding: 10px 20px;
@@ -63,6 +87,24 @@ button:hover {
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.8);
 }
 
+  .slideB {
+      animation: slideB 0.9s forwards;
+    }
+
+    @keyframes slideB {
+      from { left: -350px; }
+      to { left: 20px; } 
+    }
+
+    .slideA {
+      animation: slideA 0.9s forwards;
+    }
+
+    @keyframes slideA {
+      from { left: 20px; }
+      to { left: -350px; } 
+    }
+
 	</style>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -78,8 +120,20 @@ button:hover {
 <button class="pip-btn" onclick="PiP();">PiP</button>
 <button class="refresh-btn" onclick="refresh()">Refresh</button>
 <button class="cache-btn" onclick="clearCache()">Cache</button>
+<button class="list-btn" onclick="listO()">&nbsp;List&nbsp;</button>
+
+<div class="list" id="list">
+    <h1 class="g" style="color: white;">Libaries list</h1>
+    <p style="color: white;" class="g">
+    ●Hello <br>
+    ●ee
+</p>
+</div>
+
 
 <script>
+
+    var listOp = false;
 
 	function PiP() {
 		window.open("./index.html", "MsgWindow", "width=360,height=760");
@@ -97,6 +151,19 @@ button:hover {
         console.log("cache cleared");
     }
     
+    function listO() {
+        if(listOp == false) {
+            document.getElementById("list").classList.remove("slideA");
+            document.getElementById("list").classList.add("slideB");
+            listOp = true;
+        } else if (listOp == true) {
+            document.getElementById("list").classList.remove("slideB");
+            document.getElementById("list").classList.add("slideA");
+            listOp = false;
+        } else {
+            alert("unknown error occured");
+        }
+    }
    
 </script>
 </body>
