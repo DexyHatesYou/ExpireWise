@@ -20,6 +20,10 @@ body, html {
     user-select: none;
 }
 
+iframe {
+  transition: width 0.2s ease-in-out;
+}
+
 .ifr-con {
     position: relative;
     width: 360px; 
@@ -54,6 +58,11 @@ body, html {
 .list-btn {
     top: 78px;
     left: 128px;
+}
+
+.wide-btn {
+    top: 126px;
+    left: 30px;
 }
 
 .list {
@@ -113,14 +122,15 @@ button:hover {
 <body>
 
 
-  <div class="ifr-con">
+  <div class="ifr-con" id="ifr-con">
         <iframe src="./index.html" id="site" tag="iframe" class="fixed" style="background-color: #BFCBCE;"></iframe>
     </div>
 
-<button class="pip-btn" onclick="PiP();">PiP</button>
+<button class="pip-btn" onclick="PiP()">PiP</button>
 <button class="refresh-btn" onclick="refresh()">Refresh</button>
 <button class="cache-btn" onclick="clearCache()">Cache</button>
 <button class="list-btn" onclick="listO()">&nbsp;List&nbsp;</button>
+<button class="wide-btn" id="wide" onclick="startGrowing()">Wide</button>
 
 <div class="list" id="list">
     <h1 class="g" style="color: white;">Libaries list</h1>
@@ -138,6 +148,48 @@ button:hover {
 	function PiP() {
 		window.open("./index.html", "MsgWindow", "width=360,height=760");
 	}
+
+let growInterval;
+
+var wide = false;
+var growing = false;
+
+function startGrowing() {
+  const iframe = document.getElementById('ifr-con');
+  var text = document.getElementById('wide');
+  let currentWidth = parseInt(iframe.style.width) || 360;
+
+if (growing == false) {
+if (wide == false) {
+    growing = true;
+  growInterval = setInterval(function() {
+    if (currentWidth < 800) { 
+      currentWidth += 1; 
+      iframe.style.width = currentWidth + 'px';
+    } else {
+      clearInterval(growInterval);
+      wide = true;
+      growing = false;
+    }
+  }, 7);
+}
+if (wide == true) {
+    growing = true;
+  growInterval = setInterval(function() {
+    if (currentWidth > 360) { 
+      currentWidth -= 1; 
+      iframe.style.width = currentWidth + 'px';
+    } else {
+      clearInterval(growInterval);
+      wide = false;
+      growing = false;
+    }
+  }, 7);
+}
+}
+}
+
+
 
     function refresh() {
         document.getElementById('site').src += '';
