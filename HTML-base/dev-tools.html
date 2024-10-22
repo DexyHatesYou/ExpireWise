@@ -67,10 +67,11 @@ iframe {
 
 .list {
     float:left;
-    left: -350px;
+    left: -390px;
     position: absolute;
-    text-align: center;
-    width: 300px;
+    text-align: left;
+    padding: 10px;
+    width: 360px;
     height: 400px;
     background-color: #BFCBCE;
     border-radius: 30px;
@@ -101,7 +102,7 @@ button:hover {
     }
 
     @keyframes slideB {
-      from { left: -350px; }
+      from { left: -390px; }
       to { left: 20px; } 
     }
 
@@ -111,7 +112,11 @@ button:hover {
 
     @keyframes slideA {
       from { left: 20px; }
-      to { left: -350px; } 
+      to { left: -390px; } 
+    }
+
+    i {
+    font-size: 70%;
     }
 
 	</style>
@@ -133,10 +138,22 @@ button:hover {
 <button class="wide-btn" id="wide" onclick="startGrowing()">Wide</button>
 
 <div class="list" id="list">
-    <h1 class="g" style="color: white;">Libaries list</h1>
+    <h1 class="g" style="color: white;">Libraries list</h1>
     <p style="color: white;" class="g">
-    ●Hello <br>
-    ●ee
+    ●W3.css <br>
+    ●Hover.css <br>
+    ●Animate.css <br>
+    ●Web Push Notifications <br>
+     ↑ <i>or possibly</i> Firebase Cloud Messaging <br><br>
+
+    <i>Testing:</i><br>
+    ●Faker <i>(for database)</i><br>
+    ●Android studio <br>
+    ↑ <i>(not library, but will be used for basic testing)</i><br>
+    ●Firebase Test Lab <br>
+    ↑ <i>(same as previous, and will be used for proper testing)</i>
+    <br><br><br><br>
+    <i>&nbsp;more will come as the project is ongoing</i><i id="easterEgg">.</i>
 </p>
 </div>
 
@@ -189,7 +206,16 @@ if (wide == true) {
 }
 }
 
-
+function animateEasterEgg() {
+  const el = document.getElementById('easterEgg');
+  let dots = '';
+  setInterval(() => {
+    if (!listOp) return;
+    dots = dots.length < 3 ? dots + '.' : '';
+    el.innerHTML = dots;
+  }, 400);
+}
+animateEasterEgg();
 
     function refresh() {
         document.getElementById('site').src += '';
