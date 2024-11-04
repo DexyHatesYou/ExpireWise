@@ -65,6 +65,12 @@ iframe {
     left: 30px;
 }
 
+.home-btn {
+    top: 126px;
+    left: 117px;
+    padding: 8px 14px 10px 10px !important;
+}
+
 .list {
     float:left;
     left: -390px;
@@ -136,6 +142,8 @@ button:hover {
 <button class="cache-btn" onclick="clearCache()">Cache</button>
 <button class="list-btn" onclick="listO()">&nbsp;List&nbsp;</button>
 <button class="wide-btn" id="wide" onclick="startGrowing()">Wide</button>
+<button class="home-btn" onclick="home()"><input id="check" type="checkbox">Home</button>
+<!--<button class="widew-btn" id="wide" onclick="startGrowingW()">Wide+</button>-->
 
 <div class="list" id="list">
     <h1 class="g" style="color: white;">Libraries list</h1>
@@ -161,14 +169,30 @@ button:hover {
 <script>
 
     var listOp = false;
+    var homeSet = false;
+    const iframe = document.querySelector('iframe');
 
 	function PiP() {
 		window.open("./index.html", "MsgWindow", "width=360,height=760");
 	}
 
+function home() {
+    if(homeSet == false) {
+        document.getElementById('site').src = './home.html';
+        document.getElementById("check").checked = true;
+        homeSet = true;
+    } else if (homeSet == true){
+        document.getElementById('site').src = './index.html';
+        document.getElementById("check").checked = false;
+        homeSet = false;
+
+    }
+}
+
 let growInterval;
 
 var wide = false;
+var wideW = false;
 var growing = false;
 
 function startGrowing() {
@@ -206,6 +230,55 @@ if (wide == true) {
 }
 }
 
+function startGrowingW() {
+  const iframe = document.getElementById('ifr-con');
+  var text = document.getElementById('wide');
+  let currentWidth = parseInt(iframe.style.width) || 360;
+  let currentHeight = parseInt(iframe.style.height) || 760;
+
+if (growing == false) {
+if (wide == false) {
+    growing = true;
+  growInterval = setInterval(function() {
+    if (currentWidth < 800 && currentHeight > 540) { 
+      currentWidth += 1; 
+      currentHeight -= 1; 
+      iframe.style.width = currentWidth + 'px';
+      iframe.style.height = currentHeight + 'px';
+    } else if(currentWidth < 800){
+        currentWidth += 1; 
+      
+      iframe.style.width = currentWidth + 'px';
+    } else {
+      clearInterval(growInterval);
+      wide = true;
+      growing = false;
+    }
+  }, 7);
+}
+if (wide == true) {
+    growing = true;
+  growInterval = setInterval(function() {
+    if (currentWidth > 360 && currentHeight > 760) { 
+      currentWidth -= 1; 
+      currentHeight += 1;
+      iframe.style.width = currentWidth + 'px';
+      iframe.style.height = currentHeight + 'px';
+    } else if(currentWidth <360){
+currentWidth -= 1; 
+      
+      iframe.style.width = currentWidth + 'px';
+
+    } else {
+      clearInterval(growInterval);
+      wide = false;
+      growing = false;
+    }
+  }, 7);
+}
+}
+}
+
 function animateEasterEgg() {
   const el = document.getElementById('easterEgg');
   let dots = '';
@@ -221,8 +294,8 @@ animateEasterEgg();
         document.getElementById('site').src += '';
     }
 	
+    //stackoverflow id: 9342525
     function clearCache() {
-        const iframe = document.querySelector('iframe');
         const src = iframe.src;
         iframe.src = '';  
         setTimeout(() => iframe.src = src + '?cacheBust=' + new Date().getTime(), 100);
