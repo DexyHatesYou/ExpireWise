@@ -70,6 +70,21 @@ iframe {
     left: 117px;
     padding: 8px 14px 10px 10px !important;
 }
+.add-btn {
+    top: 174px;
+    left: 30px;
+    padding: 8px 14px 10px 10px !important;
+}
+.blank-btn {
+    top: 222px;
+    left: 30px;
+    padding: 8px 14px 10px 10px !important;
+}
+.stor-btn {
+    top: 174px;
+    left: 111px;
+    padding: 8px 9px 10px 8px !important;
+}
 
 .list {
     float:left;
@@ -143,6 +158,9 @@ button:hover {
 <button class="list-btn" onclick="listO()">&nbsp;List&nbsp;</button>
 <button class="wide-btn" id="wide" onclick="startGrowing()">Wide</button>
 <button class="home-btn" onclick="home()"><input id="check" type="checkbox">Home</button>
+<button class="add-btn" onclick="adding()"><input id="checkA" type="checkbox">Add</button>
+<button class="blank-btn" onclick="blank()"><input id="checkB" type="checkbox">Blank</button>
+<button class="stor-btn" onclick="storage()"><input id="checkS" type="checkbox">Storage</button>
 <!--<button class="widew-btn" id="wide" onclick="startGrowingW()">Wide+</button>-->
 
 <div class="list" id="list">
@@ -170,6 +188,9 @@ button:hover {
 
     var listOp = false;
     var homeSet = false;
+    var addSet = false;
+    var blankSet = false;
+    var storSet = false;
     const iframe = document.querySelector('iframe');
 
 	function PiP() {
@@ -180,12 +201,95 @@ function home() {
     if(homeSet == false) {
         document.getElementById('site').src = './home.html';
         document.getElementById("check").checked = true;
+        document.getElementById("checkA").checked = false;
+        document.getElementById("checkB").checked = false;
+        document.getElementById("checkS").checked = false;
         homeSet = true;
+        addSet = false;
+        blankSet = false;
+        storSet = false;
     } else if (homeSet == true){
         document.getElementById('site').src = './index.html';
         document.getElementById("check").checked = false;
+        document.getElementById("checkA").checked = false;
+        document.getElementById("checkB").checked = false;
+        document.getElementById("checkS").checked = false;
         homeSet = false;
+        addSet = false;
+        blankSet = false;
+        storSet = false;
+    }
+}
 
+function adding() {
+    if(addSet == false) {
+        document.getElementById('site').src = './adding.html';
+        document.getElementById("check").checked = false;
+        document.getElementById("checkA").checked = true;
+        document.getElementById("checkB").checked = false;
+        document.getElementById("checkS").checked = false;
+        homeSet = false;
+        addSet = true;
+        blankSet = false;
+        storSet = false;
+    } else if (addSet == true){
+        document.getElementById('site').src = './index.html';
+        document.getElementById("check").checked = false;
+        document.getElementById("checkA").checked = false;
+        document.getElementById("checkB").checked = false;
+        document.getElementById("checkS").checked = false;
+        homeSet = false;
+        addSet = false;
+        blankSet = false;
+        storSet = false;
+    }
+}
+
+function blank() {
+    if(blankSet == false) {
+        document.getElementById('site').src = './blanktemplate.html';
+        document.getElementById("check").checked = false;
+        document.getElementById("checkA").checked = false;
+        document.getElementById("checkB").checked = true;
+        document.getElementById("checkS").checked = false;
+        homeSet = false;
+        addSet = false;
+        blankSet = true;
+        storSet = false;
+    } else if (blankSet == true){
+        document.getElementById('site').src = './index.html';
+        document.getElementById("check").checked = false;
+        document.getElementById("checkA").checked = false;
+        document.getElementById("checkB").checked = false;
+        document.getElementById("checkS").checked = false;
+        homeSet = false;
+        addSet = false;
+        blankSet = false;
+        storSet = false;
+    }
+}
+
+function storage() {
+    if(blankSet == false) {
+        document.getElementById('site').src = './storage.html';
+        document.getElementById("check").checked = false;
+        document.getElementById("checkA").checked = false;
+        document.getElementById("checkB").checked = true;
+        document.getElementById("checkS").checked = false;
+        homeSet = false;
+        addSet = false;
+        blankSet = false;
+        storSet = true;
+    } else if (blankSet == true){
+        document.getElementById('site').src = './index.html';
+        document.getElementById("check").checked = false;
+        document.getElementById("checkA").checked = false;
+        document.getElementById("checkB").checked = false;
+        document.getElementById("checkS").checked = false;
+        homeSet = false;
+        addSet = false;
+        blankSet = false;
+        storSet = false;
     }
 }
 
