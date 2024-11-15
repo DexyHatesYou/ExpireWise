@@ -40,6 +40,129 @@
       text-align: center;
     }
 
+        #date {
+      color: white;
+      position: absolute;
+      top: 1%;
+      left: 6%;
+      font-size: 130%;
+    }
+
+    .nav{
+      position: absolute;
+      bottom: 5%;
+      width: 90%;
+      height: 13%;
+      display: flex;
+      align-items: center;
+      align-self: center;
+    }
+
+    .r{
+      width: 45%;
+      height: 60%;
+      background-color: white;
+      position: absolute;
+      left: 5%;
+      border-radius: 500px;
+    }
+
+    .c{
+      height: 100%;
+      aspect-ratio: 1/1;
+      background-color: white;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 500px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+    }
+
+    .ct{
+      height: 100%;
+      aspect-ratio: 1/1;
+      background-color: white;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 500px;
+      z-index: 20;
+    }
+
+    .l{
+      width: 45%;
+      height: 60%;
+      background-color: white;
+      position: absolute;
+      right: 5%;
+      border-radius: 500px;
+    }
+
+    .b1{
+      position: absolute;
+      height: 50%;
+      width: 100%;
+      bottom: -30%;
+      background-color: #BFCBCE;
+      z-index: 15;
+    }
+
+    .b2{
+      position: absolute;
+      height: 50%;
+      width: 100%;
+      bottom: 80%;
+      background-color: #BFCBCE;
+      z-index: 15;
+    }
+
+    .ca{
+      position: absolute;
+      left: 15%;
+      bottom: 12%;
+    }
+
+    .us{
+      position: absolute;
+      right: 15%;
+      bottom: 6.5%;
+    }
+
+    .re{
+      position: absolute;
+      left: 14.5%;
+      bottom: 15%;
+    }
+
+    .c0{
+      opacity: 0%;
+    }
+
+.r .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.r:hover .c0 {
+opacity: 100%;
+}
+
+.l .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.l:hover .c0 {
+opacity: 100%;
+}
+
+.ct .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.ct:hover .c0 {
+opacity: 100%;
+}
+
 	</style>
 	<meta charset="utf-8">
   <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
@@ -47,11 +170,33 @@
 	<title>ExpireWise</title>
 </head>
 <body>
+<p id="date" class="g"></p>
+
 <div class="a">
 <h1 class="g" id="a1">Lorem Ipsum</h1><br>
 <p class="g">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras id lacus vel quam pharetra faucibus. Donec feugiat lacinia faucibus. Fusce leo erat, pharetra quis odio vitae, venenatis maximus leo.</p>
 </div>
 
+
+
+<div class="nav">
+  <div class="b1"></div>
+  <div class="r" onclick="calendar()">
+    <img width="45" class="ca" src="https://img.icons8.com/BFCBCE/stamp/100/calendar.png" alt="calendar"/>
+     <img width="45" class="ca c0" src="https://img.icons8.com/6f90af/stamp/100/calendar.png" alt="calendar"/>
+
+  </div>
+  <div class="c"></div>
+  <div class="ct" onclick="recipes()">
+    <img width="70" class="re" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+        <img width="70" class="re c0" src="https://img.icons8.com/6f90af/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+  </div>
+  <div class="l" onclick="profile();">
+    <img width="50" class="us" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+        <img width="50" class="us c0" src="https://img.icons8.com/6f90af/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+  </div>
+  <div class="b2"></div>
+</div>
 <script src="date.js"></script>
 </body>
 <script>
