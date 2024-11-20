@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		@font-face { font-family: g; src: url('hwyuenei64.ttf'); }
+			
+
+			.g{
+				font-family: g;
+			}
+
+			body {
+      background-color: #BFCBCE;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      background: rgb(86,91,117);
+      background: linear-gradient(180deg, rgba(86,91,117,1) 0%, rgba(191,203,206,1) 12%);
+    }
+
+    .load{
+      animation: load 0.6s ease-in forwards;
+    }
+
+    @keyframes load {
+      from { opacity: 0%; }
+      to { opacity: 100% } 
+    }
+
+    .a{
+      position: relative;
+      align-items: center;
+      align-self: center;
+      text-align: center;
+    }
+
+        #date {
+      color: white;
+      position: absolute;
+      top: 1%;
+      left: 6%;
+      font-size: 130%;
+    }
+
+    .nav{
+      position: absolute;
+      bottom: 5%;
+      width: 90%;
+      height: 13%;
+      display: flex;
+      align-items: center;
+      align-self: center;
+    }
+
+    .r{
+      width: 45%;
+      height: 60%;
+      background-color: white;
+      position: absolute;
+      left: 5%;
+      border-radius: 500px;
+    }
+
+    .c{
+      height: 100%;
+      aspect-ratio: 1/1;
+      background-color: white;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 500px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+    }
+
+    .ct{
+      height: 100%;
+      aspect-ratio: 1/1;
+      background-color: white;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 500px;
+      z-index: 20;
+    }
+
+    .l{
+      width: 45%;
+      height: 60%;
+      background-color: white;
+      position: absolute;
+      right: 5%;
+      border-radius: 500px;
+    }
+
+    .b1{
+      position: absolute;
+      height: 50%;
+      width: 100%;
+      bottom: -30%;
+      background-color: #BFCBCE;
+      z-index: 15;
+    }
+
+    .b2{
+      position: absolute;
+      height: 50%;
+      width: 100%;
+      bottom: 80%;
+      background-color: #BFCBCE;
+      z-index: 15;
+    }
+
+    .ca{
+      position: absolute;
+      left: 15%;
+      bottom: 12%;
+    }
+
+    .us{
+      position: absolute;
+      right: 15%;
+      bottom: 6.5%;
+    }
+
+    .re{
+      position: absolute;
+      left: 14.5%;
+      bottom: 15%;
+    }
+
+    .c0{
+      opacity: 0%;
+    }
+
+.r .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.r:hover .c0 {
+opacity: 100%;
+}
+
+.l .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.l:hover .c0 {
+opacity: 100%;
+}
+
+.ct .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.ct:hover .c0 {
+opacity: 100%;
+}
+
+.body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+        justify-content: center;
+      align-items: center;
+               opacity: 0;
+   transition: opacity .5s;
+   position: absolute;
+   top: -1%;
+}
+
+.profile{
+  height: 17%;
+  width: 90%;
+  background-color: white;
+  border-radius: 25px;
+  position: absolute;
+  top: 17%;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+}
+
+.pfp{
+  width: 28%;
+  max-height: 120%;
+  aspect-ratio: 1/1;
+  background-color: #BFCBCE;
+  border-radius: 500px;
+  position: absolute;
+  top: -35%;
+  left: 12%;
+  outline: 3px white solid;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  max-width: 20vh;
+}
+
+.name{
+  color: #6F90AF;
+  font-size: 120%;
+  position: absolute;
+  top: 6%;
+  left: 45%;
+}
+
+.since{
+  background-color: #BFCBCE;
+  color: white;
+  font-size: 50%;
+  padding: 2px 5px 2px 5px;
+  border-radius: 100px;
+  position: absolute;
+  left: 45%;
+  top: 27%;
+}
+
+.rank{
+  color: white;
+  font-size: 50%;
+  padding: 2px 5px 2px 5px;
+  border-radius: 100px;
+  position: absolute;
+  left: 80%;
+  top: 27%;
+}
+
+.vipP{
+  background-color: #CECBBF;
+}
+
+.bio{
+  color: #BFCBCE;
+  font-size: 50%;
+  width: 75%;
+  position: absolute;
+  right: 12%;
+  top: 45%;
+  max-width: 50vh;
+}
+
+.qr{
+  width: 9%;
+  max-height: 30%;
+  aspect-ratio: 1/1;
+  background-color: black;
+  max-width: 5vh;
+  position: absolute;
+  right: 5%;
+  top: 45%;
+  border-radius: 7px;
+  background-color: #BFCBCE;
+  padding: 4px;
+}
+
+.edit{
+  background-color: #BFCBCE;
+  color: white;
+  border-radius: 30px;
+  font-size: 40%;
+  position: absolute;
+  bottom: 5%;
+  right: 5%;
+  padding: 4px 4px 4px 16px;
+}
+
+.bookmarks{
+  position: absolute;
+  width: 90%;
+  height: 6%;
+  top: 37%; /* extra 3% per layer*/
+  background-color: white;
+  border-radius: 25px;
+}
+
+.sep{
+  background-color: #BFCBCE;
+  position: absolute;
+  width: 3px;
+  height: 80%;
+  top: 10%;
+  left: 18%;
+  border-radius: 100px;
+}
+
+.log{
+  position: absolute;
+  height: 75%;
+  left: 4%;
+  bottom: 12.5%;
+}
+
+.lab{
+  color: #BFCBCE;
+  position: absolute;
+  bottom: 20%;
+  margin: 0;
+  left: 22%;
+  font-size: 130%;
+}
+
+.mOp{
+  position: absolute;
+  width: 90%;
+  height: 18%;
+  background-color: white;
+  border-radius: 25px;
+  top: 46%;
+}
+
+.wOp{
+  position: absolute;
+  width: 90%;
+  height: 12%;
+  background-color: white;
+  border-radius: 25px;
+  top: 67%;
+}
+
+.d{
+/*background-color: red;    -seperation test*/
+width: 100%;
+height: 33.3%;
+position: absolute;
+border-radius: 25px;
+}
+
+.x{
+height: 33.3%;
+}
+
+.s{
+height: 50%;
+}
+
+.st{
+  top: 0%;
+}
+
+
+.fr{
+  top: 33.4%;
+}
+
+.se{
+  bottom: 0%;
+}
+
+.ab{
+  top: 0%;
+}
+
+.lo{
+  bottom: 0%;
+}
+
+	</style>
+	<meta charset="utf-8">
+  <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>ExpireWise</title>
+</head>
+<body>
+<p id="date" class="g"></p>
+<g  class="body">
+
+<div class="profile">
+  <div class="pfp"></div>
+  <span class="name g">MasterChef77</span>
+  <span class="since g">Saving food for 46days</span>
+  <span class="rank g vipP">VIP+</span>
+  <span class="bio g">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+  </span>
+  <div class="">
+    <img class="qr" src="https://img.icons8.com/ffffff/pastel-glyph/100/qr-code--v2.png" alt="qr-code--v2"/>
+  </div>
+  <span class="edit g">
+    <img style="height: 75%; position: absolute; bottom: 15%; right: 75%" src="https://img.icons8.com/ffffff/material-sharp/100/pencil--v1.png" alt="pencil--v1"/>
+    Edit profile
+  </span>
+</div>
+
+<div class="bookmarks">
+  <img class="log" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/bookmark-ribbon.png" alt="bookmark-ribbon"/>
+  <div class="sep s1"></div>
+  <h3 class="lab g">Bookmarks</h3>
+</div>
+
+<div class="mOp"> <!-- Storage, Friends, Settings-->
+  <div class="st d x">
+    <div class="sep"></div>
+    <h3 class="lab g">Storage</h3>
+    <img class="log" style="height: 65%; left: 4.5%;" src="https://img.icons8.com/BFCBCE/ios-filled/100/fridge.png" alt="bookmark-ribbon"/>
+  </div>
+  <div class="fr d x">
+    <div class="sep"></div>
+    <h3 class="lab g">Friends</h3>
+    <img class="log" src="https://img.icons8.com/BFCBCE/windows/100/friends.png" alt="bookmark-ribbon"/>
+  </div>
+  <div class="se d x">
+    <div class="sep"></div>
+    <h3 class="lab g">Settings</h3>
+    <img class="log" src="https://img.icons8.com/BFCBCE/fluency-systems-regular/100/settings--v1.png" alt="bookmark-ribbon"/>
+  </div>
+</div>
+
+<div class="wOp"> <!-- Storage, Friends, Settings-->
+  <div class="ab d s">
+    <div class="sep"></div>
+    <h3 class="lab g">About</h3>
+    <img class="log" src="https://img.icons8.com/BFCBCE/metro/100/info.png" alt="bookmark-ribbon"/>
+  </div>
+  <div class="lo d s">
+    <div class="sep" style="background-color: #CEBFBF;"></div>
+    <h3 class="lab g" style="color: #CEBFBF;">Log out</h3>
+    <img class="log" src="https://img.icons8.com/CEBFBF/ios-filled/100/logout-rounded-left.png" alt="bookmark-ribbon"/>
+  </div>
+</div>
+
+
+</g>
+<div class="nav">
+  <div class="b1"></div>
+  <div class="r" onclick="calendar()">
+    <img width="45" class="ca" src="https://img.icons8.com/BFCBCE/stamp/100/calendar.png" alt="calendar"/>
+     <img width="45" class="ca c0" src="https://img.icons8.com/6f90af/stamp/100/calendar.png" alt="calendar"/>
+
+  </div>
+  <div class="c"></div>
+  <div class="ct" onclick="transitionToPage('./home.html')">
+    <img width="70" class="re" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+        <img width="70" class="re c0" src="https://img.icons8.com/6f90af/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+  </div>
+  <div class="l" onclick="profile();">
+    <img width="50" class="us" src="https://img.icons8.com/6F90AF/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+        <img width="50" class="us c0" src="https://img.icons8.com/84A7BA/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+  </div>
+  <div class="b2"></div>
+</div>
+<script src="date.js"></script>
+</body>
+<script>
+  window.transitionToPage = function(href) {
+    document.querySelector('.body').style.opacity = 0
+    setTimeout(function() { 
+        window.location.href = href
+    }, 500)
+}
+
+document.addEventListener('DOMContentLoaded', function(event) {
+    document.querySelector('.body').style.opacity = 1
+})
+</script>
+</html>

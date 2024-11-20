@@ -86,6 +86,12 @@ iframe {
     padding: 8px 9px 10px 8px !important;
 }
 
+.prof-btn {
+    top: 222px;
+    left: 123px;
+    padding: 8px 9px 10px 8px !important;
+}
+
 .list {
     float:left;
     left: -390px;
@@ -161,6 +167,7 @@ button:hover {
 <button class="add-btn" onclick="adding()"><input id="checkA" type="checkbox">Add</button>
 <button class="blank-btn" onclick="blank()"><input id="checkB" type="checkbox">Blank</button>
 <button class="stor-btn" onclick="storage()"><input id="checkS" type="checkbox">Storage</button>
+<button class="prof-btn" onclick="profile()"><input id="checkP" type="checkbox">Profile</button>
 <!--<button class="widew-btn" id="wide" onclick="startGrowingW()">Wide+</button>-->
 
 <div class="list" id="list">
@@ -191,6 +198,7 @@ button:hover {
     var addSet = false;
     var blankSet = false;
     var storSet = false;
+    var profSet = false
     const iframe = document.querySelector('iframe');
 
 	function PiP() {
@@ -204,20 +212,24 @@ function home() {
         document.getElementById("checkA").checked = false;
         document.getElementById("checkB").checked = false;
         document.getElementById("checkS").checked = false;
+        document.getElementById("checkP").checked = false;
         homeSet = true;
         addSet = false;
         blankSet = false;
         storSet = false;
+        profSet = false;
     } else if (homeSet == true){
         document.getElementById('site').src = './index.html';
         document.getElementById("check").checked = false;
         document.getElementById("checkA").checked = false;
         document.getElementById("checkB").checked = false;
         document.getElementById("checkS").checked = false;
+        document.getElementById("checkP").checked = false;
         homeSet = false;
         addSet = false;
         blankSet = false;
         storSet = false;
+        profSet = false;
     }
 }
 
@@ -228,20 +240,24 @@ function adding() {
         document.getElementById("checkA").checked = true;
         document.getElementById("checkB").checked = false;
         document.getElementById("checkS").checked = false;
+        document.getElementById("checkP").checked = false;
         homeSet = false;
         addSet = true;
         blankSet = false;
         storSet = false;
+        profSet = false;
     } else if (addSet == true){
         document.getElementById('site').src = './index.html';
         document.getElementById("check").checked = false;
         document.getElementById("checkA").checked = false;
         document.getElementById("checkB").checked = false;
         document.getElementById("checkS").checked = false;
+        document.getElementById("checkP").checked = false;
         homeSet = false;
         addSet = false;
         blankSet = false;
         storSet = false;
+        profSet = false;
     }
 }
 
@@ -252,20 +268,24 @@ function blank() {
         document.getElementById("checkA").checked = false;
         document.getElementById("checkB").checked = true;
         document.getElementById("checkS").checked = false;
+        document.getElementById("checkP").checked = false;
         homeSet = false;
         addSet = false;
         blankSet = true;
         storSet = false;
+        profSet = false;
     } else if (blankSet == true){
         document.getElementById('site').src = './index.html';
         document.getElementById("check").checked = false;
         document.getElementById("checkA").checked = false;
         document.getElementById("checkB").checked = false;
         document.getElementById("checkS").checked = false;
+        document.getElementById("checkP").checked = false;
         homeSet = false;
         addSet = false;
         blankSet = false;
         storSet = false;
+        profSet = false;
     }
 }
 
@@ -276,20 +296,52 @@ function storage() {
         document.getElementById("checkA").checked = false;
         document.getElementById("checkB").checked = false;
         document.getElementById("checkS").checked = true;
+        document.getElementById("checkP").checked = false;
         homeSet = false;
         addSet = false;
         blankSet = false;
         storSet = true;
+        profSet = false;
     } else if (storSet == true){
         document.getElementById('site').src = './index.html';
         document.getElementById("check").checked = false;
         document.getElementById("checkA").checked = false;
         document.getElementById("checkB").checked = false;
         document.getElementById("checkS").checked = false;
+        document.getElementById("checkP").checked = false;
         homeSet = false;
         addSet = false;
         blankSet = false;
         storSet = false;
+        profSet = false;
+    }
+}
+
+function profile() {
+    if(profSet == false) {
+        document.getElementById('site').src = './profile.html';
+        document.getElementById("check").checked = false;
+        document.getElementById("checkA").checked = false;
+        document.getElementById("checkB").checked = false;
+        document.getElementById("checkS").checked = false;
+        document.getElementById("checkP").checked = true;
+        homeSet = false;
+        addSet = false;
+        blankSet = false;
+        storSet = false;
+        profSet = true;
+    } else if (profSet == true){
+        document.getElementById('site').src = './index.html';
+        document.getElementById("check").checked = false;
+        document.getElementById("checkA").checked = false;
+        document.getElementById("checkB").checked = false;
+        document.getElementById("checkS").checked = false;
+        document.getElementById("checkP").checked = false;
+        homeSet = false;
+        addSet = false;
+        blankSet = false;
+        storSet = false;
+        profSet = false;
     }
 }
 
