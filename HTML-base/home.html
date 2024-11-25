@@ -6,6 +6,11 @@
   <style>
     @font-face { font-family: g; src: url('hwyuenei64.ttf'); }
       
+.container, .blur1, .blur2, .segment {
+    max-width: 100%;
+    overflow-x: hidden;
+}
+
     html, body {
     max-width: 100%;
     overflow-x: hidden;
@@ -19,7 +24,10 @@
       }
 
       body {
+        max-width: 100vv;
+        overflow-x: hidden;
       background-color: #BFCBCE;
+      overflow-x: hidden;
       overflow: hidden;
       margin: 0;
       padding: 0;
@@ -91,6 +99,8 @@
 .container {
     border-top: 3%;
     width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
     height: 69%;
     overflow-y: scroll;
     scrollbar-width: none;
@@ -321,9 +331,10 @@ opacity: 100%;
         justify-content: center;
       align-items: center;
       opacity: 100%;
-
+overflow-x: hidden;
                opacity: 0;
    transition: opacity .5s;
+   max-width: 100vv;
 }
         #date {
       color: white;
@@ -350,7 +361,7 @@ opacity: 100%;
 <div class="container">
   <br><br>
 
-  <div class="segment">
+  <div class="segment" onclick="transitionToPage('./recipe.html')">
     <img class="rcp-img" src="https://www.themealdb.com/images/media/meals/7n8su21699013057.jpg" alt="recipe photo">
     <div class="rcp-part">
     <h3 class="rcp-name">Fish Soup (Ukha)</h3>

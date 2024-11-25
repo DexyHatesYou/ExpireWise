@@ -503,7 +503,7 @@ opacity: 100%;
     <img width="70" class="re" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
         <img width="70" class="re c0" src="https://img.icons8.com/6f90af/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
   </div>
-  <div class="l" onclick="profile();">
+  <div class="l" onclick="transitionToPage('./profile.html')">
     <img width="50" class="us" src="https://img.icons8.com/6F90AF/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
         <img width="50" class="us c0" src="https://img.icons8.com/84A7BA/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
   </div>
@@ -577,7 +577,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     function filterOptions() {
         const input = document.querySelector(".search-bar").value.toLowerCase();
         const options = document.querySelectorAll(".dropdown-option");
-        let visibleCount = 0;
+        let visibleCount = 0;f
 
         options.forEach(option => {
             if (option.textContent.toLowerCase().includes(input) && visibleCount < 6) {

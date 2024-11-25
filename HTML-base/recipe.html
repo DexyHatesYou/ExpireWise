@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style>
+		@font-face { font-family: g; src: url('hwyuenei64.ttf'); }
+			
+
+			.g{
+				font-family: g;
+			}
+
+			body {
+      background-color: #BFCBCE;
+      overflow-x: hidden;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+      animation: load 0.6s ease-in forwards;
+      background: rgb(86,91,117);
+      background: linear-gradient(180deg, rgba(86,91,117,1) 0%, rgba(191,203,206,1) 12%);
+    }
+
+    .load{
+      animation: load 0.6s ease-in forwards;
+    }
+
+    @keyframes load {
+      from { opacity: 0%; }
+      to { opacity: 100% } 
+    }
+
+    .a{
+      position: relative;
+      align-items: center;
+      align-self: center;
+      text-align: center;
+    }
+
+        #date {
+      color: white;
+      position: absolute;
+      top: 1%;
+      left: 6%;
+      font-size: 130%;
+    }
+
+    .nav{
+      position: absolute;
+      bottom: 5%;
+      width: 90%;
+      height: 13%;
+      display: flex;
+      align-items: center;
+      align-self: center;
+      background-color: #BFCBCE;
+    }
+
+    .r{
+      width: 45%;
+      height: 60%;
+      background-color: white;
+      position: absolute;
+      left: 5%;
+      border-radius: 500px;
+    }
+
+    .c{
+      height: 100%;
+      aspect-ratio: 1/1;
+      background-color: white;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 500px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+    }
+
+    .ct{
+      height: 100%;
+      aspect-ratio: 1/1;
+      background-color: white;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 500px;
+      z-index: 20;
+    }
+
+    .l{
+      width: 45%;
+      height: 60%;
+      background-color: white;
+      position: absolute;
+      right: 5%;
+      border-radius: 500px;
+    }
+
+    .b1{
+      position: absolute;
+      height: 50%;
+      width: 100%;
+      bottom: -30%;
+      background-color: #BFCBCE;
+      z-index: 15;
+    }
+
+    .b2{
+      position: absolute;
+      height: 50%;
+      width: 100%;
+      bottom: 80%;
+      background-color: #BFCBCE;
+      z-index: 15;
+    }
+
+    .ca{
+      position: absolute;
+      left: 15%;
+      bottom: 12%;
+    }
+
+    .us{
+      position: absolute;
+      right: 15%;
+      bottom: 6.5%;
+    }
+
+    .re{
+      position: absolute;
+      left: 14.5%;
+      bottom: 15%;
+    }
+
+    .c0{
+      opacity: 0%;
+    }
+
+.r .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.r:hover .c0 {
+opacity: 100%;
+}
+
+.l .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.l:hover .c0 {
+opacity: 100%;
+}
+
+.ct .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.ct:hover .c0 {
+opacity: 100%;
+}
+
+.body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+        justify-content: center;
+      align-items: center;
+               opacity: 0;
+   transition: opacity .5s;
+   position: absolute;
+   overflow: auto;
+   overflow-x: hidden;
+   top: -1%;
+   scrollbar-width: none;
+}
+
+    .top{
+      width: 100%;
+      position: absolute;
+      display: inline-flex;
+      top: 11%;
+      height: 8%;
+      align-items: center;
+      justify-content: center;
+      z-index: 22;
+      position: fixed;
+
+    }
+
+        .rcp-name{
+      background-color: white;
+      width: 68%;
+      height: 100%;
+      border-radius: 25px;
+      z-index: 100;
+      text-align: center;
+      border: none;
+      color: #BFCBCE;
+      transition: all 0.5s ease-out;
+      margin-right: 3%;
+    }
+
+      .back-btn{
+      background-color: white;
+      height: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 50px;
+      display: inline;
+      text-align: center;
+      border: none;
+      color: #BFCBCE;
+      transition: all 0.5s ease-out;
+    }
+
+    .back-btn:hover,
+    .back-btn:focus {
+     color: #303655;
+     box-shadow: 0px 0px 20px 0px #888888;
+    }
+
+    .back-btn:hover .btn-image,
+    .back-btn:focus .btn-image {
+     filter: brightness(0) saturate(100%) invert(31%) sepia(20%) saturate(600%) hue-rotate(150deg) brightness(95%) contrast(100%);
+     transition: filter 0.5s ease-out;
+      } 
+
+
+      .main{
+  height: 47%;
+  width: 90%;
+  background-color: white;
+  border-radius: 25px;
+  position: absolute;
+  top: 17%;
+  z-index: ;
+}
+
+.img{
+
+  width: 45%;
+  max-height: 160%;
+  aspect-ratio: 1/1;
+  background-color: #BFCBCE;
+  border-radius: 500px;
+  position: relative;
+  top: -18%;
+  left: 12%;
+  outline: 3px white solid;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  max-width: 30vh;
+}
+
+.mark{
+  font-size: 80%;
+  background-color: #BFCBCE;
+  color: white;
+  padding: 2px 10px 2px 10px;
+  border-radius: 50px;
+  border-top: 15px;
+  position: absolute;
+  left: 60%;
+}
+
+.scroll {
+  overflow-y: scroll;
+  max-width: 98%;
+  top: 13%;
+  position: absolute;
+  width: 98%;
+  height: 100%;
+  margin: auto;
+  scrollbar-width: none;
+  left: 6%;
+   scroll-behavior: smooth;
+}
+
+
+.scroll::-webkit-scrollbar {
+  display: none;
+}}
+
+.ingr{
+  top: 10%;
+}
+
+.country{
+  top: 10%;
+}
+
+.type{
+  top: 17%;
+}
+
+.got{
+font-size: 70%;
+top: 28%;
+left: 8%;
+background-color: #BFCEC3;
+}
+
+.xgot{
+font-size: 70%;
+top: 28%;
+left: 50%;
+background-color: #CEBFBF;
+}
+
+.spacer{
+  position: absolute;
+  top: 25%;
+  width: 90%;
+  background-color: #BFCBCE;
+  height: 2px;
+  border-radius: 20px;
+  left: 5%;
+  z-index: -1;
+}
+
+.mainy{
+  position: absolute;
+  top: 30%;
+  color: #BFCBCE;
+  font-size: 70%;
+}
+
+.mainn{
+  position: absolute;
+  top: 30%;
+  left: 44%;
+  color: #BFCBCE;
+  font-size: 70%;
+}
+
+      .cook{
+        font-size: 100%;
+      background-color: white;
+      border-radius: 50px;
+      margin: 15px;
+      display: inline;
+      text-align: center;
+      border: none;
+      color: #BFCBCE;
+      transition: all 0.5s ease-out;
+      box-shadow: 0px 0px 20px 0px #888888;
+      position: absolute;
+      top: 89%;
+      left: 48%;
+      width: 40%;
+      z-index: 16;
+    }
+
+     .cook:hover,
+    .cook:focus {
+     color: #303655;
+}
+
+.instr{
+        background-color: white;
+      width: 90%;
+      height: 5%;
+      border-radius: 25px;
+      position: absolute;
+      top: 70%;
+      text-align: center;
+      border: none;
+      color: #BFCBCE;
+      transition: all 0.5s ease-out;
+      margin-right: 3%;
+
+}
+
+.meas{
+  background-color: white;
+  position: absolute;
+  width: 90%;
+  border-radius: 25px;
+  top: 78%;
+}
+
+.spac{
+  position: absolute;
+  top: 200%;
+  height: 50%;
+  width: 100%;
+
+}
+
+.blur1 {
+  width: 120%;
+  height: 5%;
+  background-color: #BFCBCE;
+  position: absolute;
+  box-shadow: 0px 0px 20px 20px #BFCBCE;
+  z-index: -3;
+  top: 16%;
+}
+
+.blur2 {
+  width: 120%;
+  height: 7%;
+  background-color: #BFCBCE;
+  position: absolute;
+  box-shadow: 0px 0px 20px 20px #BFCBCE;
+  top: 78%;
+  position: fixed;
+}
+
+.ownM{
+  font-size: 70%;
+  list-style-type: none;
+  color: #84A7BA;
+}
+
+.scroll {
+  scroll-behavior: smooth;
+}
+
+.tuto{
+  padding: 15px;
+  color: #84A7BA;
+}
+
+.ee{
+  font-size: 40%;
+}
+
+.video{
+  top: 168%;
+  position: absolute;
+  width: 90%;
+  height: 28%;
+  background-color: white;
+  border-radius: 25px;
+}
+
+.reg{
+  width: 90%;
+  position: absolute;
+  left: 5%;
+  bottom: 5%;
+  border-radius: 18px;
+}
+
+.vidl{
+  color: #BFCBCE;
+  margin-left: 6%;
+  margin-top: 5%;
+}
+
+	</style>
+	<meta charset="utf-8">
+  <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>ExpireWise</title>
+  <link rel="stylesheet" href="food-labels.css">
+</head>
+<body>
+<p id="date" class="g"></p>
+<g class="body">
+
+
+
+
+<div class="top">
+<div class="rcp-name" onclick="">
+<h3 class="g" style="top: -10%; z-index: 100;">Fish Soup (Ukha)</h3>
+</div>
+<div class="blur1"></div>
+<button class="back-btn" onclick="">
+<img width="30" src="https://img.icons8.com/BFCBCE/android/100/undo.png" class="btn-image" alt="undo"/>
+</button>
+</div>
+
+<div class="scroll" id="scroll">
+<div class="main">
+  <img class="img" src="https://www.themealdb.com/images/media/meals/7n8su21699013057.jpg">
+  <span class="mark g ingr" style="top: 3%;">9 ingredients</span>
+  <span class="mark g country">Russian</span>
+  <span class="mark g type seafood">Seafood</span>
+  <div class="spacer"></div>
+  <span class="mark g got">You have:</span>
+  <span class="mark g xgot">You are missing:</span>
+  <ul class="mainy g">
+    <li class="own">Olive Oil</li>
+    <li class="ownM">2 tbs</li>
+     <li class="own">Onion</li>
+     <li class="ownM">1 sliced</li>
+      <li class="own">Carrots</li>
+      <li class="ownM">2 medium</li>
+      <li class="own">Fish Stock</li>
+      <li class="ownM">3 cups</li>
+      <li class="own">Water</li>
+      <li class="ownM">3 cups</li>
+      <li class="own">Potatoes</li>
+      <li class="ownM">4 large</li>
+      <li class="own">Cod</li>
+      <li class="ownM">1 tbs</li>
+  </ul>
+  <ul class="mainn g">
+    <li class="xown">Bay Leaf</li>
+    <li class="ownM">3</li>
+     <li class="xown">Salmon</li>
+     <li class="ownM">1 tbs</li>
+      
+  </ul>
+
+  <button class="mark g cook" onclick="scroll()">Start Cooking</button>
+
+  
+
+</div>
+
+
+<div class="instr"><h3 class="g" style="top:20%; position: relative; margin: 0">Instructions</h3></div>
+
+<div class="meas second">
+    <p class="tuto g">In a medium pot, heat the olive oil over medium-high heat. Add the onions and cook, stirring occasionally until the onions start to caramelize. Add the carrots and cook until the carrots start to soften, about 4 more minutes.<span class="ee"><br><br></span>
+Add the stock, water, potatoes, bay leaves, and black peppercorns. Season with salt and bring to a boil. Reduce heat, cover and cook for 10 minutes. Add the millet and cook for 15 more minutes until millet and potatoes are cooked.<span class="ee"><br><br></span>
+Gently add the fish cubes. Stir and bring the soup to a simmer.<span class="ee"><br><br></span>The fish will cook through very fast, so make sure to not overcook them. They are done when the flesh is opaque and flakes easily.<span class="ee"><br><br></span>
+Garnish the soup with chopped fresh dill or parsley before serving.</p>
+  </div>
+
+<div class="spac"></div>
+
+
+<div class="video">
+  <h4 class="g vidl">Video tutorial:</h4>
+  <iframe class="reg"
+src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen">
+</iframe>
+</div>
+
+
+
+</div>
+
+<div class="blur2"></div>
+</g>
+<div class="nav">
+  <div class="b1"></div>
+  <div class="r" onclick="transitionToPage('./calendar.html')">
+    <img width="45" class="ca" src="https://img.icons8.com/BFCBCE/stamp/100/calendar.png" alt="calendar"/>
+     <img width="45" class="ca c0" src="https://img.icons8.com/6f90af/stamp/100/calendar.png" alt="calendar"/>
+
+  </div>
+  <div class="c"></div>
+  <div class="ct" onclick="transitionToPage('./home.html')">
+    <img width="70" class="re" src="https://img.icons8.com/6F90AF/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+        <img width="70" class="re c0" src="https://img.icons8.com/6f90af/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+  </div>
+  <div class="l" onclick="transitionToPage('./profile.html')">
+    <img width="50" class="us" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+        <img width="50" class="us c0" src="https://img.icons8.com/6f90af/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+  </div>
+  <div class="b2"></div>
+</div>
+<script src="date.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+</body>
+<script>
+    window.transitionToPage = function(href) {
+    document.querySelector('.body').style.opacity = 0
+    setTimeout(function() { 
+        window.location.href = href
+    }, 500)
+}
+
+document.addEventListener('DOMContentLoaded', function(event) {
+    document.querySelector('.body').style.opacity = 1
+})
+
+$(document).ready(function () {
+    $("button").click(function () {
+
+        var scrollAmount = $(window).height() * 0.6;
+
+        $('.scroll').animate({
+            scrollTop: $('.scroll').scrollTop() + scrollAmount
+        }, 10, 'swing');
+    });
+});
+
+
+
+
+
+
+</script>
+</html>
