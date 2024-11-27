@@ -45,8 +45,8 @@
             // Convert the image to a data URL
             const imageData = canvas.toDataURL('image/png');
 
-            // Send the image to a free barcode reader API
-            fetch('https://api.qrserver.com/v1/read-qr-code/', {
+            // Use AllOrigins proxy to forward the request to QRServer
+            fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.qrserver.com/v1/read-qr-code/'), {
                 method: 'POST',
                 body: JSON.stringify({ data: imageData }),
                 headers: {
@@ -55,10 +55,13 @@
             })
             .then(response => response.json())
             .then(data => {
-                if (data[0] && data[0].symbol[0].data) {
-                    result.textContent = `Barcode: ${data[0].symbol[0].data}`;
-                } else {
-                    result.textContent = 'No barcode found.';
+                if (data.contents) {
+                    const barcodeData = JSON.parse(data.contents);
+                    if (barcodeData[0] && barcodeData[0].symbol[0].data) {
+                        result.textContent = `Barcode: ${barcodeData[0].symbol[0].data}`;
+                    } else {
+                        result.textContent = 'No barcode found.';
+                    }
                 }
             })
             .catch(error => {
