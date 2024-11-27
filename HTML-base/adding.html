@@ -577,7 +577,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     function filterOptions() {
         const input = document.querySelector(".search-bar").value.toLowerCase();
         const options = document.querySelectorAll(".dropdown-option");
-        let visibleCount = 0;f
+        let visibleCount = 0;
 
         options.forEach(option => {
             if (option.textContent.toLowerCase().includes(input) && visibleCount < 6) {
