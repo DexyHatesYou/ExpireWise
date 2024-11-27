@@ -1,0 +1,36 @@
+Q1: What data do you collect, and why?
+Just the essentials: username, profile settings, ingredients, and their expiration dates. That’s it. No emails, no phone numbers, no blood type. We need this to help you keep track of your fridge chaos, not to blackmail you.
+
+Q2: Do you share my data?
+Absolutely not. Your data stays where it belongs—on our local server. Even if someone asked nicely, the answer’s still no.
+
+Q3: Can I delete my account?
+Yes, and it’s as dramatic as it sounds. Go to Profile, click Settings, click Delete Account, confirm by retyping your username and password, and BAM—it’s gone. Forever. Not archived, not stored, just gone. No going back even if you beg us.
+
+Q4: Is this app actually free?
+Yes! No hidden fees, no “premium unlocks.” It’s free now, and it’ll stay free. Because seriously, its 2024, f*ck paying for basic simple apps.(even if they take long to develop)
+
+Q5: Where is my data stored?
+On a local database we run ourselves. No clouds, no weird third-party deals. Just good old responsible storage.
+
+Q6: What happens if the app goes down?
+It’s a temporary project, so... yeah, it might go down occasionally. When it does, don’t panic—we’ll fix it when we can. Or not. Either way, your data is safe and won't be given out even if the app fully closes.
+
+Q7: Can I upload my own recipes?
+Nope, we keep things clean and safe for all ages. Stick to the premade recipes. Your grandma’s secret soup is safe at home.
+
+Q8: Are there ads or sponsors?
+LOL, no. This is a passion school project, not some ad farm. Enjoy the silence.
+
+Q9: Can I use this app for business or to sell my recipes?
+Nope. Don’t be that guy. Copying, selling, or overall making money off this app is strictly prohibited. Do it, and karma will find you (probably through a fridge full of expired milk).
+
+Q10: Are there any restrictions?
+Just basically Q9 and don’t do anything dumb(including offensive usernames). It’s a free tool for everyone—keep it that way.
+
+Q11: I found a bug, what to do?
+Email us the bug or use github repository and make an issue(we prefer email). You can find the email in Q12.
+
+Q12: How do I contact you?
+For questions, support, or existential crises(please don't, i got one myself), email us at info@expirewise.eu. We’ll reply when we’re not busy eating leftovers.
+
