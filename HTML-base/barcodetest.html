@@ -16,7 +16,8 @@
 
     <h1>Scan a Barcode</h1>
     <video id="video" autoplay playsinline></video>
-    <button id="capture">Capture & Read Barcodef</button>
+    <button id="capture">Capture & Read Barcode</button>
+    <input type="file" id="fileInput" accept="image/*">
     <canvas id="canvas" style="display: none;"></canvas>
     <p id="result"></p>
 
@@ -26,6 +27,7 @@
         const context = canvas.getContext('2d');
         const result = document.getElementById('result');
         const captureButton = document.getElementById('capture');
+        const fileInput = document.getElementById('fileInput');
 
         // Access the camera
         navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
@@ -45,30 +47,21 @@
             // Convert the image to a data URL
             const imageData = canvas.toDataURL('image/png');
 
-            // Use AllOrigins proxy to forward the request to QRServer
-            fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.qrserver.com/v1/read-qr-code/'), {
-                method: 'POST',
-                body: JSON.stringify({ data: imageData }),
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest' // AllOrigins needs this header
-                }
-            })
-            .then(response => response.text()) // Change to response.text() instead of response.json()
-            .then(text => {
-                console.log("Raw response:", text); // Log the raw response
+            // If you want to directly upload the image, consider allowing file upload with <input type="file">
+            const formData = new FormData();
+            formData.append('file', imageData); // Add base64 image data (for demonstration)
 
-                // Try to parse the response as JSON
-                try {
-                    const data = JSON.parse(text);
-                    if (data[0] && data[0].symbol[0].data) {
-                        result.textContent = `Barcode: ${data[0].symbol[0].data}`;
-                    } else {
-                        result.textContent = 'No barcode found.';
-                    }
-                } catch (error) {
-                    console.error("Error parsing response:", error);
-                    result.textContent = 'Error parsing barcode response.';
+            // Send the form data to a server that accepts it
+            fetch('https://api.qrserver.com/v1/read-qr-code/', {
+                method: 'POST',
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data[0] && data[0].symbol[0].data) {
+                    result.textContent = `Barcode: ${data[0].symbol[0].data}`;
+                } else {
+                    result.textContent = 'No barcode found.';
                 }
             })
             .catch(error => {
