@@ -16,7 +16,7 @@
 
     <h1>Scan a Barcode</h1>
     <video id="video" autoplay playsinline></video>
-    <button id="capture">Capture & Read Barcode</button>
+    <button id="capture">Capture & Read Barcodef</button>
     <canvas id="canvas" style="display: none;"></canvas>
     <p id="result"></p>
 
@@ -54,15 +54,21 @@
                     'X-Requested-With': 'XMLHttpRequest' // AllOrigins needs this header
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                if (data.contents) {
-                    const barcodeData = JSON.parse(data.contents);
-                    if (barcodeData[0] && barcodeData[0].symbol[0].data) {
-                        result.textContent = `Barcode: ${barcodeData[0].symbol[0].data}`;
+            .then(response => response.text()) // Change to response.text() instead of response.json()
+            .then(text => {
+                console.log("Raw response:", text); // Log the raw response
+
+                // Try to parse the response as JSON
+                try {
+                    const data = JSON.parse(text);
+                    if (data[0] && data[0].symbol[0].data) {
+                        result.textContent = `Barcode: ${data[0].symbol[0].data}`;
                     } else {
                         result.textContent = 'No barcode found.';
                     }
+                } catch (error) {
+                    console.error("Error parsing response:", error);
+                    result.textContent = 'Error parsing barcode response.';
                 }
             })
             .catch(error => {
