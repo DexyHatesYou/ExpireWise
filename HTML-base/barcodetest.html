@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Barcode Reader</title>
+    <style>
+        video, canvas {
+            width: 100%;
+            max-width: 400px;
+            height: auto;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Scan a Barcode</h1>
+    <video id="video" autoplay playsinline></video>
+    <button id="capture">Capture & Read Barcode</button>
+    <canvas id="canvas" style="display: none;"></canvas>
+    <p id="result"></p>
+
+    <script>
+        const video = document.getElementById('video');
+        const canvas = document.getElementById('canvas');
+        const context = canvas.getContext('2d');
+        const result = document.getElementById('result');
+        const captureButton = document.getElementById('capture');
+
+        // Access the camera
+        navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } })
+            .then(stream => {
+                video.srcObject = stream;
+            })
+            .catch(err => {
+                console.error("Error accessing the camera:", err);
+            });
+
+        captureButton.addEventListener('click', () => {
+            // Draw the video frame to canvas
+            canvas.width = video.videoWidth;
+            canvas.height = video.videoHeight;
+            context.drawImage(video, 0, 0, canvas.width, canvas.height);
+
+            // Convert the image to a data URL
+            const imageData = canvas.toDataURL('image/png');
+
+            // Send the image to a free barcode reader API
+            fetch('https://api.qrserver.com/v1/read-qr-code/', {
+                method: 'POST',
+                body: JSON.stringify({ data: imageData }),
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data[0] && data[0].symbol[0].data) {
+                    result.textContent = `Barcode: ${data[0].symbol[0].data}`;
+                } else {
+                    result.textContent = 'No barcode found.';
+                }
+            })
+            .catch(error => {
+                console.error("Error reading barcode:", error);
+                result.textContent = 'Error reading barcode.';
+            });
+        });
+    </script>
+
+</body>
+</html>
