@@ -16,7 +16,7 @@
 
     <h1>Scan a Barcode</h1>
     <video id="video" autoplay playsinline></video>
-    <button id="capture">Capdtfurre & Read Barcode</button>
+    <button id="capture">Capture & Read Barcode</button>
     <canvas id="canvas" style="display: none;"></canvas>
     <p id="result"></p>
 
@@ -45,24 +45,30 @@
             // Convert the image to a data URL
             const imageData = canvas.toDataURL('image/png');
 
-            // Use CORS Anywhere proxy to forward the request to QRServer
-            fetch('https://api.allorigins.win/get?url=https://api.qrserver.com/v1/read-qr-code/', {
-    method: 'POST',
-    body: JSON.stringify({ data: imageData }),
-    headers: {
-        'Content-Type': 'application/json',
-        'X-Requested-With': 'XMLHttpRequest' // CORS Anywhere needs this header
-    },
-    mode: 'no-cors' // This disables access to the response
-})
-.then(response => {
-    console.log(response); // Will not be able to read the actual response due to no-cors
-    // You can't process the response because it's opaque
-})
-.catch(error => {
-    console.error("Error reading barcode:", error);
-});
-
+            // Use AllOrigins proxy to forward the request to QRServer
+            fetch('https://api.allorigins.win/get?url=' + encodeURIComponent('https://api.qrserver.com/v1/read-qr-code/'), {
+                method: 'POST',
+                body: JSON.stringify({ data: imageData }),
+                headers: {
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest' // AllOrigins needs this header
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.contents) {
+                    const barcodeData = JSON.parse(data.contents);
+                    if (barcodeData[0] && barcodeData[0].symbol[0].data) {
+                        result.textContent = `Barcode: ${barcodeData[0].symbol[0].data}`;
+                    } else {
+                        result.textContent = 'No barcode found.';
+                    }
+                }
+            })
+            .catch(error => {
+                console.error("Error reading barcode:", error);
+                result.textContent = 'Error reading barcode.';
+            });
         });
     </script>
 
