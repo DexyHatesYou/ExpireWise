@@ -220,6 +220,24 @@
       to { top: -85%; } 
     }
 
+       .slideC {
+      animation: slideC 1.4s forwards;
+    }
+
+    @keyframes slideC {
+      from { top: -45%; }
+      to { top: 35%; } 
+    }
+
+     .slideD {
+      animation: slideD 1.4s forwards;
+    }
+
+    @keyframes slideD {
+      from { top: 35%; }
+      to { top: -45%; } 
+    }
+
     .okay {
       position: absolute;
       align-self: center;
@@ -236,8 +254,30 @@
       transition: all 0.5s ease-out;
     }
 
+    .okay1{
+      position: absolute;
+      align-self: center;
+      text-align: center;
+      align-items: center;
+      top: 75%;
+      width: 50%;
+      height: 15%;
+      color: #BFCBCE;
+      font-size: 110%;
+      border-radius: 30px;
+      border: none;
+      left: 25%;
+      transition: all 0.5s ease-out;
+    }
+
 .okay:hover,
 .okay:focus {
+  color: #303655;
+  box-shadow: 0px 0px 20px 0px #888888;
+}
+
+.okay1:hover,
+.okay1:focus {
   color: #303655;
   box-shadow: 0px 0px 20px 0px #888888;
 }
@@ -288,6 +328,12 @@
   text-align: left;
 }
 
+.polda1{
+  font-size: 90%;
+  margin: 20px;
+  color: #6F90AF;
+}
+
 .d1d{
   font-size: 120%;
   color: #303655;
@@ -298,7 +344,19 @@
     color: #303655;
 }
 
-
+    .help {
+      position: absolute;
+      align-self: center;
+      text-align: center;
+      align-items: center;
+      width: 300px;
+      height: 270px;
+      background-color: #BFCBCE;
+      border-radius: 30px;
+      z-index: 2;
+      box-shadow: 0px 0px 40px #303655;
+      top: -45%;
+    }
   </style>
 </head>
 <body id="body1">
@@ -339,7 +397,7 @@
         <i class="fa-solid ico fa-eye-slash fa-xl" id="hidden" style="color: #BFCBCE;"></i>
         <i class="fa-solid ico fa-eye fa-xl o0" id="showed" style="color: #BFCBCE; padding-left: 2px;"></i>
       </div><p style="font-size: 20%;"></p>
-      <label style="font-size: 75%; text-decoration: underline 2px;">Need help logging in?</label>
+      <label style="font-size: 75%; text-decoration: underline 2px;" onclick="slideC()" >Need help logging in?</label>
 
     </div>
     <button class="loginB g" onclick="loadI()" >LOG IN</button>
@@ -394,10 +452,23 @@ Email us the bug or use github repository and make an issue(we prefer email). Yo
 For questions, support, or existential crises(please don't, i got one myself), email us at <u class="dark">info@expirewise.eu</u>  We’ll reply when we’re not busy eating leftovers.
 
 </p>
-    <!-- Repeat or add more text -->
   </div>
   <button class="okay g" onclick="slideB()">OKAY</button>
 </div>
+
+
+
+<div id="help" class="help g">
+  <div class="help-content">
+    <p class="polda1"><b class="d1d">Oops, no help here!</b><br><br>
+Since we don't track anything, there's no way to recover your account. Just create a new one if you're having trouble logging in. It's all about keeping things simple and secure—just your username and password!
+</p>
+  </div>
+  <button class="okay1 g" onclick="slideD()">OKAY</button>
+</div>
+
+
+
 
   <div class="coverAll">
     <i class="fa-solid fa-circle-question fa-xl" style="color: #BFCBCE;" onclick="info()"></i>   
@@ -413,6 +484,17 @@ For questions, support, or existential crises(please don't, i got one myself), e
     function slideB() {
       document.getElementById("policies").classList.add("slideB");
       document.getElementById("policies").classList.remove("slideA");
+
+    }
+
+        function slideC() {
+      document.getElementById("help").classList.add("slideC");
+      document.getElementById("help").classList.remove("slideD");
+    }
+
+    function slideD() {
+      document.getElementById("help").classList.add("slideD");
+      document.getElementById("help").classList.remove("slideC");
 
     }
 
