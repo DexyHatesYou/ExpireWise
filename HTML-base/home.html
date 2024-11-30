@@ -120,6 +120,8 @@
     display: flex;
         max-width: 100%;
     overflow-x: hidden;
+    z-index: 30%;
+    cursor: pointer;
 }
 
 
@@ -438,10 +440,11 @@ async function getMeals() {
       
       const segment = document.createElement('div');
       segment.classList.add('segment');
+      segment.setAttribute('onclick', `openrecipe(${meal.idMeal})`);
 
       segment.innerHTML = `
         <img class="rcp-img" src="${meal.strMealThumb}" alt="recipe photo">
-        <div class="rcp-part">
+        <div class="rcp-part onclick="openrecipe(${meal.idMeal})">
           <h3 class="rcp-name">${meal.strMeal}</h3>
           <span class="mark ${mealDetails.strCategory.toLowerCase()}">${mealDetails.strCategory}</span>
           <span class="mark">${mealDetails.strArea}</span><br><p class="spacer"></p>
@@ -461,7 +464,10 @@ async function getMeals() {
 
 getMeals();
 
-
+function openrecipe(id) {
+    // Navigate to recipes.html with the recipe id as a query parameter
+    window.location.href = `recipes.html?id=${id}`;
+}
 
 </script>
 </html>
