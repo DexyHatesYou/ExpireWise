@@ -513,6 +513,13 @@ opacity: 100%;
 </body>
 <script>
 
+	function test() {
+		fetch('https://academics-myth-shepherd-clearing.trycloudflare.com')
+  .then(response => response.json())
+  .then(data => console.log(data));
+
+	}
+
   window.transitionToPage = function(href) {
     document.querySelector('.body').style.opacity = 0
     setTimeout(function() { 
