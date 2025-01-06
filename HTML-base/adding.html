@@ -517,9 +517,15 @@ opacity: 100%;
 		fetch('https://academics-myth-shepherd-clearing.trycloudflare.com/api/test.php', {
   mode: 'no-cors',
 })
-  .then((response) => console.log(response))
-  .catch((error) => console.error(error));
-
+.then(response => response.json())
+  .then(data => {
+    if (data.message === 'LOL') {
+      console.log('worksssssss'); // This will log "LOL" to the browser console
+    } else {
+      console.error('Error:', data.error);
+    }
+  })
+  .catch(error => console.error('Request failed', error));
 
 	}
 
