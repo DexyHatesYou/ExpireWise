@@ -514,20 +514,21 @@ opacity: 100%;
 <script>
 
 	function test() {
-		fetch('https://academics-myth-shepherd-clearing.trycloudflare.com/api/test.php', {
-  mode: 'no-cors',
-})
-.then(response => response.json())
-  .then(data => {
-    if (data.message === 'LOL') {
-      console.log('worksssssss'); // This will log "LOL" to the browser console
-    } else {
-      console.error('Error:', data.error);
-    }
-  })
-  .catch(error => console.error('Request failed', error));
+  fetch('https://academics-myth-shepherd-clearing.trycloudflare.com/api/test.php')
+    .then((response) => {
+      // Check if the response is okay (status 200)
+      if (response.ok) {
+        return response.json(); // Parse the JSON body of the response
+      } else {
+        throw new Error('Network response was not ok');
+      }
+    })
+    .then((data) => {
+      console.log(data.message); // Log the "message" from the response (e.g., 'LOL')
+    })
+    .catch((error) => console.error('Fetch error:', error)); // Catch and log errors
+}
 
-	}
 
   window.transitionToPage = function(href) {
     document.querySelector('.body').style.opacity = 0
