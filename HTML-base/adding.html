@@ -513,21 +513,21 @@ opacity: 100%;
 </body>
 <script>
 
-	function test() {
+function test() {
   fetch('https://rick-perform-bureau-flower.trycloudflare.com/api/test.php')
     .then((response) => {
-      // Check if the response is okay (status 200)
       if (response.ok) {
-        return response.json(); // Parse the JSON body of the response
+        return response.json(); // Parse JSON body
       } else {
         throw new Error('Network response was not ok');
       }
     })
     .then((data) => {
-      alert(data.message); // Log the "message" from the response (e.g., 'LOL')
+      alert(data.message); // Show "LOL"
     })
-    .catch((error) => console.error('Fetch error:', error)); // Catch and log errors
+    .catch((error) => console.error('Fetch error:', error));
 }
+
 
 
   window.transitionToPage = function(href) {
