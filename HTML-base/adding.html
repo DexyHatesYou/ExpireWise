@@ -514,16 +514,16 @@ opacity: 100%;
 <script>
 
 function test() {
-  fetch('76b7342f-1e27-4717-8ae5-8fbc9c5895af.cfargotunnel.com')
+  fetch('195.113.213.191/db/test.php')
     .then((response) => {
       if (response.ok) {
-        return response.json(); // Parse JSON body
+        return response.json();
       } else {
         throw new Error('Network response was not ok');
       }
     })
     .then((data) => {
-      alert(data.message); // Show "LOL"
+      alert(data.message);
     })
     .catch((error) => console.error('Fetch error:', error));
 }
