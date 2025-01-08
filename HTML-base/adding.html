@@ -514,7 +514,7 @@ opacity: 100%;
 <script>
 
 function test() {
-  fetch('https://pup-able-instantly.ngrok-free.app/db/test.php')
+  fetch('tcp://2.tcp.eu.ngrok.io:19032/db/test.php')
     .then((response) => {
       if (response.ok) {
         return response.json();
