@@ -295,44 +295,93 @@ opacity: 100%;
       color: #BFCBCE;
       top: 25%;
       position: relative;
+      left: 15%;
     }
 
     .strip{
       position: relative;
       width: 100%;
-      height: 0.2vh;
+      height: 0.1vh;
       background-color: #BFCBCE;
       z-index: 5;
       bottom: -38%;
       border-radius: 25px;
     }
 
-    .left{
-      position: absolute;
-      top: 20%;
-      background-color: #BFCBCE;
-      color: white;
-      padding: 1px 6px 1px 6px;
-      border-radius: 6px;
-      right: 17%;
-    }
 
-    .leftct{
-      font-size: 70%;
-    }
 
     .img{
       position: absolute;
       top: 5%;
+      right: 0%;
     }
 
-    .edit{
-      right: 7%;
+.pfp{
+  height: 90%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  background-color: white;
+  border-radius: 500px;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  outline: 1px #BFCBCE solid;
+  max-width: 20vh;
+}
+
+  .add-btn{
+      background-color: white;
+      width: 68%;
+      height: 100%;
+      border-radius: 25px;
+      display: inline;
+      text-align: center;
+      border: none;
+      color: #BFCBCE;
+      transition: all 0.5s ease-out;
+      margin-right: 3%;
     }
 
-    .delete{
-      right: -3%;
+      .back-btn{
+      background-color: white;
+      height: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 50px;
+      display: inline;
+      text-align: center;
+      border: none;
+      color: #BFCBCE;
+      transition: all 0.5s ease-out;
     }
+
+    .down{
+      width: 100%;
+      position: absolute;
+      display: inline-flex;
+      top: 71%;
+      height: 8%;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .add-btn:hover,
+    .add-btn:focus {
+     color: #303655;
+     box-shadow: 0px 0px 20px 0px #888888;
+    }
+
+    .back-btn:hover,
+    .back-btn:focus {
+     color: #303655;
+     box-shadow: 0px 0px 20px 0px #888888;
+    }
+
+    .back-btn:hover .btn-image,
+    .back-btn:focus .btn-image {
+     filter: brightness(0) saturate(100%) invert(31%) sepia(20%) saturate(600%) hue-rotate(150deg) brightness(95%) contrast(100%);
+     transition: filter 0.5s ease-out;
+      } 
 
 	</style>
 	<meta charset="utf-8">
@@ -344,30 +393,28 @@ opacity: 100%;
 <p id="date" class="g"></p>
 <g class="body">
 <div class="top">
-<img height="35px" class="ico" src="https://img.icons8.com/BFCBCE/ios-filled/100/fridge.png" alt="fridge"/>
+<img height="35px" class="ico" src="https://img.icons8.com/BFCBCE/ios/100/friends.png" alt="friends"/>
 <div class="line"></div>
-<h2 class="g topt">Storage</h2>
+<h2 class="g topt">Friend list</h2>
 </div>
 <div class="blur1"></div>
 
 <div class="scroll">
   <div class="main">
     <div class="stored">
-    
+      
       <div class="ingre">
-        <div class="g str">Pasta</div>
-        <div class="g left">2 <span class="leftct">Days left</span></div>
+        <img class="pfp" src="https://stormclub.cz/wp-content/uploads/2024/12/hq720.jpg">
+        <div class="g str">SteveSniff</div>
         <img class="edit img" width="30" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png" alt="pencil--v1"/>
-        <img class="delete img" width="30" src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png" alt="waste"/>
         <div class="strip"></div>
       </div>
       
 
-<div class="ingre">
-        <div class="g str">Milk</div>
-        <div class="g left">3 <span class="leftct">Days left</span></div>
+      <div class="ingre">
+        <img class="pfp" src="https://play.nintendo.com/images/profile-mk-yoshi.babe07bc.7fdea5d658b63e27.png">
+        <div class="g str">Yoshi</div>
         <img class="edit img" width="30" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png" alt="pencil--v1"/>
-        <img class="delete img" width="30" src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png" alt="waste"/>
         <div class="strip"></div>
       </div>
 
@@ -384,9 +431,17 @@ opacity: 100%;
 
 </g>
 <div class="blur2"></div>
-<div class="bottom" onclick="transitionToPage('./adding.html')">
-<h2 class="g">Add ingredient</h2>
+<div class="down">
+<button class="add-btn" onclick="test()">
+<h2 class="g" style="top: -10%; margin: 15px;">Search people</h2>
+</button>
+<button class="back-btn" onclick="transitionToPage('./requests.html')">
+<img width="30" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/secured-letter--v1.png" alt="secured-letter--v1"/>
+</button>
 </div>
+</g>
+
+
 <div class="nav">
   <div class="b1"></div>
   <div class="r" onclick="transitionToPage('./calendar.html')">
