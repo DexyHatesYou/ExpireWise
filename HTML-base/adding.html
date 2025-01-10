@@ -514,7 +514,7 @@ opacity: 100%;
 <script>
 
 function test() {
-  fetch('http://expirewise.spsul.cz/test.php')
+  fetch('./db/test.php')
     .then((response) => {
       if (response.ok) {
         return response.json();
