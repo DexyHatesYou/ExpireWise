@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
+	<style>
+		@font-face { font-family: g; src: url('hwyuenei64.ttf'); }
+			
+
+
+			.g{
+				font-family: g;
+			}
+
+			body {
+      background-color: #BFCBCE;
+      overflow: hidden;
+      margin: 0;
+      padding: 0;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      user-select: none;
+
+      background: rgb(86,91,117);
+      background: linear-gradient(180deg, rgba(86,91,117,1) 0%, rgba(191,203,206,1) 12%);
+    }
+
+    .load{
+      animation: load 0.6s ease-in forwards;
+    }
+
+    @keyframes load {
+      from { opacity: 0%; }
+      to { opacity: 100% } 
+    }
+
+    .a{
+      position: relative;
+      align-items: center;
+      align-self: center;
+      text-align: center;
+    }
+
+    .ico {
+      padding: 15px 15px 15px 15px;
+      aspect-ratio: 1 / 1;
+    }
+
+    .line {
+      top: 17.5%;
+      left: 18%;
+      position: absolute;
+      width: 4px;
+      height: 65%;
+      background-color: #BFCBCE;
+      border-radius: 5px;
+    }
+
+    .top {
+      position: absolute;
+      top: 10%;
+      background-color: white;
+      width: 90%;
+      height: 8%;
+      border-radius: 25px;
+      display: inline;
+      z-index: 5;
+    }
+
+    .topt {
+      position: absolute;
+      top: -3%;
+      left: 23%;
+      color: #BFCBCE;
+    }
+
+    #date {
+      color: white;
+      position: absolute;
+      top: 1%;
+      left: 6%;
+      font-size: 130%;
+    }
+
+
+    .nav{
+      position: absolute;
+      bottom: 5%;
+      width: 90%;
+      height: 13%;
+      display: flex;
+      align-items: center;
+      align-self: center;
+      z-index: 10;
+    }
+
+    .r{
+      width: 45%;
+      height: 60%;
+      background-color: white;
+      position: absolute;
+      left: 5%;
+      border-radius: 500px;
+    }
+
+    .c{
+      height: 100%;
+      aspect-ratio: 1/1;
+      background-color: white;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 500px;
+      box-shadow: 0 0 25px rgba(0, 0, 0, 0.4);
+      z-index: 10;
+    }
+
+    .ct{
+      height: 100%;
+      aspect-ratio: 1/1;
+      background-color: white;
+      position: absolute;
+      left: 50%;
+      transform: translateX(-50%);
+      border-radius: 500px;
+      z-index: 20;
+    }
+
+    .l{
+      width: 45%;
+      height: 60%;
+      background-color: white;
+      position: absolute;
+      right: 5%;
+      border-radius: 500px;
+    }
+
+    .b1{
+      position: absolute;
+      height: 50%;
+      width: 100%;
+      bottom: -30%;
+      background-color: #BFCBCE;
+      z-index: 15;
+    }
+
+    .b2{
+      position: absolute;
+      height: 50%;
+      width: 100%;
+      bottom: 80%;
+      background-color: #BFCBCE;
+      z-index: 15;
+    }
+
+    .ca{
+      position: absolute;
+      left: 15%;
+      bottom: 12%;
+    }
+
+    .us{
+      position: absolute;
+      right: 15%;
+      bottom: 6.5%;
+    }
+
+    .re{
+      position: absolute;
+      left: 14.5%;
+      bottom: 15%;
+    }
+
+    .c0{
+      opacity: 0%;
+    }
+
+.r .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.r:hover .c0 {
+opacity: 100%;
+}
+
+.l .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.l:hover .c0 {
+opacity: 100%;
+}
+
+.ct .c0 {
+  transition: opacity 0.3s ease;
+}
+
+.ct:hover .c0 {
+opacity: 100%;
+}
+
+.scroll {
+  overflow-y: scroll;
+  overflow-x: hidden;
+  max-width: 98%;
+  top: 37%;
+  position: absolute;
+  width: 98%;
+  height: 45%;
+  margin: auto;
+  scrollbar-width: none;
+  left: 6%;
+   scroll-behavior: smooth;
+}
+
+      .main{
+  height: 247%;
+  width: 90%;
+  background-color: white;
+  border-radius: 25px;
+  position: absolute;
+  top: 5%;
+  z-index: ;
+  overflow: ;
+}
+
+.blur1 {
+  width: 120%;
+  height: 5%;
+  background-color: #BFCBCE;
+  position: absolute;
+  box-shadow: 0px 0px 20px 20px #BFCBCE;
+  z-index: 3;
+  top: 32%;
+}
+
+.blur2 {
+  width: 120%;
+  height: 7%;
+  background-color: #BFCBCE;
+  position: absolute;
+  box-shadow: 0px 0px 20px 20px #BFCBCE;
+  top: 79%;
+  position: fixed;
+}
+
+.body {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+        justify-content: center;
+      align-items: center;
+
+         animation: load 0.6s ease-in forwards;
+}
+
+
+   .bottom {
+      position: absolute;
+      top: 72%;
+      background-color: white;
+      width: 90%;
+      height: 8%;
+      border-radius: 25px;
+      display: inline;
+      z-index: 50;
+      text-align: center;
+      align-items: center;
+      justify-content: center;
+      display: flex;
+      color: #BFCBCE;
+      transition: all 0.5s ease-out;
+    }
+
+    .bottom:hover,
+    .bottom:focus {
+     color: #303655;
+     box-shadow: 0px 0px 20px 0px #888888;
+    }
+
+    .stored{
+      padding: 8px 15px 8px 15px;
+    }
+
+    .ingre{
+      position: relative;
+      width: 100%;
+      height: 5vh;
+    }
+
+    .str{
+      font-size: 110%;
+      color: #BFCBCE;
+      top: 25%;
+      position: relative;
+      left: 15%;
+    }
+
+    .strip{
+      position: relative;
+      width: 100%;
+      height: 0.1vh;
+      background-color: #BFCBCE;
+      z-index: 5;
+      bottom: -38%;
+      border-radius: 25px;
+    }
+
+
+
+    .img{
+      position: absolute;
+      top: 5%;
+      right: 0%;
+    }
+
+.thumb{
+  height: 90%;
+  aspect-ratio: 1/1;
+  object-fit: cover;
+  background-color: white;
+  border-radius: 500px;
+  position: absolute;
+  top: 0%;
+  left: 0%;
+  outline: 1px #BFCBCE solid;
+  max-width: 20vh;
+}
+
+  .add-btn{
+      background-color: white;
+      width: 68%;
+      height: 100%;
+      border-radius: 25px;
+      display: inline;
+      text-align: center;
+      border: none;
+      color: #BFCBCE;
+      transition: all 0.5s ease-out;
+      margin-right: 3%;
+    }
+
+      .back-btn{
+      background-color: white;
+      height: 100%;
+      aspect-ratio: 1/1;
+      border-radius: 50px;
+      display: inline;
+      text-align: center;
+      border: none;
+      color: #BFCBCE;
+      transition: all 0.5s ease-out;
+    }
+
+    .down{
+      width: 100%;
+      position: absolute;
+      display: inline-flex;
+      top: 71%;
+      height: 8%;
+      align-items: center;
+      justify-content: center;
+      z-index: 20;
+    }
+
+    .add-btn:hover,
+    .add-btn:focus {
+     color: #303655;
+     box-shadow: 0px 0px 20px 0px #888888;
+    }
+
+    .back-btn:hover,
+    .back-btn:focus {
+     color: #303655;
+     box-shadow: 0px 0px 20px 0px #888888;
+    }
+
+    .back-btn:hover .btn-image,
+    .back-btn:focus .btn-image {
+     filter: brightness(0) saturate(100%) invert(31%) sepia(20%) saturate(600%) hue-rotate(150deg) brightness(95%) contrast(100%);
+     transition: filter 0.8s ease-out;
+      } 
+
+      .profile{
+  height: 13%;
+  width: 90%;
+  background-color: white;
+  border-radius: 25px;
+  position: absolute;
+  top: 17%;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.2);
+  z-index: 10;
+}
+
+.pfp{
+  width: 28%;
+  max-height: 120%;
+  aspect-ratio: 1/1;
+  background-color: #BFCBCE;
+  border-radius: 500px;
+  position: absolute;
+  top: -35%;
+  left: 12%;
+  outline: 3px white solid;
+  box-shadow: 0 0 25px rgba(0, 0, 0, 0.6);
+  max-width: 20vh;
+}
+
+.name{
+  color: #6F90AF;
+  font-size: 120%;
+  position: absolute;
+  top: 6%;
+  left: 45%;
+}
+
+.since{
+  background-color: #BFCBCE;
+  color: white;
+  font-size: 50%;
+  padding: 2px 5px 2px 5px;
+  border-radius: 100px;
+  position: absolute;
+  left: 45%;
+  top: 32%;
+}
+
+.rank{
+  color: white;
+  font-size: 50%;
+  padding: 2px 5px 2px 5px;
+  border-radius: 100px;
+  position: absolute;
+  left: 80%;
+  top: 32%;
+}
+
+.vipP{
+  background-color: #CECBBF;
+}
+
+.bio{
+  color: #BFCBCE;
+  font-size: 50%;
+  width: 75%;
+  position: absolute;
+  right: 15%;
+  top: 65%;
+  max-width: 50vh;
+}
+
+.qr{
+  width: 9%;
+  max-height: 30%;
+  aspect-ratio: 1/1;
+  background-color: black;
+  max-width: 5vh;
+  position: absolute;
+  right: 5%;
+  top: 50%;
+  border-radius: 7px;
+  background-color: #BFCBCE;
+  padding: 4px;
+}
+
+.bookmarks{
+  position: absolute;
+  width: 88%;
+  height: 6%;
+  top: 31.5%;
+  background-color: white;
+  border-radius: 25px;
+  z-index: 10;
+}
+
+
+.sep{
+  background-color: #BFCBCE;
+  position: absolute;
+  width: 3px;
+  height: 80%;
+  top: 10%;
+  left: 18%;
+  border-radius: 100px;
+}
+
+.log{
+  position: absolute;
+  height: 75%;
+  left: 4%;
+  bottom: 12.5%;
+}
+
+.lab{
+  color: #BFCBCE;
+  position: absolute;
+  bottom: 20%;
+  margin: 0;
+  left: 22%;
+  font-size: 130%;
+}
+
+	</style>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>ExpireWise</title>
+</head>
+<body>
+
+<p id="date" class="g"></p>
+<g class="body">
+<div class="profile">
+  <div class="pfp"></div>
+  <span class="name g">MasterChef77</span>
+  <span class="since g">Saving food for 46days</span>
+  <span class="rank g vipP">VIP+</span>
+  <span class="bio g">
+  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore.
+  </span>
+  <div class="">
+    <img class="qr" src="https://img.icons8.com/ffffff/pastel-glyph/100/qr-code--v2.png" alt="qr-code--v2"/>
+  </div>
+
+</div>
+<div class="blur1"></div>
+
+
+<div class="bookmarks">
+  <img class="log" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/bookmark-ribbon.png" alt="bookmark-ribbon"/>
+  <div class="sep s1"></div>
+  <h3 class="lab g">Bookmarks</h3>
+</div>
+
+
+<div class="scroll">
+  <div class="main">
+    <div class="stored">
+      
+      <div class="ingre">
+        <img class="thumb" src="https://stormclub.cz/wp-content/uploads/2024/12/hq720.jpg">
+        <div class="g str">SteveSniff</div>
+        
+        <div class="strip"></div>
+      </div>
+      
+
+      <div class="ingre">
+        <img class="thumb" src="https://play.nintendo.com/images/profile-mk-yoshi.babe07bc.7fdea5d658b63e27.png">
+        <div class="g str">Yoshi</div>
+        
+        <div class="strip"></div>
+      </div>
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+
+
+</g>
+<div class="blur2"></div>
+
+
+<div class="nav">
+  <div class="b1"></div>
+  <div class="r" onclick="transitionToPage('./calendar.html')">
+    <img width="45" class="ca" src="https://img.icons8.com/BFCBCE/stamp/100/calendar.png" alt="calendar"/>
+     <img width="45" class="ca c0" src="https://img.icons8.com/6f90af/stamp/100/calendar.png" alt="calendar"/>
+
+  </div>
+  <div class="c"></div>
+  <div class="ct" onclick="transitionToPage('./recipe.html')">
+    <img width="70" class="re" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+        <img width="70" class="re c0" src="https://img.icons8.com/6f90af/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+  </div>
+  <div class="l" onclick="transitionToPage('./profile.html')">
+    <img width="50" class="us" src="https://img.icons8.com/6F90AF/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+        <img width="50" class="us c0" src="https://img.icons8.com/84A7BA/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+  </div>
+  <div class="b2"></div>
+</div>
+<script src="date.js"></script>
+</body>
+<script>
+      window.transitionToPage = function(href) {
+    document.querySelector('.body').style.opacity = 0
+    setTimeout(function() { 
+        window.location.href = href
+    }, 500)
+}
+
+document.addEventListener('DOMContentLoaded', function(event) {
+    document.querySelector('.body').style.opacity = 1
+})
+</script>
+</html>
