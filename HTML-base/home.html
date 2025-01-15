@@ -382,7 +382,7 @@ overflow-x: hidden;
 
 <div class="nav">
   <div class="b12"></div>
-  <div class="r" onclick="transitionToPage('https://www.google.com')">
+  <div class="r" onclick="transitionToPage('./calendar.html')">
     <img width="45" class="ca" src="https://img.icons8.com/BFCBCE/stamp/100/calendar.png" alt="calendar"/>
      <img width="45" class="ca c0" src="https://img.icons8.com/6f90af/stamp/100/calendar.png" alt="calendar"/>
 
@@ -418,6 +418,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 async function getMeals() {
   try {
     
+    //rework, just flour recipes for now
     var respApi = await fetch('https://www.themealdb.com/api/json/v1/1/filter.php?i=flour');
     var data = await respApi.json();
 
