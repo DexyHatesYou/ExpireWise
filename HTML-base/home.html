@@ -402,20 +402,29 @@ overflow-x: hidden;
 </body>
 <script>
 async function checkSession() {
-  const response = await fetch('https://expirewise.localto.net/api/check_session.php', {
-    credentials: 'include'
-  });
-  const result = await response.json();
+  console.log("Checking session...");
+  try {
+    const response = await fetch('https://expirewise.localto.net/api/check_session.php', {
+      credentials: 'include'
+    });
+    console.log("Response received");
 
-  if (result.loggedIn) {
-    alert(result.nickname);
-  } else {
-    alert('You are not logged in!');
-    window.location.href = 'index.html';
+    const result = await response.json();
+    console.log(result);
+
+    if (result.loggedIn) {
+      alert(result.nickname);
+    } else {
+      alert('You are not logged in!');
+      window.location.href = 'index.html';
+    }
+  } catch (error) {
+    console.error("Error:", error);
   }
 }
 
 checkSession();
+
 
 
 
