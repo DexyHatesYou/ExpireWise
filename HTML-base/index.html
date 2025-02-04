@@ -515,7 +515,7 @@ Since we don't track anything, there's no way to recover your account. Just crea
 
             if (result.status === 'OKAY') {
                 // Show an alert with the sessionId
-              localStorage.setItem("spId", result.sessionId);
+              localStorage.setItem("spId", ${result.sessionId});
               console.log(spId);
                 alert(`Login successful! Your sessionId is: ${result.sessionId}`);
 
