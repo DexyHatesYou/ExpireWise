@@ -9,14 +9,14 @@
   <style>
 
 
-    		@font-face { font-family: g; src: url('hwyuenei64.ttf'); }
-			
+        @font-face { font-family: g; src: url('hwyuenei64.ttf'); }
+      
 
-			.g{
-				font-family: g;
-			}
+      .g{
+        font-family: g;
+      }
 
-			
+      
     .coverAll {
       z-index: 1000;
       position: fixed;
@@ -53,9 +53,9 @@
     }
 
     .logoslog {
-    	 position: relative;
-    	 bottom: -220px;
-    	 text-align: center;
+       position: relative;
+       bottom: -220px;
+       text-align: center;
     }
 
    
@@ -86,8 +86,8 @@
     }
 
     .buttonLOL:hover {
- 	 cursor: pointer;
-	}
+   cursor: pointer;
+  }
    
     #login-part {
       position: relative;
@@ -357,19 +357,33 @@
       box-shadow: 0px 0px 40px #303655;
       top: -45%;
     }
+
+        .confirm {
+      position: absolute;
+      align-self: center;
+      text-align: center;
+      align-items: center;
+      width: 300px;
+      height: 210px;
+      background-color: #BFCBCE;
+      border-radius: 30px;
+      z-index: 2;
+      box-shadow: 0px 0px 40px #303655;
+      top: -45%;
+    }
   </style>
 </head>
 <body id="body1">
   <div id="login-part">
     <img class="bgimg" src="./img/bgdrop.png" alt="Background">
     <div class="login-stuff">
-    	<div class="logoslog">
-    		<img class="topimg" style="width: 80%;" src="./img/logo.png" alt="Background">
-    		<p class="g" style="color: #BFCBCE; font-size: 100%">Cook smart, waste less.</p>
-    	</div>
+      <div class="logoslog">
+        <img class="topimg" style="width: 80%;" src="./img/logo.png" alt="Background">
+        <p class="g" style="color: #BFCBCE; font-size: 100%">Cook smart, waste less.</p>
+      </div>
      <div class="buttonLOL" onclick="animateSlide();" style="text-align: center; position: relative; left: 10%; width: 80%; height: 60px; border-radius: 30px; top: 250px; background-color: #7DA7BD;">
-     	<h3 class="g" style="line-height: 50px;font-size: 100%; position: relative; vertical-align: middle; margin-top: 20px; color: white;">START SAVING FOOD NOW</h3>
-     	<img class="topimg" style="width: 30px; position: relative; top: -35px;" src="./img/down.png" >
+      <h3 class="g" style="line-height: 50px;font-size: 100%; position: relative; vertical-align: middle; margin-top: 20px; color: white;">START SAVING FOOD NOW</h3>
+      <img class="topimg" style="width: 30px; position: relative; top: -35px;" src="./img/down.png" >
      </div>
     </div>
   </div>
@@ -406,7 +420,7 @@
     <g class="g" style="position: absolute; top: 56.3%; font-size: 90%; color: white; text-align: center; width: 100%;">OTHER OPTIONS</g>
     <div style="width: 25%; height: 3px; background-color: white; position: absolute; top: 57%; left: 70%; border-radius: 15px;"></div>
 </div>
-  <button class="regB g" onclick="loadE()">REGISTER</button>
+  <button class="regB g" onclick="openReg()">REGISTER</button>
  
 <div class="policy g" onclick="slideA()">
   <p>Agreement policy</p>
@@ -467,7 +481,15 @@ Since we don't track anything, there's no way to recover your account. Just crea
   <button class="okay1 g" onclick="slideD()">OKAY</button>
 </div>
 
-
+<div id="confirm" class="confirm g">
+  <div class="help-content">
+    <h4 onclick="slideF()" style="top: -4%; right: 5%; position: absolute; color: #7DA7BD;">X</h4>
+    <p class="polda1"><b class="d1d" style="font-size: 100%; margin-top: 20px;"><br>Please confirm your password</b><br>
+</p>
+<input type="password" name="password" id="passConf" class="g" style="padding-left: 10px;">
+  </div>
+  <button class="okay1 g" onclick="register()">REGISTER</button>
+</div>
 
 
   <div class="coverAll">
@@ -488,12 +510,12 @@ Since we don't track anything, there's no way to recover your account. Just crea
         body: `nickname=${encodeURIComponent(nickname)}&password=${encodeURIComponent(password)}`,
     });
 
-    const result = await response.text(); // Expecting PHP to return plain text like "Login successful"
+    const result = await response.text(); 
     
     if (result.trim() === "Login successful") {
-        loadI(); // Call the LoadI function if login is successful
+        loadI(); 
     } else {
-        alert(result); // Show the error message (e.g., "Wrong password" or "Nickname not found")
+        alert(result); 
     }
 }
 
@@ -519,9 +541,65 @@ Since we don't track anything, there's no way to recover your account. Just crea
 
     }
 
+    function openReg() {
+      var nicknameCheck = document.getElementById("username").value;
+        var passwordCheck = document.getElementById("password").value;
+        if (nicknameCheck.length <= 3 || passwordCheck.length <= 3) {
+          alert("Please fill out nickname and password on main page before trying to register");
+        } else {
+      document.getElementById("confirm").classList.add("slideC");
+      document.getElementById("confirm").classList.remove("slideD");
+    }
+    }
+
+
+    function slideF() {
+      document.getElementById("confirm").classList.add("slideD");
+      document.getElementById("confirm").classList.remove("slideC");
+
+    }
+
+
+
+
     function animateSlide() {
       document.getElementById("login-part").classList.add("slide-up");
     }
+
+    async function register() {
+    const nickname = document.getElementById("username").value;
+    const password1 = document.getElementById("password").value;
+    const password = document.getElementById("passConf").value;
+
+
+    if (password == password1) {
+    const response = await fetch("https://expirewise.localto.net/api/register.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `nicknameCheck=${encodeURIComponent(nickname)}&passwordConf=${encodeURIComponent(password)}`,
+    });
+
+    const result = await response.text(); 
+    
+    if (result.trim() === "Registration successful") {
+        alert("Registration successful");
+        document.getElementById("body1").classList.add("loadF");
+      setTimeout(function() {
+        window.location.href = "./home.html";
+    }, 500);
+    } else {
+        alert(result); 
+        document.getElementById("confirm").classList.add("slideD");
+      document.getElementById("confirm").classList.remove("slideC");
+    }
+  } else {
+    alert("Your passwords dont match");
+    document.getElementById("passConf").value = '';
+  }
+}
+
 
     function loadI() {
       document.getElementById("body1").classList.add("loadF");
