@@ -514,19 +514,29 @@ opacity: 100%;
 <script>
 
 function test() {
-  fetch('https://expirewise.localto.net/api.test.php')
+  fetch('https://expirewise.localto.net/api/list.php')
     .then((response) => {
-      if (response.ok) {
-        return response.json();
-      } else {
+      if (!response.ok) {
         throw new Error('Network response was not ok');
       }
+      return response.json();
     })
     .then((data) => {
-      alert(data.message);
+      // Combine all nicknames into a single string, separated by new lines
+      const nicknames = data.join('\n');
+      
+      // Show alert with all nicknames
+      alert(`Nicknames:\n${nicknames}`);
+      
+      // Log all nicknames to the console
+      console.log('Nicknames:', data);
     })
-    .catch((error) => console.error('Fetch error:', error));
+    .catch((error) => {
+      console.error('Error fetching nicknames:', error);
+      alert('An error occurred while fetching nicknames.');
+    });
 }
+
 
 
 

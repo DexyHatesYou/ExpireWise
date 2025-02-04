@@ -400,7 +400,7 @@
       <label style="font-size: 75%; text-decoration: underline 2px;" onclick="slideC()" >Need help logging in?</label>
 
     </div>
-    <button class="loginB g" onclick="loadI()" >LOG IN</button>
+    <button class="loginB g" onclick="login()" >LOG IN</button>
 <div class="differentor">
     <div style="width: 25%; height: 3px; background-color: white; position: absolute; top: 57%; left: 5%; border-radius: 15px;"></div>
     <g class="g" style="position: absolute; top: 56.3%; font-size: 90%; color: white; text-align: center; width: 100%;">OTHER OPTIONS</g>
@@ -475,6 +475,27 @@ Since we don't track anything, there's no way to recover your account. Just crea
   </div>
 
   <script>
+  
+  async function login() {
+            const nickname = document.getElementById("username").value;
+            const password = document.getElementById("password").value;
+
+            const response = await fetch("https://expirewise.localto.net/api/login.php", {
+    method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded",
+        },
+        body: `nickname=${encodeURIComponent(nickname)}&password=${encodeURIComponent(password)}`,
+    });
+
+    const result = await response.text(); // Expecting PHP to return plain text like "Login successful"
+    
+    if (result.trim() === "Login successful") {
+        loadI(); // Call the LoadI function if login is successful
+    } else {
+        alert(result); // Show the error message (e.g., "Wrong password" or "Nickname not found")
+    }
+}
 
     function slideA() {
       document.getElementById("policies").classList.add("slideA");
