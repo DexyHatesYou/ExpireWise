@@ -497,7 +497,8 @@ Since we don't track anything, there's no way to recover your account. Just crea
   </div>
 
   <script>
-  
+  var spId = localStorage.getItem("spId");
+
   async function login() {
             const nickname = document.getElementById("username").value;
             const password = document.getElementById("password").value;
@@ -514,6 +515,8 @@ Since we don't track anything, there's no way to recover your account. Just crea
 
             if (result.status === 'OKAY') {
                 // Show an alert with the sessionId
+              localStorage.setItem("spId", result.sessionId);
+              console.log(spId);
                 alert(`Login successful! Your sessionId is: ${result.sessionId}`);
 
                 // Optionally, you can redirect the user to the home page
