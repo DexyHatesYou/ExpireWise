@@ -405,6 +405,24 @@ overflow-x: hidden;
   var spId = localStorage.getItem("spId");
   console.log(spId);
 
+  fetch("https://expirewise.localto.net/api/session.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ spId: spId })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status === "notFound") {
+        alert("notFound");
+        localStorage.setItem("spId", null);
+        window.location.href = "index.html";
+    } else {
+        alert("Found: " + data.nickname);
+        var nickname = data.nickname;
+    }
+})
+.catch(error => console.error("Error:", error));
+  
 /*
   async function checkSession() {
             console.log("Checking session...");
