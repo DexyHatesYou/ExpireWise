@@ -413,7 +413,7 @@ height: 50%;
     <h3 class="lab g" >About</h3>
     <img class="log" src="https://img.icons8.com/BFCBCE/metro/100/info.png" alt="bookmark-ribbon"/>
   </div>
-  <div class="lo d s">
+  <div class="lo d s" onclick="logout()">
     <div class="sep" style="background-color: #CEBFBF;"></div>
     <h3 class="lab g" style="color: #CEBFBF;">Log out</h3>
     <img class="log" src="https://img.icons8.com/CEBFBF/ios-filled/100/logout-rounded-left.png" alt="bookmark-ribbon"/>
@@ -465,6 +465,22 @@ height: 50%;
     }
 })
 .catch(error => console.error("Error:", error));
+
+
+function logout() {
+    fetch("https://expirewise.localto.net/api/logout.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ spId: localStorage.getItem("spId") })
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.status === "done" ? "done" : "error");
+        localStorage.setItem("spId", null);
+        window.location.href = "index.html";
+    })
+    .catch(error => console.error("Logout failed:", error));
+}
 
 
   window.transitionToPage = function(href) {
