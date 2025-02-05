@@ -499,6 +499,29 @@ Since we don't track anything, there's no way to recover your account. Just crea
   <script>
   var spId = localStorage.getItem("spId");
 
+
+if (spId !== null) {
+  // Send spId to expirewise.localto.net/api/session.php
+  fetch('https://expirewise.localto.net/api/session.php', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/x-www-form-urlencoded',
+    },
+    body: `spId=${encodeURIComponent(spId)}`
+  })
+  .then(response => response.text())
+  .then(data => {
+    if (data !== 'notFound') {
+      // Redirect to home.html if found
+      window.location.href = 'home.html';
+    }
+    // If 'notFound' is received, do nothing
+  })
+  .catch(error => console.error('Error:', error));
+}
+
+
+
   async function login() {
             const nickname = document.getElementById("username").value;
             const password = document.getElementById("password").value;
