@@ -368,7 +368,7 @@ height: 50%;
 
 <div class="profile">
   <div class="pfp"></div>
-  <span class="name g">MasterChef77</span>
+  <span id="nickname" class="name g"></span>
   <span class="since g">Saving food for 46days</span>
   <span class="rank g vipP">VIP+</span>
   <span class="bio g">
@@ -443,6 +443,30 @@ height: 50%;
 <script src="date.js"></script>
 </body>
 <script>
+
+  var spId = localStorage.getItem("spId");
+  console.log(spId);
+
+  fetch("https://expirewise.localto.net/api/session.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ spId: spId })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status === "notFound") {
+        alert("notFound");
+        localStorage.setItem("spId", null);
+        window.location.href = "index.html";
+    } else {
+        var nickname = data.nickname;
+        document.getElementById("nickname").textContent = nickname;
+
+    }
+})
+.catch(error => console.error("Error:", error));
+
+
   window.transitionToPage = function(href) {
     document.querySelector('.body').style.opacity = 0
     setTimeout(function() { 
