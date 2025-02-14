@@ -67,6 +67,8 @@ body {
   justify-content: center;
   align-items: center;
   user-select: none;
+  background: rgb(111,144,175);
+background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(71,85,88,1) 12%);
 }
 
 button {

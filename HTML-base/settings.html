@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="settingsD.css">
+	<title>ExpireWise</title>
+</head>
+<style type="text/css">
+  .redButton.horizTranslate2 { -webkit-transition: -webkit-transform 0.2s ease-out; -webkit-transform: translateX(730%);}
+.redButton.horizTranslate3 { -webkit-transition: -webkit-transform 0.2s ease-out; -webkit-transform: translateX(1440%);}
+.redButton.horizTranslate1 { -webkit-transition: -webkit-transform 0.2s ease-out; -webkit-transform: translateX(0%);}
+#outerContainer{ position:relative; width:100%; height:98px;}
+#buttonContainer{background-color: #BFCBCE; width:90%; height:28px; position:relative; left:20px; top:45px; border-radius:14px;}
+.redButton{width:16px; height:16px; background-color:#7DA7BD; border-radius:8px; position:relative; top:6px; left:6px;}
+#legendTextContainer{left:22px; display:inline-block;position:absolute; top:23px; color:#7DA7BD;font-size:10pt;text-align:center; width: 90%;}
+.legendText{display:inline-block;width:30%; padding-bottom:33px; cursor:default; user-select: none;}
+#message{border:1px solid #cccccc; display:inline-block; padding:4px; margin-top: 6px;font-size:10pt;}
+</style>
+<body>
+
+<p id="date" class="g"></p>
+<g class="body">
+<div class="top">
+<img height="35px" class="ico" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/settings--v1.png" alt="settings"/>
+<div class="line"></div>
+<h2 class="g topt">Settings</h2>
+</div>
+<div class="blur1"></div>
+
+<div class="scroll">
+  <div class="main">
+    <div class="stored">
+    
+   <div id="outerContainer">
+        <div id="buttonContainer">
+            <div class="redButton" id="slider"></div>
+        </div>
+
+       <div class="g" id="legendTextContainer">
+            <div class="legendText" onclick="go_to_1()">Light</div><div
+                 class="legendText" onclick="go_to_2()">Dark</div><div
+                 class="legendText" onclick="go_to_3()">Black</div>
+        </div>
+    </div>
+
+
+
+
+
+
+
+
+    </div>
+  </div>
+</div>
+<div class="down">
+<button class="add-btn" onclick="test()">
+<h2 class="g" style="top: -10%; margin: 15px;">Save changes</h2>
+</button>
+<button class="back-btn" onclick="transitionToPage('./profile.html')">
+<img width="30" src="https://img.icons8.com/BFCBCE/android/100/undo.png" class="btn-image" alt="undo"/>
+</button>
+</div>
+</g>
+
+
+</g>
+
+<div class="nav">
+  <div class="b1"></div>
+  <div class="r" onclick="transitionToPage('./calendar.html')">
+    <img width="45" class="ca" src="https://img.icons8.com/BFCBCE/stamp/100/calendar.png" alt="calendar"/>
+     <img width="45" class="ca c0" src="https://img.icons8.com/6f90af/stamp/100/calendar.png" alt="calendar"/>
+
+  </div>
+  <div class="c"></div>
+  <div class="ct" onclick="transitionToPage('./recipe.html')">
+    <img width="70" class="re" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+        <img width="70" class="re c0" src="https://img.icons8.com/6f90af/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
+  </div>
+  <div class="l" onclick="transitionToPage('./profile.html')">
+    <img width="50" class="us" src="https://img.icons8.com/6F90AF/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+        <img width="50" class="us c0" src="https://img.icons8.com/84A7BA/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
+  </div>
+  <div class="b2"></div>
+</div>
+<script src="date.js"></script>
+</body>
+<script>
+      window.transitionToPage = function(href) {
+    document.querySelector('.body').style.opacity = 0
+    setTimeout(function() { 
+        window.location.href = href
+    }, 500)
+}
+var themeTemp;
+  var theme = localStorage.getItem("theme");
+  console.log(theme);
+
+  let currentFileName = window.location.pathname.split('/').pop();
+  let baseFileName = currentFileName.replace('.html', '');
+  let newCSSFileName = baseFileName;
+
+document.addEventListener('DOMContentLoaded', function(event) {
+    document.querySelector('.body').style.opacity = 1
+})
+
+ let toggleSwitch = document.getElementsByClassName('redButton')[0]
+
+        function go_to_1() {
+            toggleSwitch.classList.add('horizTranslate1');
+            toggleSwitch.classList.remove('horizTranslate2');
+            toggleSwitch.classList.remove('horizTranslate3');
+            document.getElementById("slider").style.backgroundColor = "#7DA7BD"
+            document.getElementById("buttonContainer").style.backgroundColor = "#BFCBCE"
+
+            doStuff("W")
+        }
+
+        function go_to_2() {
+            toggleSwitch.classList.add('horizTranslate2');
+            toggleSwitch.classList.remove('horizTranslate3');
+            toggleSwitch.classList.remove('horizTranslate1');
+            document.getElementById("slider").style.backgroundColor = "#BFCBCE"
+            document.getElementById("buttonContainer").style.backgroundColor = "#475558"
+
+            doStuff("D")
+        }
+
+        function go_to_3() {
+            toggleSwitch.classList.add('horizTranslate3');
+            toggleSwitch.classList.remove('horizTranslate2');
+            toggleSwitch.classList.remove('horizTranslate1');
+            document.getElementById("slider").style.backgroundColor = "#ffffff"
+            document.getElementById("buttonContainer").style.backgroundColor = "#121617"
+
+            doStuff("B")
+        }
+
+        function doStuff(n) {
+          themeTemp = n;
+          console.log(n)
+          change()
+        }
+
+        function test() {
+localStorage.setItem("theme", themeTemp);
+console.log("Theme set to: " + themeTemp)
+change()
+
+        }
+
+function change(){
+if (themeTemp === 'W') {
+    newCSSFileName = baseFileName + ".css";
+} else if (themeTemp === 'D') {
+    newCSSFileName = baseFileName + "D.css";
+} else if (themeTemp === 'B') {
+    newCSSFileName = baseFileName + "B.css";
+}
+let link = document.createElement('link');
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = newCSSFileName;
+
+
+document.head.appendChild(link);
+}
+</script>
+</html>

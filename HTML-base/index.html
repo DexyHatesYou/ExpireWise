@@ -1,12 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    <script src="theme.js"></script>
   <meta charset="UTF-8">
   <link rel="stylesheet" href="./hover.css">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
   <title>ExpireWise</title>
-  <link rel="stylesheet" href="index.css">
+
 </head>
 <body id="body1">
   <div id="login-part">
@@ -135,7 +136,54 @@ Since we don't track anything, there's no way to recover your account. Just crea
   var spId = localStorage.getItem("spId");
 
 
+function detectAndSetTheme() {
+    
+    const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
 
+    localStorage.getItem("theme");
+    if (theme === null)
+    {
+    
+    if (isDarkMode) {
+        
+        localStorage.setItem('theme', 'D');
+        applyTheme();
+    } else {
+       
+        localStorage.setItem('theme', 'W');
+        applyTheme();
+    }
+  } else {}
+}
+
+
+detectAndSetTheme();
+
+function applyTheme() {
+    var theme = localStorage.getItem("theme");
+  console.log(theme);
+
+  let currentFileName = window.location.pathname.split('/').pop();
+  let baseFileName = currentFileName.replace('.html', '');
+  let newCSSFileName = baseFileName;
+
+if (theme === 'W') {
+    newCSSFileName = baseFileName + ".css";
+} else if (theme === 'D') {
+    newCSSFileName = baseFileName + "D.css";
+} else if (theme === 'B') {
+    newCSSFileName = baseFileName + "B.css";
+} else {
+  newCSSFileName = baseFileName + ".css";
+}
+
+let link = document.createElement('link');
+link.rel = 'stylesheet';
+link.type = 'text/css';
+link.href = newCSSFileName;
+
+document.head.appendChild(link);
+}
 
   async function login() {
             const nickname = document.getElementById("username").value;
