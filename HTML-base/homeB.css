@@ -20,7 +20,7 @@
       body {
         max-width: 100vv;
         overflow-x: hidden;
-      background-color: #BFCBCE;
+
       overflow-x: hidden;
       overflow: hidden;
       margin: 0;
@@ -31,7 +31,7 @@
       align-items: center;
       user-select: none;
 background: rgb(111,144,175);
-background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(18,22,23,1) 12%);
+background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(0,0,0,1) 12%);
     }
 
     .load{
@@ -131,9 +131,9 @@ background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(18,22,23,1) 12%
 .blur1 {
   width: 120%;
   height: 5%;
-  background-color: #121617;
+  background-color: black;
   position: absolute;
-  box-shadow: 0px 0px 20px 20px #121617;
+  box-shadow: 0px 0px 20px 20px black;
   z-index: 5;
   top: 11%;
 }
@@ -141,9 +141,9 @@ background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(18,22,23,1) 12%
 .blur2 {
   width: 120%;
   height: 7%;
-  background-color: #121617;
+  background-color: black;
   position: absolute;
-  box-shadow: 0px 0px 20px 20px #121617;
+  box-shadow: 0px 0px 20px 20px black;
   z-index: 18;
   top: 78%;
 }
@@ -162,7 +162,7 @@ background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(18,22,23,1) 12%
 }
 
 .rcp-name {
-  color:  #7DA7BD;
+  color:  white;
   margin-top: 10px;
   margin-bottom: 5px;
   text-decoration: underline;
@@ -270,7 +270,7 @@ background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(18,22,23,1) 12%
       height: 50%;
       width: 100%;
       bottom: -30%;
-      background-color: #121617;
+      background-color: black;
       z-index: 6;
     }
 
@@ -279,7 +279,7 @@ background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(18,22,23,1) 12%
       height: 50%;
       width: 100%;
       bottom: 80%;
-      background-color: #121617;
+      background-color: black;
       z-index: 5;
     }
 
