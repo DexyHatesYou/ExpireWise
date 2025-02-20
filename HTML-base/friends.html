@@ -473,5 +473,28 @@ opacity: 100%;
 document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
+
+function fetchFriends(uid) {
+    fetch("https://expirewise.spsul.cz/fetch_friends.php", {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/x-www-form-urlencoded"
+        },
+        body: new URLSearchParams({ uid })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.error) {
+            console.error("Error:", data.error);
+        } else {
+            console.log("Friends:", data.friends);
+        }
+    })
+    .catch(error => console.error("Fetch error:", error));
+}
+
+// Example usage:
+fetchFriends("5"); // Replace with an actual UID
+
 </script>
 </html>
