@@ -548,17 +548,15 @@ function test() {
     }, 500)
 }
 
-// Fetch friends from the API and populate the dropdown
-function fetchFriends() {
-  // Replace "12345" with the actual UID as needed
-  const uid = "12345";
-  const formData = new URLSearchParams();
-  formData.append("uid", uid);
+// Global variable to store the selected nickname
+let selected = null;
 
-  fetch('https://expirewise.localto.net/api/fetch_friends.php', {
-    method: 'POST',
-    body: formData
-  })
+// When the DOM is ready, fetch the nicknames and populate the dropdown
+document.addEventListener("DOMContentLoaded", () => {
+  const optionsContainer = document.getElementById("options");
+
+  // Fetch nicknames from the API endpoint (fetch_list.php)
+  fetch("https://expirewise.localto.net/api/list.php")
     .then(response => {
       if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -566,48 +564,36 @@ function fetchFriends() {
       return response.json();
     })
     .then(data => {
-      if (data.error) {
-        throw new Error(data.error);
-      }
-      // data.friends should be an array of friend identifiers (or names)
-      populateFriendsDropdown(data.friends);
+      // data is expected to be an array of nicknames
+      data.forEach(nickname => {
+        const optionDiv = document.createElement("div");
+        optionDiv.classList.add("dropdown-option");
+        optionDiv.textContent = nickname;
+        
+        // When an option is clicked, update the search bar and display the selected nickname
+        optionDiv.addEventListener("click", () => {
+          document.querySelector(".search-bar").value = nickname;
+          selected = nickname;
+          document.getElementById("selected-option").textContent = selected;
+          optionsContainer.classList.remove("show");
+        });
+        
+        optionsContainer.appendChild(optionDiv);
+      });
     })
     .catch(error => {
-      console.error("Error fetching friends:", error);
-      alert("An error occurred while fetching friends.");
+      console.error("Error fetching nicknames:", error);
+      alert("An error occurred while fetching nicknames.");
     });
-}
+});
 
-function populateFriendsDropdown(friendsList) {
-  let selectedFriend = null;
-  const optionsContainer = document.getElementById("options");
-  
-  // Clear any existing options
-  optionsContainer.innerHTML = "";
-  
-  friendsList.forEach(friend => {
-    const optionDiv = document.createElement("div");
-    optionDiv.classList.add("dropdown-option");
-    optionDiv.textContent = friend;  // Adjust if your data structure is different
-
-    optionDiv.addEventListener("click", () => {
-      document.querySelector(".search-bar").value = friend;
-      selectedFriend = friend;
-      document.getElementById("selected-option").textContent = selectedFriend;
-      optionsContainer.classList.remove("show");
-    });
-    
-    optionsContainer.appendChild(optionDiv);
-  });
-}
-
-// Function to display the dropdown
+// Show the dropdown when the search bar is clicked
 function showDropdown() {
   const options = document.getElementById("options");
   options.classList.add("show");
 }
 
-// Function to filter options based on the search input
+// Filter options based on user input in the search bar
 function filterOptions() {
   const input = document.querySelector(".search-bar").value.toLowerCase();
   const options = document.querySelectorAll(".dropdown-option");
@@ -623,7 +609,7 @@ function filterOptions() {
   });
 }
 
-// Hide the dropdown if clicking outside of it
+// Hide the dropdown when clicking outside of it
 document.addEventListener("click", function(event) {
   const dropdown = document.querySelector(".dropdown");
   const options = document.getElementById("options");
@@ -632,8 +618,11 @@ document.addEventListener("click", function(event) {
   }
 });
 
-// Call fetchFriends() when needed (e.g., on page load)
-fetchFriends();
+// Optionally, add event listeners to the search bar input
+const searchBar = document.querySelector(".search-bar");
+searchBar.addEventListener("click", showDropdown);
+searchBar.addEventListener("keyup", filterOptions);
+
 
 </script>
 </html>
