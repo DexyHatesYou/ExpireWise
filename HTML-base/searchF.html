@@ -749,6 +749,7 @@ function fetchUserInfo(nickname) {
       const diffTime = currentDate - creationDate;  // in milliseconds
       const diffDays = Math.floor((diffTime / (1000 * 60 * 60 * 24))+1);
       const friendId = data.user_id;
+      console.log(friendId);
       // Update the separate elements with the fetched info
       document.getElementById("rank").textContent = data.rank;
       document.getElementById("bio").textContent = data.bio;
