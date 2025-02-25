@@ -492,8 +492,8 @@ background-color: #CEBFBF;
 
       
   </ul>
-
-  <button class="mark g cook" onclick="scroll()">Start Cooking</button>
+  <button class="mark g cook" onclick="copy()" style="left: 5% !important;">Share recipe</button>
+  <button class="mark g cook" onclick="scroll()" id="scroller">Start Cooking</button>
 
   
 
@@ -546,6 +546,19 @@ src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen
 
 </body>
 <script>
+
+function copy() {
+  const rcpName = document.getElementById("rcp-name").textContent;
+            const url = window.location.href;
+            navigator.clipboard.writeText(url).then(() => {
+                console.log('URL copied to clipboard');
+                alert("Link to " + rcpName + " recipe was copied to your clipboard.")
+            }).catch(err => {
+                console.error('Failed to copy: ', err);
+            });
+        }
+
+
     window.transitionToPage = function(href) {
     document.querySelector('.body').style.opacity = 0
     setTimeout(function() { 
@@ -558,8 +571,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 })
 
 $(document).ready(function () {
-    $("button").click(function () {
-
+    $("#scroller").click(function () {
         var scrollAmount = $(window).height() * 0.6;
 
         $('.scroll').animate({
@@ -567,6 +579,7 @@ $(document).ready(function () {
         }, 10, 'swing');
     });
 });
+
 
 function getRecipeId() {
     const params = new URLSearchParams(window.location.search);
