@@ -612,7 +612,6 @@ opacity: 100%;
 <script src="date.js"></script>
 </body>
 <script>
-var friendId = 0;
 // Get the stored session ID
 const spId = localStorage.getItem("spId");
 
@@ -749,7 +748,7 @@ function fetchUserInfo(nickname) {
       const currentDate = new Date();
       const diffTime = currentDate - creationDate;  // in milliseconds
       const diffDays = Math.floor((diffTime / (1000 * 60 * 60 * 24))+1);
-      var friendId = data.user_id;
+      const friendId = data.user_id;
       // Update the separate elements with the fetched info
       document.getElementById("rank").textContent = data.rank;
       document.getElementById("bio").textContent = data.bio;
