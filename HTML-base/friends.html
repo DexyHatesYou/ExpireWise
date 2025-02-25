@@ -506,7 +506,12 @@ function fetchFriends() {
                 // Profile picture element
                 const pfpImg = document.createElement("img");
                 pfpImg.classList.add("pfp");
+                if(friend.pfp !== null) {
                 pfpImg.src = friend.pfp; // The profile image URL from the DB
+                } else {
+                  pfpImg.src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+                }
+                
 
                 // Nickname element (using class "g str")
                 const nicknameDiv = document.createElement("div");
