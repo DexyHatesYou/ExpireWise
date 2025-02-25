@@ -618,6 +618,7 @@ const spId = localStorage.getItem("spId");
 // Assume you have the friendId from somewhere (e.g., user input)
 
 function test() {
+  const friendId = localStorage.getItem("friendId");
 fetch("https://expirewise.localto.net/api/addFriend.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -750,6 +751,7 @@ function fetchUserInfo(nickname) {
       const diffDays = Math.floor((diffTime / (1000 * 60 * 60 * 24))+1);
       const friendId = data.user_id;
       console.log(friendId);
+      localStorage.setItem("friendId", friendId);
       // Update the separate elements with the fetched info
       document.getElementById("rank").textContent = data.rank;
       document.getElementById("bio").textContent = data.bio;
