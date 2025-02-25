@@ -583,9 +583,9 @@ opacity: 100%;
 
 <div class="down">
 <button class="add-btn" onclick="test()">
-<h2 class="g" style="top: -10%; margin: 15px;">Add ingredient</h2>
+<h2 class="g" style="top: -10%; margin: 15px;">Add friend</h2>
 </button>
-<button class="back-btn" onclick="transitionToPage('./storage.html')">
+<button class="back-btn" onclick="transitionToPage('./friends.html')">
 <img width="30" src="https://img.icons8.com/BFCBCE/android/100/undo.png" class="btn-image" alt="undo"/>
 </button>
 </div>
@@ -612,31 +612,28 @@ opacity: 100%;
 <script src="date.js"></script>
 </body>
 <script>
+let friendId;
+// Get the stored session ID
+const spId = localStorage.getItem("spId");
+
+// Assume you have the friendId from somewhere (e.g., user input)
 
 function test() {
-  fetch('https://expirewise.localto.net/api/fetch_friends.php')
-    .then((response) => {
-      if (!response.ok) {
-        throw new Error('Network response was not ok');
-      }
-      return response.json();
-    })
-    .then((data) => {
-      // Combine all nicknames into a single string, separated by new lines
-      const nicknames = data.join('\n');
-      
-      // Show alert with all nicknames
-      alert(`Nicknames:\n${nicknames}`);
-      
-      // Log all nicknames to the console
-      console.log('Nicknames:', data);
-    })
-    .catch((error) => {
-      console.error('Error fetching nicknames:', error);
-      alert('An error occurred while fetching nicknames.');
-    });
+fetch("https://expirewise.localto.net/api/addFriend.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ spId: spId, friendId: friendId })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.error) {
+        alert("Error: " + data.error);
+    } else if (data.success) {
+        alert(data.success);
+    }
+})
+.catch(error => console.error("Error:", error));
 }
-
 
 
 
@@ -752,7 +749,7 @@ function fetchUserInfo(nickname) {
       const currentDate = new Date();
       const diffTime = currentDate - creationDate;  // in milliseconds
       const diffDays = Math.floor((diffTime / (1000 * 60 * 60 * 24))+1);
-      
+      var friendId = data.user_id;
       // Update the separate elements with the fetched info
       document.getElementById("rank").textContent = data.rank;
       document.getElementById("bio").textContent = data.bio;
