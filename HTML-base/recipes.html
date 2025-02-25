@@ -548,15 +548,43 @@ src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen
 <script>
 
 function copy() {
-  const rcpName = document.getElementById("rcp-name").textContent;
-            const url = window.location.href;
-            navigator.clipboard.writeText(url).then(() => {
+    const rcpName = document.getElementById("rcp-name").textContent;
+    const url = window.location.href;
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        // Modern asynchronous clipboard API
+        navigator.clipboard.writeText(url)
+            .then(() => {
                 console.log('URL copied to clipboard');
-                alert("Link to " + rcpName + " recipe was copied to your clipboard.")
-            }).catch(err => {
+                alert("Link to " + rcpName + " recipe was copied to your clipboard.");
+            })
+            .catch(err => {
                 console.error('Failed to copy: ', err);
             });
+    } else {
+        // Fallback method using a temporary textarea
+        const textArea = document.createElement("textarea");
+        textArea.value = url;
+        // Make textarea out of viewport
+        textArea.style.position = "fixed";
+        textArea.style.top = "-1000px";
+        document.body.appendChild(textArea);
+        textArea.select();
+
+        try {
+            const successful = document.execCommand('copy');
+            if (successful) {
+                console.log('URL copied to clipboard (fallback)');
+                alert("Link to " + rcpName + " recipe was copied to your clipboard.");
+            } else {
+                console.error('Fallback: Copy command was unsuccessful');
+            }
+        } catch (err) {
+            console.error('Fallback: Unable to copy', err);
         }
+        document.body.removeChild(textArea);
+    }
+}
 
 
     window.transitionToPage = function(href) {
