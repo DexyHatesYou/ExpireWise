@@ -35,12 +35,12 @@
   <input min="1" max="31" type="number" placeholder="day" class="day dt g">
   <input min="1" max="12" type="number" placeholder="month" class="month dt g">
   <input min="2024" max="2030" type="number" placeholder="year" class="year dt g">
-  <textarea placeholder="Start typing..." class="note g" name="note" cols="40" rows="6"></textarea>
+  <textarea placeholder="Start typing..." id="notes" class="note g" name="note" cols="40" rows="6"></textarea>
   <h4 class="g nl">Note</h4><h4 class="g ll dl">Day</h4><h4 class="g ll ml">Month</h4><h4 class="g ll yl">Year</h4>
 </div>
 
 <div class="down">
-<button class="add-btn" onclick="test()">
+<button class="add-btn" onclick="submitIngredient()">
 <h2 class="g" style="top: -10%; margin: 15px;">Add ingredient</h2>
 </button>
 <button class="back-btn" onclick="transitionToPage('./storage.html')">
@@ -134,24 +134,33 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
        let selected = null;
 
-    
-    const optionsContainer = document.getElementById("options");
+       const optionsContainer = document.getElementById("options");
 
-    optionsList.forEach(optionText => {
-        const optionDiv = document.createElement("div");
-        optionDiv.classList.add("dropdown-option");
-        optionDiv.textContent = optionText;
+    
+optionsList.forEach((optionText, index) => {
+    const optionDiv = document.createElement("div");
+    optionDiv.classList.add("dropdown-option");
+    optionDiv.textContent = optionText;
+    // Optionally, assign the index as an id attribute or data attribute
+    optionDiv.id = index; // or: optionDiv.dataset.id = index;
+
+    optionDiv.addEventListener("click", () => {
+        // Update the search bar and selected option display
+        document.querySelector(".search-bar").value = optionText;
+        selected = optionText;
+        document.getElementById("selected-option").textContent = selected;
         
+        // Log the index (or id) of the clicked option
+        console.log("Selected option index:", index);
+        // Alternatively, if you set an id on the element, you can use:
+        // console.log("Selected option id:", optionDiv.id);
         
-        optionDiv.addEventListener("click", () => {
-            document.querySelector(".search-bar").value = optionText;
-            selected = optionText;
-            document.getElementById("selected-option").textContent = selected;
-            options.classList.remove("show");
-        });
-        
-        optionsContainer.appendChild(optionDiv);
+        // Hide the dropdown options
+        document.getElementById("options").classList.remove("show");
     });
+    
+    optionsContainer.appendChild(optionDiv);
+});
 
     function showDropdown() {
         const options = document.getElementById("options");
@@ -183,5 +192,58 @@ document.addEventListener('DOMContentLoaded', function(event) {
              options.classList.remove("show");
         }
     });
+
+      function submitIngredient() {
+    // Get expiration date parts from the inputs (using querySelector on class names)
+    const dayInput = document.querySelector(".day");
+    const monthInput = document.querySelector(".month");
+    const yearInput = document.querySelector(".year");
+    const note = document.getElementById("notes").value;
+    // Pad day and month to 2 digits
+    const day = dayInput.value.padStart(2, '0');
+    const month = monthInput.value.padStart(2, '0');
+    const year = yearInput.value;
+    const expiration_date = `${year}-${month}-${day}`;
+
+    // Get spId from localStorage
+    const spId = localStorage.getItem("spId");
+
+    // Validate required fields
+    if (!selectedName || selectedIndex === null || !note || !dayInput.value || !monthInput.value || !yearInput.value || !spId) {
+      alert("Please fill in all fields and select an option.");
+      return;
+    }
+
+    // Prepare the data object
+    const data = {
+      spId: spId,
+      name: selectedName,
+      note: note,
+      expiration_date: expiration_date,
+      dbId: selectedIndex
+    };
+
+    // Send the POST request using fetch
+    fetch("https://expirewise.localto.net/api/submit_ingredient.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(result => {
+      console.log(result);
+      if (result.success) {
+        alert("Ingredient added successfully!");
+      } else {
+        alert("Error: " + result.error);
+      }
+    })
+    .catch(error => {
+      console.error("Error submitting data:", error);
+      alert("An error occurred. Please try again.");
+    });
+  }
 </script>
 </html>
