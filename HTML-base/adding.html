@@ -204,6 +204,7 @@ optionsList.forEach((optionText, index) => {
     const month = monthInput.value.padStart(2, '0');
     const year = yearInput.value;
     const expiration_date = `${year}-${month}-${day}`;
+    const selectedName = document.getElementById("selected-option").value;
 
     // Get spId from localStorage
     const spId = localStorage.getItem("spId");
