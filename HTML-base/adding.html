@@ -200,6 +200,7 @@ function submitIngredient() {
   const yearInput = document.querySelector(".year");
   const note = document.getElementById("notes").value;
   const selectedName = selected; // Assuming 'selected' is defined elsewhere
+  const dbId = index;
 
   // Get spId from localStorage
   const spId = localStorage.getItem("spId");
@@ -232,7 +233,8 @@ function submitIngredient() {
     spId: spId,
     name: selectedName,
     expiration_date: expirationDate,
-    notes: note
+    notes: note,
+    dbId: dbId
   };
 
   // Send the POST request using fetch
