@@ -240,6 +240,7 @@ function submitIngredient() {
   // Send the POST request using fetch
   fetch("https://expirewise.localto.net/api/submit_ingredient.php", {
     method: "POST",
+      credentials: "include",
     headers: {
       "Content-Type": "application/json"
     },
