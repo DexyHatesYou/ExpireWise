@@ -199,53 +199,63 @@ function submitIngredient() {
   const monthInput = document.querySelector(".month");
   const yearInput = document.querySelector(".year");
   const note = document.getElementById("notes").value;
-  const selectedName = selected;
+  const selectedName = selected; // Assuming 'selected' is defined elsewhere
 
   // Get spId from localStorage
   const spId = localStorage.getItem("spId");
 
   // Validate required fields
 
-console.log(
-  "1" + dayInput.value, // Access the value property
-  "2" + monthInput.value, // Access the value property
-  "3" + yearInput.value, // Access the value property
-  "4" + note,
-  "5" + dayInput.value,
-  "6" + monthInput.value,
-  "7" + yearInput.value,
-  "8" + `${yearInput.value}-${monthInput.value.padStart(2, '0')}-${dayInput.value.padStart(2, '0')}`,
-  "9" + selectedName, //this value was undefined in your log, make sure the element exists.
-  "10" + spId
-);
-
+  console.log(
+    "1: " + dayInput.value, // Access the value property
+    "2: " + monthInput.value, // Access the value property
+    "3: " + yearInput.value, // Access the value property
+    "4: " + note,
+    "5: " + dayInput.value,
+    "6: " + monthInput.value,
+    "7: " + yearInput.value,
+    "8: " + `${yearInput.value}-${monthInput.value.padStart(2, '0')}-${dayInput.value.padStart(2, '0')}`,
+    "9: " + selectedName, //this value was undefined in your log, make sure the element exists.
+    "10: " + spId
+  );
 
   if (!selectedName || !note || !dayInput.value || !monthInput.value || !yearInput.value || !spId) {
     alert("Please fill in all fields and select an option.");
     return;
   }
 
-    // Send the POST request using fetch
-    fetch("https://expirewise.localto.net/api/submit_ingredient.php", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify(data)
-    })
-    .then(response => response.json())
-    .then(result => {
-      console.log(result);
-      if (result.success) {
-        alert("Ingredient added successfully!");
-      } else {
-        alert("Error: " + result.error);
-      }
-    })
-    .catch(error => {
-      console.error("Error submitting data:", error);
-      alert("An error occurred. Please try again.");
-    });
-  }
+  // Construct the expiration date string
+  const expirationDate = `${yearInput.value}-${monthInput.value.padStart(2, '0')}-${dayInput.value.padStart(2, '0')}`;
+
+  // Construct the data object to send
+  const data = {
+    spId: spId,
+    name: selectedName,
+    expiration_date: expirationDate,
+    notes: note
+  };
+
+  // Send the POST request using fetch
+  fetch("https://expirewise.localto.net/api/submit_ingredient.php", {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+  })
+  .then(response => response.json())
+  .then(result => {
+    console.log(result);
+    if (result.success) {
+      alert("Ingredient added successfully!");
+    } else {
+      alert("Error: " + result.error);
+    }
+  })
+  .catch(error => {
+    console.error("Error submitting data:", error);
+    alert("An error occurred. Please try again.");
+  });
+}
 </script>
 </html>
