@@ -230,11 +230,11 @@ function submitIngredient() {
 
   // Construct the data object to send
   const data = {
-    spId: spId,
+    user_id: spId,
     name: selectedName,
     expiration_date: expirationDate,
-    notes: note,
-    dbId: dbId
+    note: note,
+    db_id: dbId
   };
 
   // Send the POST request using fetch
