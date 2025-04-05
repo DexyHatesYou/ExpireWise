@@ -193,37 +193,35 @@ optionsList.forEach((optionText, index) => {
         }
     });
 
-      function submitIngredient() {
-    // Get expiration date parts from the inputs (using querySelector on class names)
-    const dayInput = document.querySelector(".day");
-    const monthInput = document.querySelector(".month");
-    const yearInput = document.querySelector(".year");
-    const note = document.getElementById("notes").value;
-    // Pad day and month to 2 digits
-    const day = dayInput.value.padStart(2, '0');
-    const month = monthInput.value.padStart(2, '0');
-    const year = yearInput.value;
-    const expiration_date = `${year}-${month}-${day}`;
-    const selectedName = document.getElementById("selected-option").value;
+function submitIngredient() {
+  // Get expiration date parts from the inputs (using querySelector on class names)
+  const dayInput = document.querySelector(".day");
+  const monthInput = document.querySelector(".month");
+  const yearInput = document.querySelector(".year");
+  const note = document.getElementById("notes").value;
+  const selectedName = document.getElementById("selected-option").value;
 
-    // Get spId from localStorage
-    const spId = localStorage.getItem("spId");
+  // Get spId from localStorage
+  const spId = localStorage.getItem("spId");
 
-    // Validate required fields
-    console.log("1" + dayInput, "2" + monthInput, "3" + yearInput, "4" + note, "5" + day, "6" + month, "7" + year, "8" + expiration_date, "9" + selectedName, "10" + spId,);
-    if (!selectedName || selectedIndex === null || !note || !dayInput.value || !monthInput.value || !yearInput.value || !spId) {
-      alert("Please fill in all fields and select an option.");
-      return;
-    }
+  // Validate required fields
+  console.log(
+    "1" + dayInput,
+    "2" + monthInput,
+    "3" + yearInput,
+    "4" + note,
+    "5" + dayInput.value,
+    "6" + monthInput.value,
+    "7" + yearInput.value,
+    "8" + `${yearInput.value}-${monthInput.value.padStart(2, '0')}-${dayInput.value.padStart(2, '0')}`,
+    "9" + selectedName,
+    "10" + spId
+  );
 
-    // Prepare the data object
-    const data = {
-      spId: spId,
-      name: selectedName,
-      note: note,
-      expiration_date: expiration_date,
-      dbId: selectedIndex
-    };
+  if (!selectedName || !note || !dayInput.value || !monthInput.value || !yearInput.value || !spId) {
+    alert("Please fill in all fields and select an option.");
+    return;
+  }
 
     // Send the POST request using fetch
     fetch("https://expirewise.localto.net/api/submit_ingredient.php", {
