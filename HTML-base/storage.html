@@ -165,7 +165,7 @@ function fetchIngredients() {
         let spanClass = "left";          // default
         if (displayDays === 1) {
           spanClass = "leftW";           // exactly 1 day
-        } else if (displayDays < 5) {
+        } else if (displayDays < 5 && displayDays > 0) {
           spanClass = "leftO";           // 2–4 days
         } else if (displayDays > 30) {
           spanClass = "leftY";           // more than 30 days
