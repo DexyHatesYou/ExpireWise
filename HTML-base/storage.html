@@ -86,5 +86,60 @@
 document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
+
+// In your <script> or separate .js file:
+function fetchIngredients() {
+  const spId = localStorage.getItem("spId");
+  if (!spId) {
+    console.error("No session found.");
+    return;
+  }
+
+  fetch("https://expirewise.localto.net/api/fetch_ingredients.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ spId })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.error) {
+      console.error(data.error);
+      return;
+    }
+
+    const container = document.querySelector(".stored");
+    container.innerHTML = "";  // clear old
+
+    data.ingredients.forEach(ing => {
+      const days = ing.days_left;
+      // clamp at zero if already expired
+      const displayDays = days < 0 ? 0 : days;
+
+      container.insertAdjacentHTML("beforeend", `
+        <div class="ingre">
+          <div class="g str">${ing.name}</div>
+          <div class="g left">
+            ${displayDays}
+            <span class="leftct">
+              ${displayDays === 1 ? "Day" : "Days"} left
+            </span>
+          </div>
+          <img class="edit img" width="30"
+               src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png"
+               alt="edit" />
+          <img class="delete img" width="30"
+               src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
+               alt="delete" />
+          <div class="strip"></div>
+        </div>
+      `);
+    });
+  })
+  .catch(err => console.error("Fetch error:", err));
+}
+
+// Call on page load
+document.addEventListener("DOMContentLoaded", fetchIngredients);
+
 </script>
 </html>
