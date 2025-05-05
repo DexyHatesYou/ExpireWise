@@ -169,7 +169,7 @@ function fetchIngredients() {
           spanClass = "leftO";           // 2–4 days
         } else if (displayDays > 30) {
           spanClass = "leftY";           // more than 30 days
-        } else if (displayDays === 0) {
+        } else if (displayDays < 1) {
           spanClass = "leftD";           // 2–4 days
         }
 
