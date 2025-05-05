@@ -301,15 +301,7 @@ opacity: 100%;
       border-radius: 25px;
     }
 
-    .left{
-      position: absolute;
-      top: 20%;
-      background-color: #525e61;
-      color: white;
-      padding: 1px 6px 1px 6px;
-      border-radius: 6px;
-      right: 17%;
-    }
+ 
 
     .leftct{
       font-size: 70%;

@@ -1,6 +1,53 @@
 <!DOCTYPE html>
 <html>
 <head>
+  <style type="text/css">
+       .left{
+      position: absolute;
+      top: 20%;
+      background-color: #525e61;
+      color: white;
+      padding: 1px 6px 1px 6px;
+      border-radius: 6px;
+      right: 17%;
+    }
+           .leftW{
+      position: absolute;
+      top: 20%;
+      background-color: #CEBFBF;
+      color: white;
+      padding: 1px 6px 1px 6px;
+      border-radius: 6px;
+      right: 17%;
+    }
+           .leftO{
+      position: absolute;
+      top: 20%;
+      background-color: #525e61;
+      color: white;
+      padding: 1px 6px 1px 6px;
+      border-radius: 6px;
+      right: 17%;
+    }
+           .leftY{
+      position: absolute;
+      top: 20%;
+      background-color: #BFCEC3;
+      color: white;
+      padding: 1px 6px 1px 6px;
+      border-radius: 6px;
+      right: 17%;
+    }
+           .leftD{
+      position: absolute;
+      top: 20%;
+      background-color: #342121;
+      color: white;
+      padding: 1px 6px 1px 6px;
+      border-radius: 6px;
+      right: 17%;
+    }
+  </style>
   <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -111,27 +158,38 @@ function fetchIngredients() {
     container.innerHTML = "";  // clear old
 
     data.ingredients.forEach(ing => {
-      const days = ing.days_left;
-      // clamp at zero if already expired
-      const displayDays = days < 0 ? 0 : days;
+        const days = ing.days_left;
+        const displayDays = days < 0 ? 0 : days;
 
-      container.insertAdjacentHTML("beforeend", `
-        <div class="ingre">
-          <div class="g str">${ing.name}</div>
-          <div class="g left">
-            ${displayDays}
-            <span class="leftct">
-              ${displayDays === 1 ? "Day" : "Days"} left
-            </span>
+        // decide which class to use on the <span>
+        let spanClass = "left";          // default
+        if (displayDays === 1) {
+          spanClass = "leftW";           // exactly 1 day
+        } else if (displayDays < 5) {
+          spanClass = "leftO";           // 2–4 days
+        } else if (displayDays > 30) {
+          spanClass = "leftY";           // more than 30 days
+        } else if (displayDays === 0) {
+          spanClass = "leftD";           // 2–4 days
+        }
+
+        container.insertAdjacentHTML("beforeend", `
+          <div class="ingre">
+            <div class="g str">${ing.name}</div>
+            <div class="g left">
+              ${displayDays}
+              <span class="${spanClass}">
+                ${displayDays === 1 ? "Day" : "Days"} left
+              </span>
+            </div>
+            <img class="edit img" width="30"
+                 src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png"
+                 alt="edit" />
+            <img class="delete img" width="30"
+                 src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
+                 alt="delete" />
+            <div class="strip"></div>
           </div>
-          <img class="edit img" width="30"
-               src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png"
-               alt="edit" />
-          <img class="delete img" width="30"
-               src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
-               alt="delete" />
-          <div class="strip"></div>
-        </div>
       `);
     });
   })

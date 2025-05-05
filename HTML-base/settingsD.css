@@ -44,15 +44,7 @@ background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(71,85,88,1) 12%
       aspect-ratio: 1 / 1;
     }
 
-    .line {
-      top: 17.5%;
-      left: 18%;
-      position: absolute;
-      width: 4px;
-      height: 65%;
-      background-color: #BFCBCE;
-      border-radius: 5px;
-    }
+
 
     .top {
       position: absolute;
