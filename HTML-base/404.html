@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<style type="text/css">
+@font-face { font-family: g; src: url('hwyuenei64.ttf'); }
+
+body {
+  max-width: 100vw;
+  overflow: hidden;
+  background-color: #BFCBCE;
+  margin: 0;
+  padding: 0;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  user-select: none;
+  background: linear-gradient(180deg, rgba(86,91,117,1) 0%, rgba(191,203,206,1) 12%);
+}
+
+.g {
+  font-family: g;
+}
+
+.topimg {
+  width: 90%;
+  position: absolute;
+}
+	</style>
+	<title>404 error</title>
+</head>
+<body>
+  <img id="errorImage" class="topimg" style="top: 30%;" src="./img/404a.gif" alt="Background">
+  <h1 class="g" style="font-size: 230%; color: #7E7E7E; text-align: center; position: absolute; top: 50%; width: 90%">
+    Uh-oh, something broke.<br> No idea where this page went.<br>
+    Try going back. If that fails, opening and closing the app might save you.
+  </h1>
+
+  <script>
+    const maxVisits = 5
+    const timeWindow = 30000
+    const now = Date.now()
+    let visits = JSON.parse(localStorage.getItem("errorVisits") || "[]")
+    visits = visits.filter(ts => now - ts < timeWindow)
+    visits.push(now)
+
+    const image = document.getElementById("errorImage")
+
+    if (visits.length >= maxVisits) {
+      image.src = "./img/404b.gif"
+      image.style.top = "20%"
+      localStorage.setItem("errorVisits", "[]")
+    } else {
+      localStorage.setItem("errorVisits", JSON.stringify(visits))
+    }
+  </script>
+</body>
+</html>
