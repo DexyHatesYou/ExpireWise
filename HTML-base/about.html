@@ -129,7 +129,7 @@ document.getElementById('testALG').addEventListener('click', async () => {
     const spId = localStorage.getItem('spId');
     if (!spId) throw new Error('No session ID in localStorage');
 
-    // single fetch
+    // 1 fetch
     const res = await fetch('https://expirewise.localto.net/api/getData.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -143,46 +143,61 @@ document.getElementById('testALG').addEventListener('click', async () => {
 
     const { ingredients, recipes } = data;
 
-    // build map: ingredient_id → daysToExpiry
+    // Build map: ingredient_id → daysToExpiry
     const now = Date.now();
     const daysToExpiry = {};
     ingredients.forEach(i => {
       const ms = new Date(i.expiration_date) - now;
       daysToExpiry[i.ingredient_id] = ms > 0 
         ? ms / (1000 * 60 * 60 * 24)
-        : 0;
+        : 0;  // past expiry treated as 0 days
     });
 
-    // score each recipe (meal)
-    const w1 = 0.7, w2 = 0.3;
+    // Score each recipe
     const scored = recipes.map(r => {
-      const available = r.ingredients.filter(id => id in daysToExpiry);
-      const missing   = r.ingredients.filter(id => !(id in daysToExpiry));
+      const totalCount   = r.ingredients.length;
+      const availableIds = r.ingredients.filter(id => id in daysToExpiry);
+      const availableCnt = availableIds.length;
 
-      const expiryScore = available.length
-        ? Math.min(...available.map(id => daysToExpiry[id]))
+      // ratio of ingredients you have
+      const ratio = totalCount > 0
+        ? availableCnt / totalCount
+        : 0;
+
+      // earliest expiry among available (or Infinity if none)
+      const earliestExpiry = availableCnt > 0
+        ? Math.min(...availableIds.map(id => daysToExpiry[id]))
         : Infinity;
-      const missingCount = missing.length;
-
-      const score = w1 * (1 / (expiryScore + 1e-4))
-                  + w2 * (1 / (missingCount + 1));
 
       return {
-        name:         r.name,
-        missing:      missingCount,
-        expiryScore:  expiryScore === Infinity ? null : +expiryScore.toFixed(1),
-        score:        +score.toFixed(4)
+        name:           r.name,
+        totalCount,
+        availableCnt,
+        ratio:          +ratio.toFixed(2),
+        earliestExpiry: earliestExpiry === Infinity
+                         ? null
+                         : +earliestExpiry.toFixed(1)
       };
     });
 
-    // sort descending & show top 10
-    scored.sort((a, b) => b.score - a.score);
+    // Sort by: 1) ratio DESC, 2) earliestExpiry ASC (nulls go last)
+    scored.sort((a, b) => {
+      if (b.ratio !== a.ratio) {
+        return b.ratio - a.ratio;
+      }
+      const ea = a.earliestExpiry === null ? Infinity : a.earliestExpiry;
+      const eb = b.earliestExpiry === null ? Infinity : b.earliestExpiry;
+      return ea - eb;
+    });
+
+    // Show top 10
     console.table(scored.slice(0, 10));
 
   } catch (err) {
     console.error('Error running algorithm:', err);
   }
 });
+
 
 
 
