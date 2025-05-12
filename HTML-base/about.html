@@ -93,7 +93,7 @@ img.animate {
 <p class="g text">Creating this app was a challenging yet rewarding journey. While it may not be perfect, it works reliably and achieves its purpose. This project wouldn't have been possible without some <t onclick="egg()";>valuable help</t> and a lot of determination!</p>
 </div>
 
-
+<button id="testALG">TEST DA ALG</button>
 
 </g>
 
@@ -122,6 +122,101 @@ function egg() {
 
     }, 1800);
 }
+
+
+document.getElementById('testALG').addEventListener('click', async () => {
+  try {
+    // 1) Resolve session -> userId
+    const spId = localStorage.getItem('spId');
+    if (!spId) throw new Error('No session ID found in localStorage.');
+
+    const userResp = await fetch('getUser.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ spId })
+    });
+    const userData = await userResp.json();
+    if (userData.status !== 'Found') {
+      console.error('User session not found.');
+      return;
+    }
+    const userId = userData.userId;
+
+    // 2) Fetch user ingredients
+    const ingrResp = await fetch('getIngredients.php', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ userId })
+    });
+    const ingredients = await ingrResp.json();
+    // Map ingredientId -> daysToExpiry
+    const now = Date.now();
+    const daysToExpiryMap = {};
+    ingredients.forEach(item => {
+      const diffMs = new Date(item.expirationDate) - now;
+      daysToExpiryMap[item.ingredientId] = diffMs > 0
+        ? diffMs / (1000 * 60 * 60 * 24)
+        : 0;
+    });
+
+    // 3) Fetch all recipes
+    const recResp = await fetch('getRecipes.php');
+    const recipes = await recResp.json();
+
+    // 4) For each recipe, get its ingredients and compute score
+    const w1 = 0.7;  // weight for expiry
+    const w2 = 0.3;  // weight for missing count
+    const scoringPromises = recipes.map(async recipe => {
+      // fetch its ingredient IDs
+      const riResp = await fetch('getRecipeIngredients.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ recipeId: recipe.recipeId })
+      });
+      const reqIngs = await riResp.json();
+      const ids = reqIngs.map(r => r.ingredientId);
+
+      // split available vs missing
+      const available = [];
+      const missing = [];
+      ids.forEach(id => {
+        if (id in daysToExpiryMap) available.push(id);
+        else missing.push(id);
+      });
+
+      // compute expiry_score
+      let expiryScore;
+      if (available.length > 0) {
+        // use MIN daysToExpiry (sooner-expiring drives priority)
+        expiryScore = Math.min(...available.map(id => daysToExpiryMap[id]));
+      } else {
+        expiryScore = Infinity; 
+      }
+
+      const missingCount = missing.length;
+      const score = w1 * (1 / (expiryScore + 0.0001))  // avoid div-zero
+                   + w2 * (1 / (missingCount + 1));
+
+      return {
+        recipeId:    recipe.recipeId,
+        name:        recipe.name,
+        missing:     missingCount,
+        expiryScore,
+        score
+      };
+    });
+
+    const scored = await Promise.all(scoringPromises);
+
+    // 5) Sort and output top suggestions
+    scored.sort((a, b) => b.score - a.score);
+    console.table(scored.slice(0, 10));
+    // or render into your UI instead of console.table
+
+  } catch (err) {
+    console.error('Algorithm error:', err);
+  }
+});
 
 </script>
 </html>
