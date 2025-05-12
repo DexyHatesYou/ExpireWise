@@ -143,17 +143,17 @@ document.getElementById('testALG').addEventListener('click', async () => {
 
     const { ingredients, recipes } = data;
 
-    // build definition_id → daysToExpiry map
+    // build map: ingredient_id → daysToExpiry
     const now = Date.now();
     const daysToExpiry = {};
     ingredients.forEach(i => {
       const ms = new Date(i.expiration_date) - now;
-      daysToExpiry[i.definition_id] = ms > 0 
+      daysToExpiry[i.ingredient_id] = ms > 0 
         ? ms / (1000 * 60 * 60 * 24)
         : 0;
     });
 
-    // score each recipe
+    // score each recipe (meal)
     const w1 = 0.7, w2 = 0.3;
     const scored = recipes.map(r => {
       const available = r.ingredients.filter(id => id in daysToExpiry);
@@ -183,6 +183,7 @@ document.getElementById('testALG').addEventListener('click', async () => {
     console.error('Error running algorithm:', err);
   }
 });
+
 
 
 
