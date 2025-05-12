@@ -130,7 +130,7 @@ document.getElementById('testALG').addEventListener('click', async () => {
     if (!spId) throw new Error('No session ID in localStorage');
 
     // single fetch
-    const res = await fetch('getData.php', {
+    const res = await fetch('https://expirewise.localto.net/api/getData.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ spId })
