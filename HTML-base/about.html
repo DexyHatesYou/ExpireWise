@@ -126,71 +126,96 @@ function egg() {
 
 document.getElementById('testALG').addEventListener('click', async () => {
   try {
+    console.clear();
+    console.log('▶️ Starting algorithm debug run');
+
     const spId = localStorage.getItem('spId');
+    console.log('spId from localStorage:', spId);
     if (!spId) throw new Error('No session in localStorage');
 
-    // 1 HTTP call
+    // Single fetch
+    console.log('Fetching combined data from getData.php …');
     const resp = await fetch('https://expirewise.localto.net/api/getData.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ spId })
     });
     const data = await resp.json();
-    console.log('RAW PAYLOAD:', data);
+    console.log('📥 RAW PAYLOAD:', data);
 
     if (data.status !== 'ok') {
-      console.error('Session not found or error:', data);
+      console.error('❌ Server returned:', data);
       return;
     }
-    const { ingredients, recipes } = data;
 
-    // Build a map: ingredient_id → days to expiry
+    const { ingredients, recipes } = data;
+    console.log(`Fetched ${ingredients.length} ingredients and ${recipes.length} recipes`);
+
+    // Build daysToExpiry map
     const now = Date.now();
     const daysToExpiry = {};
     ingredients.forEach(i => {
       const msDiff = new Date(i.expiration_date) - now;
-      daysToExpiry[i.ingredient_id] = msDiff > 0
-        ? msDiff / (1000 * 60 * 60 * 24)
-        : 0;
+      const days = msDiff > 0 ? msDiff / (1000*60*60*24) : 0;
+      daysToExpiry[i.ingredient_id] = days;
+      console.log(
+        `Ingredient ${i.ingredient_id}: expiration_date=${i.expiration_date}, ` +
+        `daysToExpiry=${days.toFixed(2)}`
+      );
     });
+    console.log('🏷 daysToExpiry map:', daysToExpiry);
 
     // Score each recipe
     const w1 = 0.7, w2 = 0.3;
-    const scored = recipes.map(r => {
-      // r.recipe_id, r.name, r.ingredients (array of IDs)
+    const debugResults = [];
+    recipes.forEach(r => {
+      console.group(`Recipe ${r.recipe_id} — ${r.name}`);
       const available = [];
-      const missing   = [];
+      const missing = [];
       (r.ingredients || []).forEach(id => {
-        if (id in daysToExpiry) available.push(id);
-        else                 missing.push(id);
+        if (id in daysToExpiry) {
+          available.push(id);
+        } else {
+          missing.push(id);
+        }
       });
+      console.log(' Available IDs:', available);
+      console.log(' Missing IDs:  ', missing);
 
       const expiryScore = available.length
         ? Math.min(...available.map(id => daysToExpiry[id]))
         : Infinity;
+      console.log(' Computed expiryScore:', expiryScore === Infinity ? '∞' : expiryScore.toFixed(2));
+
       const missingCount = missing.length;
+      console.log(' Missing count:', missingCount);
 
       const score = w1 * (1 / (expiryScore + 1e-4))
                   + w2 * (1 / (missingCount + 1));
+      console.log(' Final score:', score.toFixed(4));
 
-      return {
+      console.groupEnd();
+
+      debugResults.push({
         recipe_id:   r.recipe_id,
         name:        r.name,
-        missing:     missingCount,
-        expiryScore: expiryScore === Infinity ? null : expiryScore.toFixed(1),
-        score:       score.toFixed(4)
-      };
+        available,
+        missing,
+        expiryScore: expiryScore === Infinity ? null : Number(expiryScore.toFixed(2)),
+        missingCount,
+        score:       Number(score.toFixed(4))
+      });
     });
 
     // Sort descending and show top 10
-    scored.sort((a, b) => b.score - a.score);
-    console.table(scored.slice(0, 10));
+    debugResults.sort((a, b) => b.score - a.score);
+    console.log('✅ Top 10 recipes by score:');
+    console.table(debugResults.slice(0, 10));
 
   } catch (err) {
     console.error('Algorithm error:', err);
   }
 });
-
 
 
 </script>
