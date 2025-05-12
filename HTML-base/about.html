@@ -126,96 +126,64 @@ function egg() {
 
 document.getElementById('testALG').addEventListener('click', async () => {
   try {
-    console.clear();
-    console.log('▶️ Starting algorithm debug run');
-
     const spId = localStorage.getItem('spId');
-    console.log('spId from localStorage:', spId);
-    if (!spId) throw new Error('No session in localStorage');
+    if (!spId) throw new Error('No session ID in localStorage');
 
-    // Single fetch
-    console.log('Fetching combined data from getData.php …');
-    const resp = await fetch('https://expirewise.localto.net/api/getData.php', {
+    // single fetch
+    const res = await fetch('getData.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ spId })
     });
-    const data = await resp.json();
-    console.log('📥 RAW PAYLOAD:', data);
-
+    const data = await res.json();
     if (data.status !== 'ok') {
-      console.error('❌ Server returned:', data);
+      console.error('Session not found or server error:', data);
       return;
     }
 
     const { ingredients, recipes } = data;
-    console.log(`Fetched ${ingredients.length} ingredients and ${recipes.length} recipes`);
 
-    // Build daysToExpiry map
+    // build definition_id → daysToExpiry map
     const now = Date.now();
     const daysToExpiry = {};
     ingredients.forEach(i => {
-      const msDiff = new Date(i.expiration_date) - now;
-      const days = msDiff > 0 ? msDiff / (1000*60*60*24) : 0;
-      daysToExpiry[i.ingredient_id] = days;
-      console.log(
-        `Ingredient ${i.ingredient_id}: expiration_date=${i.expiration_date}, ` +
-        `daysToExpiry=${days.toFixed(2)}`
-      );
+      const ms = new Date(i.expiration_date) - now;
+      daysToExpiry[i.definition_id] = ms > 0 
+        ? ms / (1000 * 60 * 60 * 24)
+        : 0;
     });
-    console.log('🏷 daysToExpiry map:', daysToExpiry);
 
-    // Score each recipe
+    // score each recipe
     const w1 = 0.7, w2 = 0.3;
-    const debugResults = [];
-    recipes.forEach(r => {
-      console.group(`Recipe ${r.recipe_id} — ${r.name}`);
-      const available = [];
-      const missing = [];
-      (r.ingredients || []).forEach(id => {
-        if (id in daysToExpiry) {
-          available.push(id);
-        } else {
-          missing.push(id);
-        }
-      });
-      console.log(' Available IDs:', available);
-      console.log(' Missing IDs:  ', missing);
+    const scored = recipes.map(r => {
+      const available = r.ingredients.filter(id => id in daysToExpiry);
+      const missing   = r.ingredients.filter(id => !(id in daysToExpiry));
 
       const expiryScore = available.length
         ? Math.min(...available.map(id => daysToExpiry[id]))
         : Infinity;
-      console.log(' Computed expiryScore:', expiryScore === Infinity ? '∞' : expiryScore.toFixed(2));
-
       const missingCount = missing.length;
-      console.log(' Missing count:', missingCount);
 
       const score = w1 * (1 / (expiryScore + 1e-4))
                   + w2 * (1 / (missingCount + 1));
-      console.log(' Final score:', score.toFixed(4));
 
-      console.groupEnd();
-
-      debugResults.push({
-        recipe_id:   r.recipe_id,
-        name:        r.name,
-        available,
-        missing,
-        expiryScore: expiryScore === Infinity ? null : Number(expiryScore.toFixed(2)),
-        missingCount,
-        score:       Number(score.toFixed(4))
-      });
+      return {
+        name:         r.name,
+        missing:      missingCount,
+        expiryScore:  expiryScore === Infinity ? null : +expiryScore.toFixed(1),
+        score:        +score.toFixed(4)
+      };
     });
 
-    // Sort descending and show top 10
-    debugResults.sort((a, b) => b.score - a.score);
-    console.log('✅ Top 10 recipes by score:');
-    console.table(debugResults.slice(0, 10));
+    // sort descending & show top 10
+    scored.sort((a, b) => b.score - a.score);
+    console.table(scored.slice(0, 10));
 
   } catch (err) {
-    console.error('Algorithm error:', err);
+    console.error('Error running algorithm:', err);
   }
 });
+
 
 
 </script>
