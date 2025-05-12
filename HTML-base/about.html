@@ -129,60 +129,68 @@ document.getElementById('testALG').addEventListener('click', async () => {
     const spId = localStorage.getItem('spId');
     if (!spId) throw new Error('No session in localStorage');
 
-    // 1 fetch instead of hundreds
+    // 1 HTTP call
     const resp = await fetch('https://expirewise.localto.net/api/getData.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ spId })
     });
-    const { status, ingredients, recipes } = await resp.json();
-    if (status !== 'ok') {
-      console.error('Session not found or error');
+    const data = await resp.json();
+    console.log('RAW PAYLOAD:', data);
+
+    if (data.status !== 'ok') {
+      console.error('Session not found or error:', data);
       return;
     }
+    const { ingredients, recipes } = data;
 
-    // build daysToExpiry map
+    // Build a map: ingredient_id → days to expiry
     const now = Date.now();
     const daysToExpiry = {};
     ingredients.forEach(i => {
-      const d = new Date(i.expirationDate) - now;
-      daysToExpiry[i.ingredientId] = d > 0 
-        ? d / (1000*60*60*24) 
+      const msDiff = new Date(i.expiration_date) - now;
+      daysToExpiry[i.ingredient_id] = msDiff > 0
+        ? msDiff / (1000 * 60 * 60 * 24)
         : 0;
     });
 
-    // scoring
+    // Score each recipe
     const w1 = 0.7, w2 = 0.3;
     const scored = recipes.map(r => {
-      const avail = [], missing = [];
-      r.ingredients.forEach(id => {
-        (id in daysToExpiry ? avail : missing).push(id);
+      // r.recipe_id, r.name, r.ingredients (array of IDs)
+      const available = [];
+      const missing   = [];
+      (r.ingredients || []).forEach(id => {
+        if (id in daysToExpiry) available.push(id);
+        else                 missing.push(id);
       });
 
-      const expiryScore = avail.length > 0
-        ? Math.min(...avail.map(id => daysToExpiry[id]))
+      const expiryScore = available.length
+        ? Math.min(...available.map(id => daysToExpiry[id]))
         : Infinity;
       const missingCount = missing.length;
+
       const score = w1 * (1 / (expiryScore + 1e-4))
                   + w2 * (1 / (missingCount + 1));
 
       return {
-        recipeId: r.recipeId,
-        name:     r.name,
-        missing:  missingCount,
-        expiryScore,
-        score
+        recipe_id:   r.recipe_id,
+        name:        r.name,
+        missing:     missingCount,
+        expiryScore: expiryScore === Infinity ? null : expiryScore.toFixed(1),
+        score:       score.toFixed(4)
       };
     });
 
-    // sort & show top 10
-    scored.sort((a,b)=>b.score - a.score);
-    console.table(scored.slice(0,10));
+    // Sort descending and show top 10
+    scored.sort((a, b) => b.score - a.score);
+    console.table(scored.slice(0, 10));
 
-  } catch (e) {
-    console.error('Algorithm error', e);
+  } catch (err) {
+    console.error('Algorithm error:', err);
   }
 });
+
 
 
 </script>
