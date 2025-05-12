@@ -126,97 +126,64 @@ function egg() {
 
 document.getElementById('testALG').addEventListener('click', async () => {
   try {
-    // 1) Resolve session -> userId
     const spId = localStorage.getItem('spId');
-    if (!spId) throw new Error('No session ID found in localStorage.');
+    if (!spId) throw new Error('No session in localStorage');
 
-    const userResp = await fetch('https://expirewise.localto.net/api/getUser.php', {
+    // 1 fetch instead of hundreds
+    const resp = await fetch('https://expirewise.localto.net/api/getData.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ spId })
     });
-    const userData = await userResp.json();
-    if (userData.status !== 'Found') {
-      console.error('User session not found.');
+    const { status, ingredients, recipes } = await resp.json();
+    if (status !== 'ok') {
+      console.error('Session not found or error');
       return;
     }
-    const userId = userData.userId;
 
-    // 2) Fetch user ingredients
-    const ingrResp = await fetch('https://expirewise.localto.net/api/getIngredients.php', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ userId })
-    });
-    const ingredients = await ingrResp.json();
-    // Map ingredientId -> daysToExpiry
+    // build daysToExpiry map
     const now = Date.now();
-    const daysToExpiryMap = {};
-    ingredients.forEach(item => {
-      const diffMs = new Date(item.expirationDate) - now;
-      daysToExpiryMap[item.ingredientId] = diffMs > 0
-        ? diffMs / (1000 * 60 * 60 * 24)
+    const daysToExpiry = {};
+    ingredients.forEach(i => {
+      const d = new Date(i.expirationDate) - now;
+      daysToExpiry[i.ingredientId] = d > 0 
+        ? d / (1000*60*60*24) 
         : 0;
     });
 
-    // 3) Fetch all recipes
-    const recResp = await fetch('https://expirewise.localto.net/api/getRecipes.php');
-    const recipes = await recResp.json();
-
-    // 4) For each recipe, get its ingredients and compute score
-    const w1 = 0.7;  // weight for expiry
-    const w2 = 0.3;  // weight for missing count
-    const scoringPromises = recipes.map(async recipe => {
-      // fetch its ingredient IDs
-      const riResp = await fetch('https://expirewise.localto.net/api/getRecipeIngredients.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ recipeId: recipe.recipeId })
-      });
-      const reqIngs = await riResp.json();
-      const ids = reqIngs.map(r => r.ingredientId);
-
-      // split available vs missing
-      const available = [];
-      const missing = [];
-      ids.forEach(id => {
-        if (id in daysToExpiryMap) available.push(id);
-        else missing.push(id);
+    // scoring
+    const w1 = 0.7, w2 = 0.3;
+    const scored = recipes.map(r => {
+      const avail = [], missing = [];
+      r.ingredients.forEach(id => {
+        (id in daysToExpiry ? avail : missing).push(id);
       });
 
-      // compute expiry_score
-      let expiryScore;
-      if (available.length > 0) {
-        // use MIN daysToExpiry (sooner-expiring drives priority)
-        expiryScore = Math.min(...available.map(id => daysToExpiryMap[id]));
-      } else {
-        expiryScore = Infinity; 
-      }
-
+      const expiryScore = avail.length > 0
+        ? Math.min(...avail.map(id => daysToExpiry[id]))
+        : Infinity;
       const missingCount = missing.length;
-      const score = w1 * (1 / (expiryScore + 0.0001))  // avoid div-zero
-                   + w2 * (1 / (missingCount + 1));
+      const score = w1 * (1 / (expiryScore + 1e-4))
+                  + w2 * (1 / (missingCount + 1));
 
       return {
-        recipeId:    recipe.recipeId,
-        name:        recipe.name,
-        missing:     missingCount,
+        recipeId: r.recipeId,
+        name:     r.name,
+        missing:  missingCount,
         expiryScore,
         score
       };
     });
 
-    const scored = await Promise.all(scoringPromises);
+    // sort & show top 10
+    scored.sort((a,b)=>b.score - a.score);
+    console.table(scored.slice(0,10));
 
-    // 5) Sort and output top suggestions
-    scored.sort((a, b) => b.score - a.score);
-    console.table(scored.slice(0, 10));
-    // or render into your UI instead of console.table
-
-  } catch (err) {
-    console.error('Algorithm error:', err);
+  } catch (e) {
+    console.error('Algorithm error', e);
   }
 });
+
 
 </script>
 </html>
