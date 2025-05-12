@@ -130,7 +130,7 @@ document.getElementById('testALG').addEventListener('click', async () => {
     const spId = localStorage.getItem('spId');
     if (!spId) throw new Error('No session ID found in localStorage.');
 
-    const userResp = await fetch('getUser.php', {
+    const userResp = await fetch('https://expirewise.localto.net/api/getUser.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ spId })
@@ -143,7 +143,7 @@ document.getElementById('testALG').addEventListener('click', async () => {
     const userId = userData.userId;
 
     // 2) Fetch user ingredients
-    const ingrResp = await fetch('getIngredients.php', {
+    const ingrResp = await fetch('https://expirewise.localto.net/api/getIngredients.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ userId })
@@ -160,7 +160,7 @@ document.getElementById('testALG').addEventListener('click', async () => {
     });
 
     // 3) Fetch all recipes
-    const recResp = await fetch('getRecipes.php');
+    const recResp = await fetch('https://expirewise.localto.net/api/getRecipes.php');
     const recipes = await recResp.json();
 
     // 4) For each recipe, get its ingredients and compute score
@@ -168,7 +168,7 @@ document.getElementById('testALG').addEventListener('click', async () => {
     const w2 = 0.3;  // weight for missing count
     const scoringPromises = recipes.map(async recipe => {
       // fetch its ingredient IDs
-      const riResp = await fetch('getRecipeIngredients.php', {
+      const riResp = await fetch('https://expirewise.localto.net/api/getRecipeIngredients.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ recipeId: recipe.recipeId })
