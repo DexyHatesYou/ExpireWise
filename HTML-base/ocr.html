@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <title>ExpireWise Receipt Scanner (Gemini)</title>
+  <style>
+    body { font-family: sans-serif; max-width: 90%; margin: auto; padding: 1em; font-size: 140%; }
+    pre  { background: #f4f4f4; padding: 1em; overflow-x: auto; }
+    button, input { margin-top: 0.5em; size: 200%; font-size: 300%; }
+  </style>
+</head>
+<body>
+
+  <h1>ExpireWise: Receipt Scanner with Gemini</h1>
+  <input type="file" id="receipt-input" accept="image/*" />
+  <button id="scan-btn">Scan & Parse Receipt</button>
+  <label>
+  <input type="file" accept="image/*" capture="environment" style="display:none" id="cameraInput">
+  <button type="button" onclick="document.getElementById('cameraInput').click()">📷 Take Photo</button>
+</label>
+
+<!-- Upload File -->
+<label>
+  <input type="file" accept="image/*" style="display:none" id="fileInput">
+  <button type="button" onclick="document.getElementById('fileInput').click()">📁 Upload File</button>
+</label>
+<h1><a href="./profile.html">back</a><h1>
+
+  <h2>Raw OCR Result</h2>
+  <pre id="raw-result">—</pre>
+
+  <h2>Parsed Table</h2>
+  <pre id="parsed-table">—</pre>
+
+  <script>
+  	document.getElementById('cameraInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    console.log('Camera capture:', file);
+    // handle file (e.g., preview or upload)
+  }
+});
+
+document.getElementById('fileInput').addEventListener('change', function(e) {
+  const file = e.target.files[0];
+  if (file) {
+    console.log('Uploaded file:', file);
+    // handle file (e.g., preview or upload)
+  }
+});
+  document.getElementById('scan-btn').onclick = async () => {
+    // 1) Grab image
+    const file = document.getElementById('receipt-input').files[0];
+    if (!file) return alert('Please select an image first.');
+
+    // 2) OCR.Space call
+    const form = new FormData();
+    form.append('file', file);
+    form.append('apikey', 'helloworld');  // free key :contentReference[oaicite:0]{index=0}
+    const ocrResp = await fetch('https://api.ocr.space/parse/image', {
+      method: 'POST', body: form
+    });
+    const ocrJson = await ocrResp.json();
+    document.getElementById('raw-result').textContent =
+      JSON.stringify(ocrJson, null, 2);
+
+    // 3) Extract text
+    const rawText = ocrJson.ParsedResults?.[0]?.ParsedText || '';
+    console.log('Raw OCR:', rawText);
+
+    // 4) Build Gemini request payload
+    const apiKey = 'AIzaSyDf-UQ-GxxhIpuLwAvznDRc8eX4ZpQuDXU';               // ← replace :contentReference[oaicite:1]{index=1}
+    const model  = 'gemini-2.0-flash';                  // choose model :contentReference[oaicite:2]{index=2}
+    const url    = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
+
+    const body = {
+      contents: [{
+        parts: [{ text:
+`from the list after, respond purely with matched ingredients you can find, pick from this list, if you cant surely match it skip it "Ackee","Allspice","Almond Extract","Almond Milk","Almonds","Ancho Chillies","Anchovy Fillet","Apple Cider Vinegar","Apples","Apricot","Apricot Jam","Asparagus","Aubergine","Avocado","Baby Aubergine","Baby Plum Tomatoes","Baby Squid","Bacon","Baguette","Baked Beans","Baking Powder","Balsamic Vinegar","Banana","Barbeque Sauce","Basil","Basil Leaves","Basmati Rice","Bay Leaf","Bay Leaves","Bean Sprouts","Beef","Beef Brisket","Beef Fillet","Beef Gravy","Beef Kidney","Beef Shin","Beef Stock","Beef Stock Concentrate","Beetroot","Bicarbonate Of Soda","Biryani Masala","Black Beans","Black Olives","Black Pepper","Black Pudding","Black Treacle","Blackberries","Blue Food Colouring","Blueberries","Boiling Water","Borlotti Beans","Bouquet Garni","Bowtie Pasta","Braeburn Apples","Bramley Apples","Brandy","Bread","Bread Rolls","Breadcrumbs","Brie","Broad Beans","Broccoli","Brown Lentils","Brown Rice","Brown Sugar","Brussels Sprouts","Buckwheat","Bulgur Wheat","Bun","Buns","Butter","Butter Beans","Butternut Squash","Cabbage","Cacao","Cajun","Candied Peel","Canned Tomatoes","Cannellini Beans","Canola Oil","Capers","Caramel","Caramel Sauce","Caraway Seed","Cardamom","Carrots","Cashew Nuts","Cashews","Caster Sugar","Cayenne Pepper","Celeriac","Celery","Celery Salt","Challots","Charlotte Potatoes","Cheddar Cheese","Cheese","Cheese Curds","Cheese Slices","Cherry","Cherry Tomatoes","Chestnut Mushroom","Chestnuts","Chicken","Chicken Breast","Chicken Breasts","Chicken Legs","Chicken Stock","Chicken Stock Concentrate","Chicken Stock Cube","Chicken Thighs","Chickpeas","Chili Powder","Chilled Butter","Chilli","Chilli Powder","Chinese Broccoli","Chives","Chocolate Chips","Chopped Onion","Chopped Parsley","Chopped Tomatoes","Chorizo","Christmas Pudding","Ciabatta","Cider","Cilantro","Cinnamon","Cinnamon Stick","Clams","Clotted Cream","Cloves","Coco Sugar","Cocoa","Coconut Cream","Coconut Milk","Cod","Colby Jack Cheese","Cold Water","Condensed Milk","Cooking wine","Coriander","Coriander Leaves","Coriander Seeds","Corn Flour","Corn Tortillas","Cornstarch","Courgettes","Couscous","Cream","Cream Cheese","Creamed Corn","Creme Fraiche","Crusty Bread","Cubed Feta Cheese","Cucumber","Cumin","Cumin Seeds","Currants","Curry Powder","Custard","Custard Powder","Dark Brown Soft Sugar","Dark Brown Sugar","Dark Chocolate","Dark Chocolate Chips","Dark Rum","Dark Soft Brown Sugar","Dark Soy Sauce","Demerara Sugar","Desiccated Coconut","Diced Tomatoes","Digestive Biscuits","Dijon Mustard","Dill","Dill Pickles","Doner Meat","Doubanjiang","Double Cream","Dried Apricots","Dried Fruit","Dried Oregano","Dry White Wine","Duck","Duck Fat","Duck Legs","Duck Sauce","Egg","Egg Plants","Egg Rolls","Egg White","Egg Yolks","Eggs","Enchilada Sauce","English Muffins","English Mustard","Extra Virgin Olive Oil","Fajita Seasoning","Farfalle","Fennel","Fennel Bulb","Fennel Seeds","Fenugreek","Fermented Black Beans","Feta","Fettuccine","Fideo","Figs","Filo Pastry","Fish Sauce","Fish Stock","Flaked Almonds","Flax Eggs","Flour","Flour Tortilla","Floury Potatoes","Free-range Egg, Beaten","Free-range Eggs, Beaten","French Lentils","Fresh Basil","Fresh Thyme","Freshly Chopped Parsley","Fries","Fromage Frais","Frozen Peas","Fruit Mix","Full Fat Yogurt","Garam Masala","Garlic","Garlic Clove","Garlic Powder","Garlic Sauce","Gelatine Leafs","Ghee","Gherkin Relish","Ginger","Ginger Cordial","Ginger Garlic Paste","Ginger Paste","Glace Cherry","Goat Meat","Goats Cheese","Gochujang","Golden Syrup","Goose Fat","Gouda Cheese","Grand Marnier","Granulated Sugar","Grape Tomatoes","Greek Yogurt","Green Beans","Green Chilli","Green Olives","Green Pepper","Green Red Lentils","Green Salsa","Ground Almonds","Ground Beef","Ground Cumin","Ground Ginger","Ground Pork","Gruyère","Haddock","Ham","Hard Taco Shells","Haricot Beans","Harissa Spice","Hazlenuts","Heavy Cream","Herring","Honey","Horseradish","Hot Beef Stock","Hotsauce","Ice Cream","Iceberg Lettuce","Icing Sugar","Italian Fennel Sausages","Italian Seasoning","Jalapeno","Jam","Jasmine Rice","Jerk","Jerusalem Artichokes","Kale","Khus Khus","Kidney Beans","Kielbasa","King Prawns","Kosher Salt","Lamb","Lamb Kidney","Lamb Leg","Lamb Loin Chops","Lamb Mince","Lamb Shoulder","Lard","Lasagne Sheets","Lean Minced Beef","Leek","Lemon","Lemon Juice","Lemon Zest","Lemons","Lentils","Lettuce","Light Brown Soft Sugar","Light Rum","Lime","Linguine Pasta","Little Gem Lettuce","Macaroni","Mackerel","Madras Paste","Malt Vinegar","Maple Syrup","Marjoram","Mars Bar","Marzipan","Mascarpone","Massaman Curry Paste","Mayonnaise","Medjool Dates","Meringue Nests","Milk","Milk Chocolate","Minced Beef","Minced Garlic","Minced Pork","Mincemeat","Miniature Marshmallows","Mint","Mirin","Mixed Grain","Mixed Peel","Mixed Spice","Monkfish","Monterey Jack Cheese","Mozzarella","Mozzarella Balls","Muffins","Mulukhiyah","Muscovado Sugar","Mushrooms","Mussels","Mustard","Mustard Powder","Mustard Seeds","Naan Bread","Noodles","Nutmeg","Oatmeal","Oats","Oil","Olive Oil","Onion","Onion Salt","Onions","Orange","Orange Blossom Water","Orange Zest","Oregano","Oxtail","Oyster Sauce","Oysters","Paccheri Pasta","Paella Rice","Paneer","Pappardelle Pasta","Paprika","Parma Ham","Parmesan","Parmesan Cheese","Parmigiano-reggiano","Parsley","Passata","Peaches","Peanut Brittle","Peanut Butter","Peanut Cookies","Peanut Oil","Peanuts","Pears","Peas","Pecan Nuts","Pecorino","Penne Rigate","Pepper","Persian Cucumber","Pickle Juice","Pilchards","Pine Nuts","Pink Food Colouring","Pinto Beans","Pita Bread","Pitted Black Olives","Plain Chocolate","Plain Flour","Plum Tomatoes","Polish Sausage","Pork","Pork Chops","Potato Starch","Potatoe Buns","Potatoes","Powdered Sugar","Prawns","Pretzels","Prosciutto","Prunes","Puff Pastry","Pumpkin","Quinoa","Raisins","Rapeseed Oil","Ras el hanout","Raspberries","Raspberry Jam","Raw King Prawns","Red Chilli","Red Chilli Flakes","Red Chilli Powder","Red Food Colouring","Red Onions","Red Pepper","Red Pepper Flakes","Red Snapper","Red Wine","Red Wine Jelly","Red Wine Vinegar","Redcurrants","Refried Beans","Rhubarb","Rice","Rice Krispies","Rice Noodles","Rice Stick Noodles","Rice Vermicelli","Rice Vinegar","Rice wine","Ricotta","Rigatoni","Roasted Vegetables","Rocket","Rolled Oats","Rose water","Rosemary","Rum","Saffron","Sage","Sake","Salmon","Salsa","Salt","Salt Cod","Salted Butter","Sardines","Sauerkraut","Sausages","Scallions","Scotch Bonnet","Sea Salt","Self-raising Flour","Semi-skimmed Milk","Sesame Seed","Sesame Seed Burger Buns","Sesame Seed Oil","Shallots","Sherry","Shiitake Mushrooms","Shortcrust Pastry","Shortening","Shredded Mexican Cheese","Shredded Monterey Jack Cheese","Sichuan Pepper","Single Cream","Small Potatoes","Smoked Haddock","Smoked Paprika","Smoked Salmon","Smoky Paprika","Sour Cream","Soy Sauce","Soya Milk","Spaghetti","Spinach","Spring Onions","Squash","Squid","Sriracha","Star Anise","Starch","Stilton Cheese","Stir-fry Vegetables","Stout","Strawberries","Suet","Sugar","Sugar Snap Peas","Sultanas","Sun-Dried Tomatoes","Sunflower Oil","Sushi Rice","Swede","Sweet Potatoes","Sweetcorn","Tabasco Sauce","Tagliatelle","Tahini","Tamarind Ball","Tamarind Paste","Tarragon Leaves","Thai Fish Sauce","Thai Green Curry Paste","Thai Red Curry Paste","Thyme","Tiger Prawns","Tinned Tomatos","Toffee Popcorn","Tofu","Tomato","Tomato Ketchup","Tomato Puree","Tomato Sauce","Tomatoes","Toor Dal","Tortillas","Treacle","Tripe","Truffle Oil","Tuna","Turkey Mince","Turmeric","Turmeric Powder","Turnips","Udon Noodles","Unsalted Butter","Vanilla","Vanilla Extract","Veal","Vegan Butter","Vegetable Oil","Vegetable Stock","Vegetable Stock Cube","Vermicelli Pasta","Vinaigrette Dressing","Vine Leaves","Vine Tomatoes","Vinegar","Walnuts","Warm Water","Water","Water Chestnut","White Chocolate","White Chocolate Chips","White Fish","White Fish Fillets","White Flour","White Vinegar","White Wine","White Wine Vinegar","Whole Milk","Whole Wheat","Wholegrain Bread","Wild Mushrooms","Wonton Skin","Wood Ear Mushrooms","Worcestershire Sauce","Yeast","Yellow Food Colouring","Yellow Onion","Yellow Pepper","Yogurt","Yukon Gold Potatoes","Zucchini"
+${rawText}`
+        }]
+      }]
+    };
+
+    // 5) Call Gemini REST endpoint
+    const gemResp = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(body)
+    });
+    const gemJson = await gemResp.json();
+    console.log('Gemini response:', gemJson);
+
+    // 6) Extract generated text
+    const generated = gemJson?.candidates?.[0]?.content?.parts?.[0]?.text;
+    if (!generated) {
+      return document.getElementById('parsed-table').textContent =
+        '❌ No content returned from Gemini.';
+    }
+
+    // 7) Parse & display JSON
+    try {
+      const parsed = JSON.parse(generated);
+      document.getElementById('parsed-table').textContent =
+        JSON.stringify(parsed, null, 2);
+    } catch (e) {
+      document.getElementById('parsed-table').textContent =
+        '' + generated;
+    }
+  };
+  </script>
+
+</body>
+</html>
