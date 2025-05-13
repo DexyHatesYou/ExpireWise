@@ -4,58 +4,22 @@
   <meta charset="UTF-8">
   <title>OCR + Gemini Summary</title>
   <style>
-  	    @font-face { font-family: g; src: url('hwyuenei64.ttf'); }
-      .g{
-        font-family: g;
-      }
-
-    body { font-family: g; padding: 20px; font-size: 150%; width: 100vw; height: 100vh;
-    	background: #BFCBCE;
-     /* background: linear-gradient(180deg, rgba(86,91,117,1) 0%, rgba(191,203,206,1) 12%); */
-
-    }
-    h1{color: white; font-size: 300%; 
-    color: white;
-
-letter-spacing: .1em;
-text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0 4px 0 #282828, 0 5px 0 #262626, 0 6px 0 #242424, 0 7px 0 #222, 0 8px 0 #202020, 0 9px 0 #1e1e1e, 0 10px 0 #1c1c1c, 0 11px 0 #1a1a1a, 0 12px 0 #181818, 0 13px 0 #161616, 0 14px 0 #141414, 0 15px 0 #121212, 0 22px 30px rgba(0,0,0,0.9);}
+    body { font-family: sans-serif; padding: 20px; font-size: 150%;}
     video, canvas, img { max-width: 100%; margin-top: 10px; }
     button, input { margin: 5px; font-size: 300%;}
     #ocr-result, #summary { white-space: pre-wrap; background: #f4f4f4; padding: 10px; margin-top: 10px; border-radius: 6px; }
-
-        button{
-        	font-family: g;
-      background-color: white;
-      width: 50%;
-      height: 100%;
-      border-radius: 25px;
-      display: inline;
-      text-align: center;
-      border: none;
-      color: #BFCBCE;
-      transition: all 0.5s ease-out;
-      margin-right: 3%;
-    }
-    button:hover,
-    button:focus {
-     color: #303655;
-     box-shadow: 0px 0px 20px 0px #888888;
-    }
-
-
-
   </style>
 </head>
 <body>
 
-  <div style="text-align: center; width: 100%"><h1>RECEIPT SCANNER <a style="font-size: 80%">beta</a></h1></div>
+  <h2>📸 OCR + 🤖 Gemini Summary</h2>
 
-  <!-- Buttons --><div style="width: 90%;">
+  <!-- Buttons -->
   <button id="open-camera">Open Camera</button>
   <button id="take-photo" style="display:none;">Take Photo</button>
   <button id="upload-file">Upload File</button>
   <input type="file" accept="image/*" id="file-input" style="display:none;">
-</div>
+
   <!-- Video and Preview -->
   <video id="video" autoplay playsinline style="display:none;"></video>
   <canvas id="canvas" style="display:none;"></canvas>
@@ -67,48 +31,6 @@ text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0
 
   <h3>🤖 Gemini Summary:</h3>
   <div id="summary">None yet</div>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
   <script>
     const openCameraBtn = document.getElementById('open-camera');
