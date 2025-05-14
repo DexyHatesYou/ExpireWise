@@ -203,13 +203,12 @@ document.head.appendChild(link);
             if (result.status === 'OKAY') {
                 // Show an alert with the sessionId
               localStorage.setItem("spId", result.sessionId);
-              console.log(spId);
-                alert(`Login successful! Your sessionId is: ${result.sessionId}`);
 
+                
                 // Optionally, you can redirect the user to the home page
                 window.location.href = 'home.html';
             } else {
-                alert(result.message || 'Login failed');
+               
             }
 }
 
@@ -239,7 +238,7 @@ document.head.appendChild(link);
       var nicknameCheck = document.getElementById("username").value;
         var passwordCheck = document.getElementById("password").value;
         if (nicknameCheck.length <= 3 || passwordCheck.length <= 3) {
-          alert("Please fill out nickname and password on main page before trying to register");
+         
         } else {
       document.getElementById("confirm").classList.add("slideC");
       document.getElementById("confirm").classList.remove("slideD");
@@ -278,18 +277,18 @@ document.head.appendChild(link);
     const result = await response.text(); 
     
     if (result.trim() === "Registration successful") {
-        alert("Registration successful");
+        
         document.getElementById("body1").classList.add("loadF");
       setTimeout(function() {
         window.location.href = "./home.html";
     }, 500);
     } else {
-        alert(result); 
+        
         document.getElementById("confirm").classList.add("slideD");
       document.getElementById("confirm").classList.remove("slideC");
     }
   } else {
-    alert("Your passwords dont match");
+
     document.getElementById("passConf").value = '';
   }
 }
