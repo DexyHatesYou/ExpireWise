@@ -190,7 +190,7 @@ text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0
 
     async function sendToGemini(text) {
       const apiKey = 'AIzaSyDf-UQ-GxxhIpuLwAvznDRc8eX4ZpQuDXU'; // Replace with your actual key
-      const model = 'gemini-2.0-flash';
+      const model = 'gemini-2.0-flash-lite';
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${model}:generateContent?key=${apiKey}`;
 
       const body = {
