@@ -180,12 +180,16 @@ function fetchIngredients() {
         // compute days‐left badge
         const days = ing.days_left;
         const displayDays = days < 0 ? 0 : days;
-        let spanClass = "left";
-        if (displayDays === 1)           spanClass = "leftW";
-        else if (displayDays < 5)        spanClass = "leftO";
-        else if (displayDays > 30)       spanClass = "leftY";
-        else if (displayDays < 1)        spanClass = "leftD";
-        else if (displayDays === 0)      spanClass = "leftD";
+  let spanClass = "left";          // default
+        if (displayDays === 1) {
+          spanClass = "leftW";           // exactly 1 day
+        } else if (displayDays < 5 && displayDays > 0) {
+          spanClass = "leftO";           // 2–4 days
+        } else if (displayDays > 30) {
+          spanClass = "leftY";           // more than 30 days
+        } else if (displayDays < 1) {
+          spanClass = "leftD";           // 2–4 days
+        }
 
         html = `
           <div class="ingre">
