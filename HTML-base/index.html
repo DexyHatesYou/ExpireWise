@@ -147,7 +147,7 @@ Since we don't track anything, there's no way to recover your account. Just crea
     if (data.status === "notFound") {
         alert("notFound");
         localStorage.setItem("spId", null);
-        window.location.href = "index.html";
+        
     } else {
         alert("Found: " + data.nickname);
         var nickname = data.nickname;
