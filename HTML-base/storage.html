@@ -197,14 +197,15 @@ function fetchIngredients() {
       } else {
         // infinite: no badge, “No expiration”
         html = `
-          <div class="ingre">
+<div class="ingre">
             <div class="g str">${ing.name}</div>
-            <div class="g infinity">
+            <div class="g ${spanClass}">
+              ${displayDays}
               <span class="leftct">
-                No Expiration
+                ${displayDays === 1 ? "Day" : "Days"} left
               </span>
             </div>
-          <!--<img class="edit img" width="30"
+            <!--<img class="edit img" width="30"
                  src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png"
                  alt="edit" />-->
             <img class="delete img" width="30"
