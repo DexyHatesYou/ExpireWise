@@ -174,6 +174,7 @@ function fetchIngredients() {
         else if (displayDays < 5)        spanClass = "leftO";
         else if (displayDays > 30)       spanClass = "leftY";
         else if (displayDays < 1)        spanClass = "leftD";
+        else if (displayDays === 0)      spanClass = "leftD";
 
         html = `
           <div class="ingre">
@@ -184,9 +185,9 @@ function fetchIngredients() {
                 ${displayDays === 1 ? "Day" : "Days"} left
               </span>
             </div>
-            <img class="edit img" width="30"
+            <!--<img class="edit img" width="30"
                  src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png"
-                 alt="edit" />
+                 alt="edit" />-->
             <img class="delete img" width="30"
                  src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
                  alt="delete" />
@@ -198,12 +199,12 @@ function fetchIngredients() {
         html = `
           <div class="ingre">
             <div class="g str">${ing.name}</div>
-            <div class="g leftInf">
+            <div class="g leftct">
               No expiration
             </div>
-            <img class="edit img" width="30"
+          <!--<img class="edit img" width="30"
                  src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png"
-                 alt="edit" />
+                 alt="edit" />-->
             <img class="delete img" width="30"
                  src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
                  alt="delete" />
