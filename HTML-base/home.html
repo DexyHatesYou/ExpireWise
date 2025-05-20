@@ -15,7 +15,7 @@
 <div class="topBar">
 <input type="text" name="search" class="searchBar g">
 <!--<button class="filter"></button>-->
-<button src="/img/time.png" class="sort"></button>
+ <img src="/img/time.png" alt="Sort icon" class="sort-icon">
 </div>
 <div class="blur1"></div>
 <div class="container">
@@ -140,13 +140,11 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
 
-let expiryList = [];
-let availList = [];
-let showExpiry = true;
+ const sortButton = document.querySelector('.sort');
+  const sortIcon   = sortButton.querySelector('.sort-icon');
 
-const sortButton = document.querySelector('.sort');
-  const sortIcon = sortButton.querySelector('.sort-icon');
-    const ICONS = {
+  let showExpiry = true;
+  const ICONS = {
     time: '/img/time.png',
     ings: '/img/ings.png'
   };
@@ -275,8 +273,8 @@ function renderList() {
 
 document.querySelector('.sort').addEventListener('click', () => {
   showExpiry = !showExpiry;
-  sortIcon.src = showExpiry ? ICONS.ings : ICONS.time;
-  renderList();
+    sortIcon.src = showExpiry ? ICONS.ings : ICONS.time;
+    renderList();
 });
 
 // run on load
