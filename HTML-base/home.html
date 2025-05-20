@@ -300,7 +300,7 @@ function renderList() {
 
 document.querySelector('.sort').addEventListener('click', () => {
   showExpiry = !showExpiry;
-    sortIcon.src = showExpiry ? ICONS.ings : ICONS.time;
+    sortIcon.src = showExpiry ? ICONS.time : ICONS.ings;
     renderList();
 });
 
