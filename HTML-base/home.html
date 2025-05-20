@@ -15,7 +15,7 @@
 <div class="topBar">
 <input type="text" name="search" class="searchBar g">
 <!--<button class="filter"></button>-->
-<button class="sort"></button>
+<button src="/img/time.png" class="sort"></button>
 </div>
 <div class="blur1"></div>
 <div class="container">
@@ -144,6 +144,9 @@ let expiryList = [];
 let availList = [];
 let showExpiry = true;
 
+const sortButton = document.querySelector('.sort');
+  const sortIcon = sortButton.querySelector('.sort-icon');
+
 async function recipes() {
   const container = document.querySelector('.container');
   container.innerHTML = '<br><br>';
@@ -169,7 +172,7 @@ async function recipes() {
       : 0;
   });
 
-  // 2) score all session recipes
+  
   const scored = yourRecipes.map(r => {
     const total = r.ingredients.length;
     const availIds = r.ingredients.filter(id => id in daysToExpiry);
@@ -185,7 +188,7 @@ async function recipes() {
     };
   });
 
-  // 3) pick top 15 by earliestExpiry, and top 15 by ratio
+  
   const topExpiry = scored
     .filter(r => r.earliestExpiry !== null)
     .sort((a, b) => a.earliestExpiry - b.earliestExpiry)
@@ -207,7 +210,7 @@ async function recipes() {
     return cache[name];
   }
 
-  // 5) build both lists
+  
   expiryList = [];
   for (const r of topExpiry) {
     const m = await fetchMeal(r.name);
@@ -265,9 +268,10 @@ function renderList() {
   });
 }
 
-// toggle on sort button click
+
 document.querySelector('.sort').addEventListener('click', () => {
   showExpiry = !showExpiry;
+  sortIcon.src = showExpiry ? ICONS.ings : ICONS.time;
   renderList();
 });
 
