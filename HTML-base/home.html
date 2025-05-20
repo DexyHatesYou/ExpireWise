@@ -140,8 +140,10 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
 
-(async function() {
+async function recipes() {
   const container = document.querySelector('.container');
+  container.innerHTML = ''; // clear existing
+
   const spId = localStorage.getItem('spId');
   if (!spId) throw new Error('No session ID in localStorage');
 
@@ -151,7 +153,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify({ spId })
   });
-  const { status, ingredients, recipes } = await res.json();
+  const { status, ingredients, recipes: yourRecipes } = await res.json();
   if (status !== 'ok') throw new Error('Session not found or server error');
 
   const now = Date.now();
@@ -163,7 +165,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
       : 0;
   });
 
-  const scored = recipes.map(r => {
+  const scored = yourRecipes.map(r => {
     const totalCount   = r.ingredients.length;
     const availableIds = r.ingredients.filter(id => id in daysToExpiry);
     const availableCnt = availableIds.length;
@@ -224,7 +226,10 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
     container.appendChild(segment);
   }
-})();
+}
+
+// auto-run on page load
+recipes();
 
 
 function openrecipe(id) {
