@@ -157,23 +157,25 @@ function fetchIngredients() {
     const container = document.querySelector(".stored");
     container.innerHTML = "";  // clear old
 
-    data.ingredients.forEach(ing => {
+    // split finite vs infinite
+    const finiteIngs  = data.ingredients.filter(ing => !ing.infinite);
+    const infiniteIngs = data.ingredients.filter(ing => ing.infinite);
+    const allIngs = [...finiteIngs, ...infiniteIngs];
+
+    allIngs.forEach(ing => {
+      let html;
+
+      if (!ing.infinite) {
+        // compute days‐left badge
         const days = ing.days_left;
         const displayDays = days < 0 ? 0 : days;
+        let spanClass = "left";
+        if (displayDays === 1)           spanClass = "leftW";
+        else if (displayDays < 5)        spanClass = "leftO";
+        else if (displayDays > 30)       spanClass = "leftY";
+        else if (displayDays < 1)        spanClass = "leftD";
 
-        // decide which class to use on the <span>
-        let spanClass = "left";          // default
-        if (displayDays === 1) {
-          spanClass = "leftW";           // exactly 1 day
-        } else if (displayDays < 5 && displayDays > 0) {
-          spanClass = "leftO";           // 2–4 days
-        } else if (displayDays > 30) {
-          spanClass = "leftY";           // more than 30 days
-        } else if (displayDays < 1) {
-          spanClass = "leftD";           // 2–4 days
-        }
-
-        container.insertAdjacentHTML("beforeend", `
+        html = `
           <div class="ingre">
             <div class="g str">${ing.name}</div>
             <div class="g ${spanClass}">
@@ -190,7 +192,27 @@ function fetchIngredients() {
                  alt="delete" />
             <div class="strip"></div>
           </div>
-      `);
+        `;
+      } else {
+        // infinite: no badge, “No expiration”
+        html = `
+          <div class="ingre">
+            <div class="g str">${ing.name}</div>
+            <div class="g leftInf">
+              No expiration
+            </div>
+            <img class="edit img" width="30"
+                 src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png"
+                 alt="edit" />
+            <img class="delete img" width="30"
+                 src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
+                 alt="delete" />
+            <div class="strip"></div>
+          </div>
+        `;
+      }
+
+      container.insertAdjacentHTML("beforeend", html);
     });
   })
   .catch(err => console.error("Fetch error:", err));
@@ -198,6 +220,7 @@ function fetchIngredients() {
 
 // Call on page load
 document.addEventListener("DOMContentLoaded", fetchIngredients);
+
 
 </script>
 </html>
