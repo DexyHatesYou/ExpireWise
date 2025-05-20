@@ -35,8 +35,14 @@
   <input min="1" max="31" type="number" placeholder="day" class="day dt g">
   <input min="1" max="12" type="number" placeholder="month" class="month dt g">
   <input min="2024" max="2030" type="number" placeholder="year" class="year dt g">
-  <textarea placeholder="Start typing..." id="notes" class="note g" name="note" cols="40" rows="6"></textarea>
-  <h4 class="g nl">Note</h4><h4 class="g ll dl">Day</h4><h4 class="g ll ml">Month</h4><h4 class="g ll yl">Year</h4>
+     <input
+      type="radio"
+       id="noExpire"
+      name="toggleRadio"
+      onclick="toggleDateInputs(this)"
+      data-was-checked="false"
+    >
+  <h4 class="g nl">No expiry date</h4><h4 class="g ll dl">Day</h4><h4 class="g ll ml">Month</h4><h4 class="g ll yl">Year</h4>
 </div>
 
 <div class="down">
@@ -70,6 +76,20 @@
 <script src="date.js"></script>
 </body>
 <script>
+
+ function toggleDateInputs(radio) {
+      // Read previous state from data attribute
+      const wasChecked = radio.dataset.wasChecked === 'true';
+      const newState = !wasChecked;
+
+      // Manually set the checked state (radios don't toggle off by default)
+      radio.checked = newState;
+      radio.dataset.wasChecked = String(newState);
+
+      // Disable or enable all .day, .month, .year inputs
+      document.querySelectorAll('.day, .month, .year')
+        .forEach(input => input.disabled = newState);
+    }
 
 function test() {
   fetch('https://expirewise.localto.net/api/list.php')
@@ -193,72 +213,76 @@ optionsList.forEach((optionText, index) => {
         }
     });
 
-function submitIngredient() {
-  // Get expiration date parts from the inputs (using querySelector on class names)
-  const dayInput = document.querySelector(".day");
-  const monthInput = document.querySelector(".month");
-  const yearInput = document.querySelector(".year");
-  const note = document.getElementById("notes").value;
-  const selectedName = selected; // Assuming 'selected' is defined elsewhere
-  const dbId = selectedIndex;
-
-  // Get spId from localStorage
-  const spId = localStorage.getItem("spId");
-
-  // Validate required fields
-
-  console.log(
-    "1: " + dayInput.value, // Access the value property
-    "2: " + monthInput.value, // Access the value property
-    "3: " + yearInput.value, // Access the value property
-    "4: " + note,
-    "5: " + dayInput.value,
-    "6: " + monthInput.value,
-    "7: " + yearInput.value,
-    "8: " + `${yearInput.value}-${monthInput.value.padStart(2, '0')}-${dayInput.value.padStart(2, '0')}`,
-    "9: " + selectedName, //this value was undefined in your log, make sure the element exists.
-    "10: " + spId
-  );
-
-  if (!selectedName || !note || !dayInput.value || !monthInput.value || !yearInput.value || !spId) {
-    alert("Please fill in all fields and select an option.");
-    return;
-  }
-
-  // Construct the expiration date string
-  const expirationDate = `${yearInput.value}-${monthInput.value.padStart(2, '0')}-${dayInput.value.padStart(2, '0')}`;
-
-  // Construct the data object to send
-  const data = {
-    user_id: spId,
-    name: selectedName,
-    expiration_date: expirationDate,
-    note: note,
-    db_id: dbId
-  };
-
-  // Send the POST request using fetch
-  fetch("https://expirewise.localto.net/api/submit_ingredient.php", {
-    method: "POST",
-      credentials: "include",
-    headers: {
-      "Content-Type": "application/json"
-    },
-    body: JSON.stringify(data)
-  })
-  .then(response => response.json())
-  .then(result => {
-    console.log(result);
-    if (result.success) {
-      alert("Ingredient added successfully!");
-    } else {
-      alert("Error: " + result.error);
+>
+    // Enable/disable the day/month/year inputs
+    function toggleDateInputs(toggle) {
+      const disable = toggle.checked;
+      document.querySelectorAll('.day, .month, .year')
+        .forEach(input => input.disabled = disable);
     }
-  })
-  .catch(error => {
-    console.error("Error submitting data:", error);
-    alert("An error occurred. Please try again.");
-  });
-}
+
+    function submitIngredient() {
+      const dayInput   = document.querySelector(".day");
+      const monthInput = document.querySelector(".month");
+      const yearInput  = document.querySelector(".year");
+      const noExpire   = document.getElementById("noExpire").checked;
+      const selectedName = selected;       // assuming defined elsewhere
+      const dbId         = selectedIndex;  // assuming defined elsewhere
+      const spId         = localStorage.getItem("spId");
+
+      // Basic validation
+      if (!selectedName || !dbId || !spId) {
+        alert("Please select an ingredient and ensure your session is valid.");
+        return;
+      }
+      // If not “no expiration,” require a full date
+      if (!noExpire) {
+        if (!dayInput.value || !monthInput.value || !yearInput.value) {
+          alert("Please fill in a complete expiration date, or check “No expiration date.”");
+          return;
+        }
+      }
+
+      // Build the payload
+      let expirationDate, infiniteFlag;
+      if (noExpire) {
+        expirationDate = "infinity";
+        infiniteFlag   = true;
+      } else {
+        // pad single-digit month/day with a leading zero
+        const dd = dayInput.value.padStart(2, '0');
+        const mm = monthInput.value.padStart(2, '0');
+        const yy = yearInput.value;
+        expirationDate = `${yy}-${mm}-${dd}`;
+        infiniteFlag   = false;
+      }
+
+      const data = {
+        user_id:         spId,
+        name:            selectedName,
+        db_id:           dbId,
+        expiration_date: expirationDate,
+        infinite:        infiniteFlag
+      };
+
+      fetch("https://expirewise.localto.net/api/submit_ingredient.php", {
+        method:      "POST",
+        credentials: "include",
+        headers:     { "Content-Type": "application/json" },
+        body:        JSON.stringify(data)
+      })
+      .then(r => r.json())
+      .then(result => {
+        if (result.success) {
+          alert("Ingredient added successfully!");
+        } else {
+          alert("Error: " + result.error);
+        }
+      })
+      .catch(err => {
+        console.error("Error submitting data:", err);
+        alert("An error occurred. Please try again.");
+      });
+    }
 </script>
 </html>
