@@ -151,7 +151,7 @@ async function recipes() {
   const spId = localStorage.getItem('spId');
   if (!spId) throw new Error('No session ID in localStorage');
 
-  // fetch session data
+  // 1) fetch session data & compute daysToExpiry
   const res = await fetch('https://expirewise.localto.net/api/getData.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -169,51 +169,74 @@ async function recipes() {
       : 0;
   });
 
-  // score & fetch details
-  const detailed = await Promise.all(yourRecipes.slice(0, 15).map(async r => {
+  // 2) score all session recipes
+  const scored = yourRecipes.map(r => {
     const total = r.ingredients.length;
     const availIds = r.ingredients.filter(id => id in daysToExpiry);
     const availCnt = availIds.length;
-    const missingCnt = total - availCnt;
     const earliest = availCnt
       ? Math.round(Math.min(...availIds.map(id => daysToExpiry[id])))
       : null;
-
-    const resp = await fetch(
-      `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(r.name)}`
-    );
-    const { meals } = await resp.json();
-    if (!meals) return null;
-    const m = meals[0];
-    let ingrCount = 0;
-    for (let i = 1; i <= 20; i++) if (m[`strIngredient${i}`]) ingrCount++;
-
     return {
-      id:           m.idMeal,
-      thumb:        m.strMealThumb,
-      name:         m.strMeal,
-      category:     m.strCategory,
-      area:         m.strArea,
-      ingredientCount: ingrCount,
-      missingCnt,
+      name:           r.name,
+      missingCnt:     total - availCnt,
+      ratio:          total > 0 ? availCnt / total : 0,
       earliestExpiry: earliest
     };
-  }));
-
-  // filter out failed fetches
-  const mealsList = detailed.filter(x => x);
-
-  // build expiryList: grouped by most at-home then by expiry
-  expiryList = [...mealsList].sort((a, b) => {
-    if (b.ingredientCount - b.missingCnt !== a.ingredientCount - a.missingCnt)
-      return (b.ingredientCount - b.missingCnt) - (a.ingredientCount - a.missingCnt);
-    const ea = a.earliestExpiry === null ? Infinity : a.earliestExpiry;
-    const eb = b.earliestExpiry === null ? Infinity : b.earliestExpiry;
-    return ea - eb;
   });
 
-  // build availList: purely by missingCnt ascending
-  availList = [...mealsList].sort((a, b) => a.missingCnt - b.missingCnt);
+  // 3) pick top 15 by earliestExpiry, and top 15 by ratio
+  const topExpiry = scored
+    .filter(r => r.earliestExpiry !== null)
+    .sort((a, b) => a.earliestExpiry - b.earliestExpiry)
+    .slice(0, 15);
+
+  const topAvail = scored
+    .sort((a, b) => b.ratio - a.ratio)
+    .slice(0, 15);
+
+  // 4) fetch meal details cache by name
+  const cache = {};
+  async function fetchMeal(name) {
+    if (cache[name]) return cache[name];
+    const resp = await fetch(
+      `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(name)}`
+    );
+    const { meals } = await resp.json();
+    cache[name] = meals ? meals[0] : null;
+    return cache[name];
+  }
+
+  // 5) build both lists
+  expiryList = [];
+  for (const r of topExpiry) {
+    const m = await fetchMeal(r.name);
+    if (!m) continue;
+    let ingrCount = 0;
+    for (let i = 1; i <= 20; i++) if (m[`strIngredient${i}`]) ingrCount++;
+    expiryList.push({
+      id: m.idMeal, thumb: m.strMealThumb, name: m.strMeal,
+      category: m.strCategory, area: m.strArea,
+      ingredientCount: ingrCount,
+      missingCnt: r.missingCnt,
+      earliestExpiry: r.earliestExpiry
+    });
+  }
+
+  availList = [];
+  for (const r of topAvail) {
+    const m = await fetchMeal(r.name);
+    if (!m) continue;
+    let ingrCount = 0;
+    for (let i = 1; i <= 20; i++) if (m[`strIngredient${i}`]) ingrCount++;
+    availList.push({
+      id: m.idMeal, thumb: m.strMealThumb, name: m.strMeal,
+      category: m.strCategory, area: m.strArea,
+      ingredientCount: ingrCount,
+      missingCnt: r.missingCnt,
+      earliestExpiry: r.earliestExpiry
+    });
+  }
 
   renderList();
 }
@@ -242,13 +265,13 @@ function renderList() {
   });
 }
 
-// toggle between lists on sort-button click
+// toggle on sort button click
 document.querySelector('.sort').addEventListener('click', () => {
   showExpiry = !showExpiry;
   renderList();
 });
 
-// auto-run on page load
+// run on load
 recipes();
 
 
