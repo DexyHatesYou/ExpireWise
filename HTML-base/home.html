@@ -141,12 +141,11 @@ document.addEventListener('DOMContentLoaded', function(event) {
 })
 
 (async function() {
-  const container = document.getElementById('container');
-
-  // 1) Load session data & compute scores
+  const container = document.querySelector('.container');
   const spId = localStorage.getItem('spId');
   if (!spId) throw new Error('No session ID in localStorage');
 
+  // 1) fetch session data & compute scores
   const res = await fetch('https://expirewise.localto.net/api/getData.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -176,7 +175,6 @@ document.addEventListener('DOMContentLoaded', function(event) {
       : Infinity;
     return {
       name:           r.name,
-      totalCount,
       availableCnt,
       ratio:          +ratio.toFixed(2),
       earliestExpiry: earliestExpiry === Infinity
@@ -194,48 +192,40 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
   const top15 = scored.slice(0, 15);
 
-  // 2) For each top recipe, fetch details by name and render
+  // 2) fetch details via name and render
   for (const rec of top15) {
-    const searchResp = await fetch(
+    const resp = await fetch(
       `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(rec.name)}`
     );
-    const searchData = await searchResp.json();
-    if (!searchData.meals) continue;
-    const meal = searchData.meals[0];
+    const { meals } = await resp.json();
+    if (!meals) continue;
+    const meal = meals[0];
 
-    // count ingredients
     let ingredientCount = 0;
     for (let i = 1; i <= 20; i++) {
       if (meal[`strIngredient${i}`]) ingredientCount++;
     }
 
     const segment = document.createElement('div');
-    segment.classList.add('segment');
+    segment.className = 'segment';
     segment.onclick = () => openrecipe(meal.idMeal);
 
     segment.innerHTML = `
       <img class="rcp-img" src="${meal.strMealThumb}" alt="recipe photo">
-      <div class="rcp-part" onclick="openrecipe(${meal.idMeal})">
+      <div class="rcp-part">
         <h3 class="rcp-name">${meal.strMeal}</h3>
-        <span class="mark ${meal.strCategory.toLowerCase()}">
-          ${meal.strCategory}
-        </span>
+        <span class="mark ${meal.strCategory.toLowerCase()}">${meal.strCategory}</span>
         <span class="mark">${meal.strArea}</span><br><p class="spacer"></p>
         <span class="mark ingr">${ingredientCount} ingredients</span>
-        <span class="mark war">
-          matched: ${rec.availableCnt} (${rec.ratio})
-        </span><br><p class="spacer"></p>
-        <span class="mark">
-          expires in: ${rec.earliestExpiry !== null
-            ? rec.earliestExpiry + 'd'
-            : '—'}
-        </span>
+        <span class="mark war">matched: ${rec.availableCnt} (${rec.ratio})</span><br><p class="spacer"></p>
+        <span class="mark">expires in: ${rec.earliestExpiry !== null ? rec.earliestExpiry + 'd' : '—'}</span>
       </div>
     `;
 
     container.appendChild(segment);
   }
 })();
+
 
 function openrecipe(id) {
     window.location.href = `recipes.html?id=${id}`;
