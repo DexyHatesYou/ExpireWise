@@ -131,7 +131,15 @@
       border-radius: 500px;
     }
     .infinity{
-      
+
+      position: absolute;
+      top: 20%;
+
+      color: #BFCBCE;
+      padding: 1px 6px 1px 6px;
+      border-radius: 6px;
+      right: 17%;
+    
     }
 
     .b1{
