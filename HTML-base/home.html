@@ -140,9 +140,12 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
 
+let mealsList = [];
+let sortByMostAvailable = false;
+
 async function recipes() {
   const container = document.querySelector('.container');
-  
+  container.innerHTML = '<br><br>'; // clear existing
 
   const spId = localStorage.getItem('spId');
   if (!spId) throw new Error('No session ID in localStorage');
@@ -165,13 +168,11 @@ async function recipes() {
       : 0;
   });
 
+  // 2) score top 15 recipes
   const scored = yourRecipes.map(r => {
     const totalCount   = r.ingredients.length;
     const availableIds = r.ingredients.filter(id => id in daysToExpiry);
     const availableCnt = availableIds.length;
-    const ratio = totalCount > 0
-      ? availableCnt / totalCount
-      : 0;
     const earliestExpiry = availableCnt > 0
       ? Math.round(Math.min(...availableIds.map(id => daysToExpiry[id])))
       : null;
@@ -179,27 +180,24 @@ async function recipes() {
       name:           r.name,
       totalCount,
       availableCnt,
-      ratio:          +ratio.toFixed(2),
+      missingCnt:     totalCount - availableCnt,
       earliestExpiry
     };
-  });
-
-  scored.sort((a, b) => {
-    if (b.ratio !== a.ratio) return b.ratio - a.ratio;
+  })
+  .sort((a, b) => {
     const ea = a.earliestExpiry === null ? Infinity : a.earliestExpiry;
     const eb = b.earliestExpiry === null ? Infinity : b.earliestExpiry;
     return ea - eb;
-  });
+  })
+  .slice(0, 15);
 
-  const top15 = scored.slice(0, 15);
-
-  // 2) fetch details via name and render
-  for (const rec of top15) {
+  // 3) fetch details for each and build mealsList
+  mealsList = await Promise.all(scored.map(async rec => {
     const resp = await fetch(
       `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(rec.name)}`
     );
     const { meals } = await resp.json();
-    if (!meals) continue;
+    if (!meals) return null;
     const meal = meals[0];
 
     let ingredientCount = 0;
@@ -207,25 +205,65 @@ async function recipes() {
       if (meal[`strIngredient${i}`]) ingredientCount++;
     }
 
+    return {
+      id:            meal.idMeal,
+      thumb:         meal.strMealThumb,
+      name:          meal.strMeal,
+      category:      meal.strCategory,
+      area:          meal.strArea,
+      ingredientCount,
+      missingCnt:    rec.missingCnt,
+      earliestExpiry: rec.earliestExpiry
+    };
+  }));
+
+  // initial render (by closest expiry)
+  renderMeals();
+}
+
+// renderMeals: sort mealsList and append to container
+function renderMeals() {
+  const container = document.querySelector('.container');
+  container.innerHTML = '<br><br>';
+
+  const sorted = [...mealsList];
+  if (sortByMostAvailable) {
+    // most at home = fewest missing
+    sorted.sort((a, b) => a.missingCnt - b.missingCnt);
+  } else {
+    // closest expiry
+    sorted.sort((a, b) => {
+      const ea = a.earliestExpiry === null ? Infinity : a.earliestExpiry;
+      const eb = b.earliestExpiry === null ? Infinity : b.earliestExpiry;
+      return ea - eb;
+    });
+  }
+
+  sorted.forEach(item => {
     const segment = document.createElement('div');
     segment.className = 'segment';
-    segment.onclick = () => openrecipe(meal.idMeal);
+    segment.onclick = () => openrecipe(item.id);
 
     segment.innerHTML = `
-      <img class="rcp-img" src="${meal.strMealThumb}" alt="recipe photo">
+      <img class="rcp-img" src="${item.thumb}" alt="recipe photo">
       <div class="rcp-part">
-        <h3 class="rcp-name">${meal.strMeal}</h3>
-        <span class="mark ${meal.strCategory.toLowerCase()}">${meal.strCategory}</span>
-        <span class="mark">${meal.strArea}</span><br><p class="spacer"></p>
-        <span class="mark ingr">${ingredientCount} ingredients</span>
-        <span class="mark war">${rec.totalCount - rec.availableCnt}!</span><br><p class="spacer"></p>
-        <span class="mark">expires in: ${rec.earliestExpiry !== null ? rec.earliestExpiry + 'd' : '—'}</span>
+        <h3 class="rcp-name">${item.name}</h3>
+        <span class="mark ${item.category.toLowerCase()}">${item.category}</span>
+        <span class="mark">${item.area}</span><br><p class="spacer"></p>
+        <span class="mark ingr">${item.ingredientCount} ingredients</span>
+        <span class="mark war">${item.missingCnt}!</span><br><p class="spacer"></p>
+        <span class="mark">expires in: ${item.earliestExpiry !== null ? item.earliestExpiry + 'd' : '—'}</span>
       </div>
     `;
-
     container.appendChild(segment);
-  }
+  });
 }
+
+// toggle sort on button click without refetching
+document.querySelector('.sort').addEventListener('click', () => {
+  sortByMostAvailable = !sortByMostAvailable;
+  renderMeals();
+});
 
 // auto-run on page load
 recipes();
