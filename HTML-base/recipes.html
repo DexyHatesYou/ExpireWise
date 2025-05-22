@@ -508,12 +508,12 @@ background-color: #CEBFBF;
 
 <div class="spac"></div>
 
-
+<!--                                  -----video now gone due to bugs
 <div class="video">
   <h4 class="g vidl">Video tutorial:</h4>
   <iframe class="reg" id="video" 
 src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen">
-</iframe>
+</iframe>-->
 </div>
 
 
@@ -638,12 +638,12 @@ window.onload = getRecipeId;
           
           document.getElementById('instructions').innerText = meal.strInstructions;
 
-          
+          /*                          -----video now gone due to bugs
           if (meal.strYoutube) {
             const youtubeId = meal.strYoutube.split('v=')[1];
             document.getElementById('video').src = `https://www.youtube.com/embed/${youtubeId}`;
           }
-
+          */
           
           document.getElementById('img').src = meal.strMealThumb;
 
