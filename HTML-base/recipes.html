@@ -710,12 +710,45 @@ function closePlanModal() {
   document.removeEventListener('click', outsideClickListener);
 }
 
-function SavePlan() {
-  document.getElementById('planModal').classList.remove('open');
-  document.removeEventListener('click', outsideClickListener);
+
+
+function savePlan() {
+  const spId       = localStorage.getItem("spId");
+  const params     = new URLSearchParams(window.location.search);
+  const recipeId   = params.get("id");
+  const imgSrc     = document.getElementById("img").src;
+  const recipeName = document.getElementById("rcp-name").textContent.trim();
+
+  const day   = document.getElementById("plan-day").value.padStart(2, "0");
+  const month = document.getElementById("plan-month").value.padStart(2, "0");
+  const year  = document.getElementById("plan-year").value;
+  const date  = `${year}-${month}-${day}`; // YYYY-MM-DD
+
+  const payload = { spId, recipeId, recipeName, imgSrc, date };
+
+  fetch("https://expirewise.localto.net/api/save-plan.php", {
+    method:  "POST",
+    headers: { "Content-Type": "application/json" },
+    body:    JSON.stringify(payload)
+  })
+  .then(response => {
+    if (!response.ok) throw new Error("Network response not ok");
+    return response.json();
+  })
+  .then(data => {
+    if (data.error) {
+      console.error("Error:", data.error);
+      alert("Error saving plan: " + data.error);
+    } else {
+      alert("Plan saved successfully!");
+      closePlanModal();
+    }
+  })
+  .catch(err => {
+    console.error(err);
+    alert("Unexpected error: " + err.message);
+  });
 }
-
-
 
 function copy() {
     const rcpName = document.getElementById("rcp-name").textContent;
@@ -788,7 +821,7 @@ function getRecipeId() {
         console.log("No Recipe ID found.");
     }
 }
-
+ var img = "";
 
 window.onload = getRecipeId;
 
@@ -816,6 +849,7 @@ window.onload = getRecipeId;
           */
           
           document.getElementById('img').src = meal.strMealThumb;
+          var img =  meal.strMealThumb;
 
           
 let ingredientsHtml = '';
