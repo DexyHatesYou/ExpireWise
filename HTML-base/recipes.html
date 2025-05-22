@@ -9,6 +9,11 @@
 				font-family: g;
 			}
 
+      .gd{
+        font-family: g;
+        color: white;
+      }
+
 			body {
       background-color: #BFCBCE;
       overflow: hidden;
@@ -452,6 +457,82 @@ background-color: #CEBFBF;
   margin-top: 5%;
 }
 
+
+
+
+
+.plan-modal {
+  position: fixed;
+  top: -30%;
+  left: 0; right: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  transition: top 1.0s ease-out;
+  z-index: 999;
+  pointer-events: none;
+
+}
+.plan-modal.open {
+  top: 25%;
+}
+
+.plan-box {
+  position: absolute;
+  top: -45%;
+  width: 300px;
+  padding: 1.5rem;
+  background-color: #BFCBCE;
+  border-radius: 30px;
+  box-shadow: 0px 0px 40px #303655;
+  transition: top 0.4s ease;
+}
+.plan-modal.open .plan-box {
+  top: 2rem; 
+  pointer-events: auto;
+}
+
+.plan-header label {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+.plan-header input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  color: #BFCBCE !important;
+}
+
+.plan-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+.plan-actions button {
+  flex: 1;
+  margin: 0 0.25rem;
+  padding: 0.6rem 0;
+  border: none;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.btn-cancel {
+  background-color: transparent;
+}
+.btn-save {
+  background-color: white;
+  color: #BFCBCE !important;
+}
+
+
+
+
 	</style>
 	<meta charset="utf-8">
   <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
@@ -492,7 +573,7 @@ background-color: #CEBFBF;
 
       
   </ul>
-  <button class="mark g cook" onclick="copy()" style="left: 5% !important;">Share recipe</button>
+  <button class="mark g cook"  id="planIt" onclick="openPlanModal()" style="left: 5% !important;">Share recipe</button>
   <button class="mark g cook" onclick="scroll()" id="scroller">Start Cooking</button>
 
   
@@ -540,6 +621,34 @@ src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen
   </div>
   <div class="b2"></div>
 </div>
+
+
+<div id="planModal" class="plan-modal">
+  <div class="plan-box">
+    <div class="plan-header gd">
+      <label>
+        Day
+        <input type="number" class="gd" id="plan-day" min="1" max="31">
+      </label>
+      <label>
+        Month
+        <input type="number" class="gd" id="plan-month" min="1" max="12">
+      </label>
+      <label>
+        Year
+        <input type="number" class="gd" id="plan-year" min="1900">
+      </label>
+    </div>
+    <div class="plan-actions">
+      <button class="btn-cancel gd" onclick="closePlanModal()">Cancel</button>
+      <button class="btn-save gd" onclick="savePlan()">Save Plan</button>
+    </div>
+  </div>
+</div>
+
+
+
+
 <script src="date.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -547,12 +656,73 @@ src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen
 </body>
 <script>
 
+let outsideClickListener;
+
+function openPlanModal() {
+  const t = new Date();
+  t.setDate(t.getDate() + 1);
+
+  const dayInput   = document.getElementById('plan-day');
+  const monthInput = document.getElementById('plan-month');
+  const yearInput  = document.getElementById('plan-year');
+
+  const defaults = {
+    day:   String(t.getDate()),
+    month: String(t.getMonth() + 1),
+    year:  String(t.getFullYear())
+  };
+
+  [ ['day', dayInput],
+    ['month', monthInput],
+    ['year', yearInput]
+  ].forEach(([key, input]) => {
+    input.value = defaults[key];
+    input.dataset.default = defaults[key];
+  });
+
+  [dayInput, monthInput, yearInput].forEach(input => {
+    if (!input._planHandlersAdded) {
+      input.addEventListener('focus', () => {
+        if (input.value === input.dataset.default) input.value = '';
+      });
+      input.addEventListener('blur', () => {
+        if (!input.value.trim()) input.value = input.dataset.default;
+      });
+      input._planHandlersAdded = true;
+    }
+  });
+
+  outsideClickListener = e => {
+    const box = document.querySelector('.plan-box');
+    if (!box.contains(e.target)) {
+      [dayInput, monthInput, yearInput].forEach(input => {
+        if (!input.value.trim()) input.value = input.dataset.default;
+      });
+    }
+  };
+
+  document.addEventListener('click', outsideClickListener);
+  document.getElementById('planModal').classList.add('open');
+}
+
+function closePlanModal() {
+  document.getElementById('planModal').classList.remove('open');
+  document.removeEventListener('click', outsideClickListener);
+}
+
+function SavePlan() {
+  document.getElementById('planModal').classList.remove('open');
+  document.removeEventListener('click', outsideClickListener);
+}
+
+
+
 function copy() {
     const rcpName = document.getElementById("rcp-name").textContent;
     const url = window.location.href;
 
     if (navigator.clipboard && navigator.clipboard.writeText) {
-        // Modern asynchronous clipboard API
+       
         navigator.clipboard.writeText(url)
             .then(() => {
                 console.log('URL copied to clipboard');
@@ -562,10 +732,10 @@ function copy() {
                 console.error('Failed to copy: ', err);
             });
     } else {
-        // Fallback method using a temporary textarea
+       
         const textArea = document.createElement("textarea");
         textArea.value = url;
-        // Make textarea out of viewport
+        
         textArea.style.position = "fixed";
         textArea.style.top = "-1000px";
         document.body.appendChild(textArea);
