@@ -4,7 +4,17 @@
   <meta charset="utf-8">
   <script src="theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<style type="text/css">
+  .info{
+        padding: 1px;
+    margin: 1px;
+    background-color: #6F90AF;
+    color: white;
+    font-size: 120%;
+    border-radius: 4px;
+}
+  }
+</style>
   <title>ExpireWise</title>
 </head>
 <body>
@@ -147,6 +157,66 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
     const today = new Date();
     generateCalendar(today.getFullYear(), today.getMonth());
+
+
+
+
+
+
+
+
+
+
+
+     async function fetchAndRenderPlans() {
+    const spId = localStorage.getItem("spId");
+    if (!spId) {
+      console.error("No session found.");
+      return;
+    }
+
+    let data;
+    try {
+      const res = await fetch("https://expirewise.localto.net/api/fetch_plans.php", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({ spId })
+      });
+      data = await res.json();
+      if (!res.ok || data.error) {
+        console.error("API error:", data.error || res.statusText);
+        return;
+      }
+    } catch (err) {
+      console.error("Fetch failed:", err);
+      return;
+    }
+
+    const plans = data.plans;
+    console.log("Plans:", plans);
+
+    
+    const now = new Date();
+    const YYYY = now.getFullYear();
+    const MM   = now.getMonth() + 1; 
+
+    plans.forEach(({ date, recipe_name }) => {
+     
+      const [y, m, d] = date.split("-").map(Number);
+      if (y === YYYY && m === MM) {
+        const box = document.getElementById(`day-${d}`);
+        if (box) {
+          const p = document.createElement("p");
+          p.className = "info";
+          p.textContent = recipe_name;
+          box.appendChild(p);
+        }
+      }
+    });
+  }
+
+ 
+  window.addEventListener("load", fetchAndRenderPlans);
   </script>
 </body>
 </html>
