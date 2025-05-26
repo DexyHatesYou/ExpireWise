@@ -10,7 +10,7 @@
     margin: 1px;
     background-color: #6F90AF;
     color: white;
-    font-size: 120%;
+    font-size: 180%;
     border-radius: 4px;
 }
   }
@@ -200,19 +200,24 @@ document.addEventListener('DOMContentLoaded', function(event) {
     const YYYY = now.getFullYear();
     const MM   = now.getMonth() + 1; 
 
-    plans.forEach(({ date, recipe_name }) => {
-     
-      const [y, m, d] = date.split("-").map(Number);
-      if (y === YYYY && m === MM) {
-        const box = document.getElementById(`day-${d}`);
-        if (box) {
-          const p = document.createElement("p");
-          p.className = "info";
-          p.textContent = recipe_name;
-          box.appendChild(p);
-        }
-      }
-    });
+    plans.forEach(({ date, recipe_name, recipe_id }) => {
+  
+  const [y, m, d] = date.split("-").map(Number);
+  if (y === YYYY && m === MM) {
+    const box = document.getElementById(`day-${d}`);
+    if (box) {
+      const p = document.createElement("p");
+      p.className = "info";
+      p.textContent = recipe_name;
+      
+      p.style.cursor = "pointer";
+      p.onclick = () => {
+        window.location.href = `https://expirewise.spsul.cz/recipes.html?id=${recipe_id}`;
+      };
+      box.appendChild(p);
+    }
+  }
+});
   }
 
  
