@@ -813,101 +813,98 @@ $(document).ready(function () {
 
 
 function getRecipeId() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    if (id) {
-        console.log("Recipe ID:", id);
-    } else {
-        console.log("No Recipe ID found.");
-    }
+  const params = new URLSearchParams(window.location.search);
+  const id = params.get('id');
+  if (id) {
+    console.log("Recipe ID:", id);
+  } else {
+    console.log("No Recipe ID found.");
+  }
 }
- var img = "";
 
 window.onload = getRecipeId;
 
-  function fetchRecipeDetails() {
-    const params = new URLSearchParams(window.location.search);
-    const recipeId = params.get('id');
-
-    if (recipeId) {
-      fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeId}`)
-        .then(response => response.json())
-        .then(data => {
-          const meal = data.meals[0];
-
-          
-          document.getElementById('rcp-name').innerHTML = meal.strMeal;
-
-          
-          document.getElementById('instructions').innerText = meal.strInstructions;
-
-          /*                          -----video now gone due to bugs
-          if (meal.strYoutube) {
-            const youtubeId = meal.strYoutube.split('v=')[1];
-            document.getElementById('video').src = `https://www.youtube.com/embed/${youtubeId}`;
-          }
-          */
-          
-          document.getElementById('img').src = meal.strMealThumb;
-          var img =  meal.strMealThumb;
-
-          
-let ingredientsHtml = '';
-let missingIngredientsHtml = '';
-let ingredientCount = 0;
-
-
-for (let i = 1; i <= 20; i++) {
-    const ingredient = meal[`strIngredient${i}`];
-    const measure = meal[`strMeasure${i}`];
-
-    if (ingredient && ingredient.trim()) {      //for now if more than 7 it puts em as you dont have
-        ingredientCount++;
-        
-        if (ingredientCount <= 7) {
-            
-            ingredientsHtml += `<li class="own">${ingredient}</li><li class="ownM">${measure}</li>`;
-        } else {
-            
-            missingIngredientsHtml += `<li class="own">${ingredient}</li><li class="ownM">${measure}</li>`;
-        }
-    }
-}
-
-
-document.getElementById('ingr-count').textContent = `${ingredientCount} ingredients`;
-
-
-document.getElementById('ingredients-list').innerHTML = ingredientsHtml;
-
-
-if (missingIngredientsHtml) {
-    document.getElementById('missing-ingredients').innerHTML = `
-        <li>${missingIngredientsHtml}</li>
-    `;
-} else {
-
-    document.getElementById('missing-ingredients').style.display = 'none';
-}
-
-
-document.getElementById('category').textContent = `${meal.strCategory}`;
-document.getElementById('area').textContent = `${meal.strArea}`;
-
-
-
-
-
-          document.querySelector('.mainy').innerHTML = ingredientsHtml;
-          document.querySelector('.mainn').innerHTML = measurementsHtml;
-        })
-        .catch(error => console.error('Error fetching recipe:', error));
-    } else {
-      console.log("No Recipe ID found.");
-    }
+function fetchRecipeDetails() {
+  const params = new URLSearchParams(window.location.search);
+  const recipeId = params.get('id');
+  const spId = localStorage.getItem("spId");
+  if (!recipeId) {
+    console.log("No Recipe ID found.");
+    return;
+  }
+  if (!spId) {
+    console.error("No session found.");
+    return;
   }
 
-  window.onload = fetchRecipeDetails;
+ 
+  fetch("https://expirewise.localto.net/api/fetch_ingredients.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ spId })
+  })
+  .then(r => r.json())
+  .then(userData => {
+    if (userData.error) {
+      console.error("User-ingredients fetch failed:", userData.error);
+      return;
+    }
+   
+    const ownedSet = new Set(
+      userData.ingredients.map(ing => ing.name.trim().toLowerCase())
+    );
+
+   
+    return fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeId}`)
+      .then(r => r.json())
+      .then(data => ({ meal: data.meals[0], ownedSet }));
+  })
+  .then(({ meal, ownedSet }) => {
+    
+    document.getElementById('rcp-name').textContent    = meal.strMeal;
+    document.getElementById('instructions').innerText   = meal.strInstructions;
+    document.getElementById('img').src                 = meal.strMealThumb;
+    document.getElementById('category').textContent    = meal.strCategory;
+    document.getElementById('area').textContent        = meal.strArea;
+
+    // 3) Build have vs. missing lists
+    let haveHtml    = '';
+    let missingHtml = '';
+    let totalCount  = 0;
+
+    for (let i = 1; i <= 20; i++) {
+      const rawName = meal[`strIngredient${i}`];
+      const measure = meal[`strMeasure${i}`] || '';
+      if (!rawName || !rawName.trim()) continue;
+
+      totalCount++;
+      const name = rawName.trim();
+      if (ownedSet.has(name.toLowerCase())) {
+        haveHtml    += `<li class="own">${name}</li><li class="ownM">${measure}</li>`;
+      } else {
+        missingHtml += `<li class="own">${name}</li><li class="ownM">${measure}</li>`;
+      }
+    }
+
+
+    document.getElementById('ingr-count').textContent       = `${totalCount} ingredients`;
+    document.getElementById('ingredients-list').innerHTML   = haveHtml;
+    if (missingHtml) {
+      document.getElementById('missing-ingredients').innerHTML = missingHtml;
+      document.getElementById('missing-ingredients').style.display = '';
+    } else {
+      document.getElementById('missing-ingredients').style.display = 'none';
+    }
+
+
+     document.querySelector('.mainy').innerHTML = haveHtml;
+    document.querySelector('.mainn').innerHTML = missingHtml;
+
+  })
+  .catch(err => console.error("Error in fetchRecipeDetails:", err));
+}
+
+window.onload = fetchRecipeDetails;
 
 
 
