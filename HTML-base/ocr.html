@@ -172,48 +172,42 @@ text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0
 <script src="pluralize.js"></script>
   <script>
  function toggleDateInputs(radio) {
-      
-      const wasChecked = radio.dataset.wasChecked === 'true';
-      const newState = !wasChecked;
-      console.log("rip");
+  
+  const wasChecked = radio.dataset.wasChecked === 'true';
+  const newState   = !wasChecked;
 
-      
-      radio.checked = newState;
-      radio.dataset.wasChecked = String(newState);
+  radio.checked             = newState;
+  radio.dataset.wasChecked  = String(newState);
 
-      
-document.querySelectorAll('.day, .month, .year')
-  .forEach(input => {
+  
+  document.querySelectorAll('.day, .month, .year').forEach(input => {
     input.disabled = newState;
-    input.value = '';
+    if (newState) input.value = '';
   });
-    }
+  
+  console.log('toggleDateInputs → noExpiry =', newState);
+}
 
 document.addEventListener('DOMContentLoaded', () => {
-
-  const modal        = document.getElementById('planModal');
-  const radio        = document.getElementById('noExpire');
-  const modalHeader  = modal.querySelector('.plan-header');
-  const titleEl      = document.createElement('h1');
-  const dayInput     = document.getElementById('plan-day');
-  const monthInput   = document.getElementById('plan-month');
-  const yearInput    = document.getElementById('plan-year');
+  const modal       = document.getElementById('planModal');
+  const radio       = document.getElementById('noExpire');
+  const modalHeader = modal.querySelector('.plan-header');
+  const titleEl     = document.createElement('h1');
+  const dayInput    = document.getElementById('plan-day');
+  const monthInput  = document.getElementById('plan-month');
+  const yearInput   = document.getElementById('plan-year');
 
   let lines   = [];
   let idx     = 0;
   let results = [];
 
-
   function save(event) {
-    if (event) event.preventDefault();             
+    if (event) event.preventDefault();
     console.log('save() called');
     const text = document.getElementById('summary')
                        .innerText
                        .trim();
-    lines = text
-              .split(/\r?\n/)
-              .map(l => l.trim())
-              .filter(l => l !== '');
+    lines = text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l);
     console.log('Lines to process:', lines);
     idx     = 0;
     results = [];
@@ -223,20 +217,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
   function showPlanModal() {
     console.log(`Showing modal for line ${idx}:`, lines[idx]);
-    
-    const oldTitle = modal.querySelector('h1');
-    if (oldTitle) oldTitle.remove();
 
-    
+    modal.querySelector('h1')?.remove();
     titleEl.textContent = lines[idx];
     modalHeader.prepend(titleEl);
 
-     radio.checked = false;
-document.querySelectorAll('.day, .month, .year')
-  .forEach(input => {
-    input.disabled = false;
-    input.value = '';
-  });
+    
+    radio.checked            = false;
+    radio.dataset.wasChecked = 'false';
+    [dayInput, monthInput, yearInput].forEach(i => {
+      i.disabled = false;
+      i.value    = '';
+    });
 
     modal.style.display = 'flex';
   }
@@ -246,38 +238,62 @@ document.querySelectorAll('.day, .month, .year')
     modal.style.display = 'none';
   }
 
-  function saveExpiry(noExpiry) {
-    console.log('saveExpiry called, noExpiry=', noExpiry);
+  function saveExpiry() {
+    
+    const noExpiry = radio.checked;
+    console.log('saveExpiry → noExpiry =', noExpiry);
+
     const entry = {
       line:   lines[idx],
       expiry: { noExpiry, date: null }
     };
 
-   const RnoExpiry = document.getElementById('noExpire').checked;
-
-if (!RnoExpiry) {
-  const d = parseInt(dayInput.value, 10);
-  const m = parseInt(monthInput.value, 10) - 1;
-  const y = parseInt(yearInput.value, 10);
-
-  if (isNaN(d) || isNaN(m) || isNaN(y)) {
-    alert('Please enter a valid day, month, and year.');
-    return;
-  }
-
-  entry.expiry.date = new Date(y, m, d);
-}
+    if (!noExpiry) {
+      const d = parseInt(dayInput.value, 10);
+      const m = parseInt(monthInput.value, 10) - 1;
+      const y = parseInt(yearInput.value, 10);
+      if (isNaN(d)||isNaN(m)||isNaN(y)) {
+        alert('Please enter a valid day, month, and year.');
+        return;
+      }
+      entry.expiry.date = new Date(y, m, d);
+    }
 
     results.push(entry);
     console.log('Saved entry:', entry);
 
     idx++;
-    if (idx < lines.length) {
-      showPlanModal();
-    } else {
+    if (idx < lines.length) showPlanModal();
+    else {
       closePlanModal();
       console.log('All entries done:', results);
-      // finishhhhh
+      fetch('https://expirewise.spsul.cz/save_ocr.php', {
+  method:      'POST',
+  credentials: 'include',          
+  headers:     { 'Content-Type': 'application/json' },
+  body:        JSON.stringify({ entries: results.map(e => ({
+    name:             e.line,
+    expiration_date:  e.expiry.date
+                       ? e.expiry.date.toISOString().slice(0,10)
+                       : null,
+    infinite:         e.expiry.noExpiry ? 1 : 0,
+    db_id:            null
+  }))})
+})
+.then(r => r.json())
+.then(json => {
+  if (json.success) {
+    console.log('✔️ Server saved all items');
+  } else {
+    console.error('❌ Server error:', json.error);
+    alert('Save failed: ' + json.error);
+  }
+})
+.catch(err => {
+  console.error('⚠️ Network error:', err);
+  alert('Network error saving items');
+});
+      
     }
   }
 
@@ -285,8 +301,6 @@ if (!RnoExpiry) {
   window.save           = save;
   window.saveExpiry     = saveExpiry;
   window.closePlanModal = closePlanModal;
-
-
 });
 
 
