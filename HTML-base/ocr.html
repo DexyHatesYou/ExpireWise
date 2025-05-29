@@ -264,42 +264,48 @@ document.addEventListener('DOMContentLoaded', () => {
     results.push(entry);
     console.log('Saved entry:', entry);
 
-    idx++;
-    if (idx < lines.length) showPlanModal();
-    else {
-      closePlanModal();
-      console.log('All entries done:', results);
-fetch('https://expirewise.spsul.cz/save_plan.php', {
-  method: 'POST',
-  credentials: 'include',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-  spId,
-  entries: results.map(e => ({
-    name:            e.line,
-    expiration_date: e.expiry.date
-                       ? e.expiry.date.toISOString().slice(0,10)
-                       : null,
-    infinite:        e.expiry.noExpiry ? 1 : 0,
-    db_id:           null
-  }))
-})
+idx++;
+if (idx < lines.length) {
+  showPlanModal();
+} else {
+  closePlanModal();
+  console.log('All entries done:', results);
 
-.then(r => r.json())
-.then(json => {
-  if (json.success) {
-    console.log('✔️ Server saved all items');
-  } else {
-    console.error('❌ Server error:', json.error);
-    alert('Save failed: ' + json.error);
-  }
-})
-.catch(err => {
-  console.error('⚠️ Network error:', err);
-  alert('Network error saving items');
-});
-      
+  // grab spId and POST it alongside entries
+  const spId = localStorage.getItem('spId');
+  console.log('spId =', spId);
+
+  fetch("https://expirewise.localto.net/api/save_ocr.php", {
+    method:      'POST',
+    credentials: 'include',
+    headers:     { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      spId,
+      entries: results.map(e => ({
+        name:            e.line,
+        expiration_date: e.expiry.date
+                          ? e.expiry.date.toISOString().slice(0,10)
+                          : null,
+        infinite:        e.expiry.noExpiry ? 1 : 0,
+        db_id:           null
+      }))
+    })
+  })
+  .then(r => r.json())
+  .then(json => {
+    if (json.success) {
+      console.log('✔️ Server saved all items');
+    } else {
+      console.error('❌ Server error:', json.error);
+      alert('Save failed: ' + json.error);
     }
+  })
+  .catch(err => {
+    console.error('⚠️ Network error:', err);
+    alert('Network error saving items');
+  });
+}
+
   }
 
   
