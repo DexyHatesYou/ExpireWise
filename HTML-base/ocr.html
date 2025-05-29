@@ -269,19 +269,22 @@ document.addEventListener('DOMContentLoaded', () => {
     else {
       closePlanModal();
       console.log('All entries done:', results);
-       fetch("https://expirewise.localto.net/api/save_ocr.php", {
-  method:      'POST',
-  credentials: 'include',          
-  headers:     { 'Content-Type': 'application/json' },
-  body:        JSON.stringify({ entries: results.map(e => ({
-    name:             e.line,
-    expiration_date:  e.expiry.date
+fetch('https://expirewise.spsul.cz/save_plan.php', {
+  method: 'POST',
+  credentials: 'include',
+  headers: { 'Content-Type': 'application/json' },
+  body: JSON.stringify({
+  spId,
+  entries: results.map(e => ({
+    name:            e.line,
+    expiration_date: e.expiry.date
                        ? e.expiry.date.toISOString().slice(0,10)
                        : null,
-    infinite:         e.expiry.noExpiry ? 1 : 0,
-    db_id:            null
-  }))})
+    infinite:        e.expiry.noExpiry ? 1 : 0,
+    db_id:           null
+  }))
 })
+
 .then(r => r.json())
 .then(json => {
   if (json.success) {
