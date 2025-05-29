@@ -267,7 +267,7 @@ document.addEventListener('DOMContentLoaded', () => {
     else {
       closePlanModal();
       console.log('All entries done:', results);
-      fetch('https://expirewise.spsul.cz/save_ocr.php', {
+       fetch("https://expirewise.localto.net/api/save_ocr.php", {
   method:      'POST',
   credentials: 'include',          
   headers:     { 'Content-Type': 'application/json' },
