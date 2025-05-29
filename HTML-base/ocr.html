@@ -295,6 +295,7 @@ if (idx < lines.length) {
   .then(json => {
     if (json.success) {
       console.log('✔️ Server saved all items');
+       alert('Your items were sucesfully saved, feel free to continue uploading more or cook some new recipes :) \n and sorry if there were mistakes this feature is still in testing beta stage');
     } else {
       console.error('❌ Server error:', json.error);
       alert('Save failed: ' + json.error);
