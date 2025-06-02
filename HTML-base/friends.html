@@ -490,7 +490,7 @@ function fetchFriends() {
       const friendDiv = document.createElement("div");
       friendDiv.classList.add("ingre");
       friendDiv.id = `friend-${friend.fid}`;
-      friendDiv.onclick = () => transitionToPage('./user.html');
+
 
       const pfpImg = document.createElement("img");
       pfpImg.classList.add("pfp");
@@ -501,6 +501,7 @@ function fetchFriends() {
       const nicknameDiv = document.createElement("div");
       nicknameDiv.classList.add("g", "str");
       nicknameDiv.textContent = friend.nickname;
+      nicknameDiv.onclick = () => transitionToPage('./user.html');
 
       const deleteImg = document.createElement("img");
       deleteImg.classList.add("delete", "img");
