@@ -389,167 +389,179 @@ opacity: 100%;
 	<title>ExpireWise</title>
 </head>
 <body>
+  <p id="date" class="g"></p>
+  <div class="body">
+    <div class="top">
+      <img
+        height="35px"
+        class="ico"
+        src="https://img.icons8.com/BFCBCE/ios/100/friends.png"
+        alt="friends"
+      />
+      <div class="line"></div>
+      <h2 class="g topt">Friend list</h2>
+    </div>
+    <div class="blur1"></div>
 
-<p id="date" class="g"></p>
-<g class="body">
-<div class="top">
-<img height="35px" class="ico" src="https://img.icons8.com/BFCBCE/ios/100/friends.png" alt="friends"/>
-<div class="line"></div>
-<h2 class="g topt">Friend list</h2>
-</div>
-<div class="blur1"></div>
-
-<div class="scroll">
-  <div class="main">
-    <div class="stored" id="fBody" > <!--  FIX LATER -->
-      
-      <div class="ingre">
-        <img class="pfp" src="https://stormclub.cz/wp-content/uploads/2024/12/hq720.jpg">
-        <div class="g str">SteveSniff</div>
-        <img class="edit img" width="30" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png" alt="pencil--v1"/>
-        <div class="strip"></div>
+    <div class="scroll">
+      <div class="main">
+        <div class="stored" id="fBody"></div>
       </div>
-      
+    </div>
 
-      <div class="ingre">
-        <img class="pfp" src="https://play.nintendo.com/images/profile-mk-yoshi.babe07bc.7fdea5d658b63e27.png">
-        <div class="g str">Yoshi</div>
-        <img class="edit img" width="30" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png" alt="pencil--v1"/>
-        <div class="strip"></div>
-      </div>
-
-
-
-
-
-
-
+    <div class="blur2"></div>
+    <div class="down">
+      <button class="add-btn" onclick="transitionToPage('./searchF.html')">
+        <h2 class="g" style="top: -10%; margin: 15px;">Search people</h2>
+      </button>
+      <button class="back-btn" onclick="transitionToPage('./requests.html')">
+        <img
+          class="btn-image"
+          width="30"
+          src="https://img.icons8.com/BFCBCE/ios-glyphs/100/secured-letter--v1.png"
+          alt="secured-letter--v1"
+        />
+      </button>
     </div>
   </div>
-</div>
 
-
-</g>
-<div class="blur2"></div>
-<div class="down">
-<button class="add-btn" onclick="transitionToPage('./searchF.html')">
-<h2 class="g" style="top: -10%; margin: 15px;">Search people</h2>
-</button>
-<button class="back-btn" onclick="transitionToPage('./requests.html')">
-<img class="btn-image" width="30" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/secured-letter--v1.png" alt="secured-letter--v1"/>
-</button>
-</div>
-</g>
-
-
-<div class="nav">
-  <div class="b1"></div>
-  <div class="r" onclick="transitionToPage('./calendar.html')">
-    <img width="45" class="ca" src="https://img.icons8.com/BFCBCE/stamp/100/calendar.png" alt="calendar"/>
-     <img width="45" class="ca c0" src="https://img.icons8.com/6f90af/stamp/100/calendar.png" alt="calendar"/>
-
+  <div class="nav">
+    <div class="b1"></div>
+    <div class="r" onclick="transitionToPage('./calendar.html')">
+      <img
+        width="45"
+        class="ca"
+        src="https://img.icons8.com/BFCBCE/stamp/100/calendar.png"
+        alt="calendar"
+      />
+      <img
+        width="45"
+        class="ca c0"
+        src="https://img.icons8.com/6f90af/stamp/100/calendar.png"
+        alt="calendar"
+      />
+    </div>
+    <div class="c"></div>
+    <div class="ct" onclick="transitionToPage('./recipe.html')">
+      <img
+        width="70"
+        class="re"
+        src="https://img.icons8.com/BFCBCE/ios-glyphs/100/cooking-book.png"
+        alt="cooking-book"
+      />
+      <img
+        width="70"
+        class="re c0"
+        src="https://img.icons8.com/6f90af/ios-glyphs/100/cooking-book.png"
+        alt="cooking-book"
+      />
+    </div>
+    <div class="l" onclick="transitionToPage('./profile.html')">
+      <img
+        width="50"
+        class="us"
+        src="https://img.icons8.com/6F90AF/ios-glyphs/100/user-male-circle.png"
+        alt="user-male-circle"
+      />
+      <img
+        width="50"
+        class="us c0"
+        src="https://img.icons8.com/84A7BA/ios-glyphs/100/user-male-circle.png"
+        alt="user-male-circle"
+      />
+    </div>
+    <div class="b2"></div>
   </div>
-  <div class="c"></div>
-  <div class="ct" onclick="transitionToPage('./recipe.html')">
-    <img width="70" class="re" src="https://img.icons8.com/BFCBCE/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
-        <img width="70" class="re c0" src="https://img.icons8.com/6f90af/ios-glyphs/100/cooking-book.png" alt="cooking-book"/>
-  </div>
-  <div class="l" onclick="transitionToPage('./profile.html')">
-    <img width="50" class="us" src="https://img.icons8.com/6F90AF/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
-        <img width="50" class="us c0" src="https://img.icons8.com/84A7BA/ios-glyphs/100/user-male-circle.png" alt="user-male-circle"/>
-  </div>
-  <div class="b2"></div>
-</div>
-<script src="date.js"></script>
-</body>
-<script>
-      window.transitionToPage = function(href) {
-    document.querySelector('.body').style.opacity = 0
-    setTimeout(function() { 
-        window.location.href = href
-    }, 500)
-}
 
-function fetchFriends() {
-  const spId = localStorage.getItem("spId");
-  if (!spId) return;
+  <script src="date.js"></script>
+  <script>
+    window.transitionToPage = function (href) {
+      document.querySelector('.body').style.opacity = 0;
+      setTimeout(function () {
+        window.location.href = href;
+      }, 500);
+    };
 
-  fetch("https://expirewise.localto.net/api/fetch_friends.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ spId })
-  })
-  .then(response => response.json())
-  .then(data => {
-    if (data.error) return;
-    const friends = data.friends;
-    const fBody = document.getElementById("fBody");
-    fBody.innerHTML = "";
+    function fetchFriends() {
+      const spId = localStorage.getItem('spId');
+      if (!spId) return;
 
-    friends.forEach(friend => {
-      const friendDiv = document.createElement("div");
-      friendDiv.classList.add("ingre");
-      friendDiv.id = `friend-${friend.fid}`;
+      fetch('https://expirewise.localto.net/api/fetch_friends.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ spId })
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.error) return;
+          const friends = data.friends;
+          const fBody = document.getElementById('fBody');
+          fBody.innerHTML = '';
 
+          friends.forEach((friend) => {
+            const id = friend.fid;
 
-      const pfpImg = document.createElement("img");
-      pfpImg.classList.add("pfp");
-      pfpImg.src = friend.pfp !== null
-        ? friend.pfp
-        : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
+            const friendDiv = document.createElement('div');
+            friendDiv.classList.add('ingre');
+            friendDiv.id = `friend-${id}`;
 
-      const nicknameDiv = document.createElement("div");
-      nicknameDiv.classList.add("g", "str");
-      nicknameDiv.textContent = friend.nickname;
-      nicknameDiv.onclick = () => transitionToPage('./user.html');
+            const pfpImg = document.createElement('img');
+            pfpImg.classList.add('pfp');
+            pfpImg.src =
+              friend.pfp !== null
+                ? friend.pfp
+                : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
 
-      const deleteImg = document.createElement("img");
-      deleteImg.classList.add("delete", "img");
-      deleteImg.width = 30;
-      deleteImg.src = "https://img.icons8.com/BFCBCE/material-rounded/100/waste.png";
-      deleteImg.alt = "delete";
-      deleteImg.id = `delete-${friend.fid}`;
-      deleteImg.onclick = () => deleteFriend(friend.fid);
+            const nicknameDiv = document.createElement('div');
+            nicknameDiv.classList.add('g', 'str');
+            nicknameDiv.textContent = friend.nickname;
+            nicknameDiv.onclick = () => transitionToPage('./user.html');
 
-      const stripDiv = document.createElement("div");
-      stripDiv.classList.add("strip");
+            const deleteImg = document.createElement('img');
+            deleteImg.classList.add('delete', 'img');
+            deleteImg.width = 30;
+            deleteImg.src =
+              'https://img.icons8.com/BFCBCE/material-rounded/100/waste.png';
+            deleteImg.alt = 'delete';
+            deleteImg.id = `delete-${id}`;
+            deleteImg.onclick = () => deleteFriend(id);
 
-      friendDiv.appendChild(pfpImg);
-      friendDiv.appendChild(nicknameDiv);
-      friendDiv.appendChild(deleteImg);
-      friendDiv.appendChild(stripDiv);
+            const stripDiv = document.createElement('div');
+            stripDiv.classList.add('strip');
 
-      fBody.appendChild(friendDiv);
-    });
-  })
-  .catch(error => console.error("Fetch error:", error));
-}
+            friendDiv.appendChild(pfpImg);
+            friendDiv.appendChild(nicknameDiv);
+            friendDiv.appendChild(deleteImg);
+            friendDiv.appendChild(stripDiv);
 
-function deleteFriend(id) {
-  const spId = localStorage.getItem("spId");
-  if (!spId) return;
-
-  fetch("https://expirewise.localto.net/api/delete_friend.php", {
-    method: "POST",
-    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-    body: new URLSearchParams({ spId, friend_id: id })
-  })
-  .then(r => r.json())
-  .then(data => {
-    if (data.success) {
-      console.log(id);
-      fetchFriends();
-    } else {
-      console.error(data.error);
+            fBody.appendChild(friendDiv);
+          });
+        })
+        .catch((error) => console.error('Fetch error:', error));
     }
-  })
-  .catch(err => console.error("Fetch error:", err));
-}
 
-document.addEventListener("DOMContentLoaded", fetchFriends);
+    function deleteFriend(id) {
+      const spId = localStorage.getItem('spId');
+      if (!spId) return;
 
+      fetch('https://expirewise.localto.net/api/delete_friend.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ spId, friend_id: id })
+      })
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.success) {
+            console.log(id);
+            fetchFriends();
+          } else {
+            console.error(data.error);
+          }
+        })
+        .catch((err) => console.error('Fetch error:', err));
+    }
 
-
-
-</script>
+    document.addEventListener('DOMContentLoaded', fetchFriends);
+  </script>
+</body>
 </html>
