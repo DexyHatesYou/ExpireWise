@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>OCR + Gemini Summary</title>
+  <title>OCR scanning</title>
   <style>
         @font-face { font-family: g; src: url('hwyuenei64.ttf'); }
       .g{
@@ -449,7 +449,7 @@ function normalizeAndMatch(rawLines) {
         console.log(gemJson);
 const generated = gemJson?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 if (!generated) {
-  summary.textContent = '❌ No content returned from Gemini.';
+  ocrResult.textContent = '❌ No content returned.';
   return;
 }
 
@@ -457,11 +457,11 @@ if (!generated) {
 const rawLines = generated.split(/\r?\n/);
 const matched  = normalizeAndMatch(rawLines);
 
-summary.textContent = matched.length
+ocrResult.textContent = matched.length
   ? matched.join("\n")
   : '❌ No valid ingredients found.';
       } catch (e) {
-        summary.textContent = '❌ Gemini error: ' + e.message;
+        ocrResult.textContent = '❌ Gemini error: ' + e.message;
       }
     }
 
