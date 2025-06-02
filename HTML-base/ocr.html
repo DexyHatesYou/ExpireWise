@@ -133,8 +133,8 @@ text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0
   <h3>🧾 OCR Result:</h3>
   <div id="ocr-result">None yet</div>
 
-  <h3>🤖 Receipt Summary:</h3>
-  <div id="summary">Noned yet</div>
+  <h3>🤖 Gemini Summary:</h3>
+  <div id="summary">None yet</div>
 
 
 
@@ -353,7 +353,7 @@ function normalizeAndMatch(rawLines) {
     const video = document.getElementById('video');
     const canvas = document.getElementById('canvas');
     const preview = document.getElementById('preview');
-    const ocrResult = document.getElementById('summary');
+    const ocrResult = document.getElementById('ocr-result');
     const summary = document.getElementById('summary');
 
     let stream;
