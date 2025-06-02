@@ -405,7 +405,9 @@ opacity: 100%;
 
     <div class="scroll">
       <div class="main">
-        <div class="stored" id="fBody"></div>
+        <div class="stored" id="fBody">
+          <!-- Friends will be injected here -->
+        </div>
       </div>
     </div>
 
@@ -493,13 +495,17 @@ opacity: 100%;
       })
         .then((response) => response.json())
         .then((data) => {
-          if (data.error) return;
+          if (data.error) {
+            console.error('Error fetching friends:', data.error);
+            return;
+          }
           const friends = data.friends;
           const fBody = document.getElementById('fBody');
           fBody.innerHTML = '';
 
           friends.forEach((friend) => {
-            const id = friend.fid;
+            // Use the exact field name returned by fetch_friends.php
+            const id = friend.friend_id;
 
             const friendDiv = document.createElement('div');
             friendDiv.classList.add('ingre');
@@ -514,7 +520,7 @@ opacity: 100%;
 
             const nicknameDiv = document.createElement('div');
             nicknameDiv.classList.add('g', 'str');
-            nicknameDiv.textContent = friend.nickname;
+            nicknameDiv.textContent = friend.nickname || '';
             nicknameDiv.onclick = () => transitionToPage('./user.html');
 
             const deleteImg = document.createElement('img');
@@ -552,12 +558,10 @@ opacity: 100%;
         .then((r) => r.json())
         .then((data) => {
           if (data.success) {
-            console.log(id);
-            console.log("rip");
+            console.log('Deleted friend with ID:', id);
             fetchFriends();
           } else {
-            console.error(data.error);
-            console.log("wtf");
+            console.error('Delete error:', data.error);
           }
         })
         .catch((err) => console.error('Fetch error:', err));
