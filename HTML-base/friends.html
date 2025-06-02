@@ -471,80 +471,81 @@ opacity: 100%;
 }
 
 function fetchFriends() {
-    // Get spId from localStorage (the session identifier)
-    const spId = localStorage.getItem("spId");
-    if (!spId) {
-        console.error("No session found.");
-        return;
-    }
+  const spId = localStorage.getItem("spId");
+  if (!spId) return;
 
-    fetch("https://expirewise.localto.net/api/fetch_friends.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: new URLSearchParams({ spId: spId })
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.error) {
-            console.error("Error:", data.error);
-        } else {
-            const friends = data.friends;
-            console.log("Friends:", friends);
+  fetch("https://expirewise.localto.net/api/fetch_friends.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ spId })
+  })
+  .then(response => response.json())
+  .then(data => {
+    if (data.error) return;
+    const friends = data.friends;
+    const fBody = document.getElementById("fBody");
+    fBody.innerHTML = "";
 
-            // Get the container where friends will be rendered.
-            const fBody = document.getElementById("fBody");
-            fBody.innerHTML = ""; // Clear any existing content
+    friends.forEach(friend => {
+      const friendDiv = document.createElement("div");
+      friendDiv.classList.add("ingre");
+      friendDiv.id = `friend-${friend.fid}`;
 
-            // For each friend, build the friend element
-            friends.forEach(friend => {
-                // Create the main container div (class "ingre")
-                const friendDiv = document.createElement("div");
-                friendDiv.classList.add("ingre");
+      const pfpImg = document.createElement("img");
+      pfpImg.classList.add("pfp");
+      pfpImg.src = friend.pfp !== null
+        ? friend.pfp
+        : "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
 
-                // Profile picture element
-                const pfpImg = document.createElement("img");
-                pfpImg.classList.add("pfp");
-                if(friend.pfp !== null) {
-                pfpImg.src = friend.pfp; // The profile image URL from the DB
-                } else {
-                  pfpImg.src = "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png";
-                }
-                
+      const nicknameDiv = document.createElement("div");
+      nicknameDiv.classList.add("g", "str");
+      nicknameDiv.textContent = friend.nickname;
 
-                // Nickname element (using class "g str")
-                const nicknameDiv = document.createElement("div");
-                nicknameDiv.classList.add("g", "str");
-                nicknameDiv.textContent = friend.nickname;
+      const deleteImg = document.createElement("img");
+      deleteImg.classList.add("delete", "img");
+      deleteImg.width = 30;
+      deleteImg.src = "https://img.icons8.com/BFCBCE/material-rounded/100/waste.png";
+      deleteImg.alt = "delete";
+      deleteImg.id = `delete-${friend.fid}`;
+      deleteImg.onclick = () => deleteFriend(friend.fid);
 
-                // Edit icon element
-                const editImg = document.createElement("img");
-                editImg.classList.add("edit", "img");
-                editImg.width = 30;
-                editImg.src = "https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png";
-                editImg.alt = "pencil--v1";
+      const stripDiv = document.createElement("div");
+      stripDiv.classList.add("strip");
 
-                // Strip element
-                const stripDiv = document.createElement("div");
-                stripDiv.classList.add("strip");
+      friendDiv.appendChild(pfpImg);
+      friendDiv.appendChild(nicknameDiv);
+      friendDiv.appendChild(deleteImg);
+      friendDiv.appendChild(stripDiv);
 
-                // Append all parts to the friend container
-                friendDiv.appendChild(pfpImg);
-                friendDiv.appendChild(nicknameDiv);
-                friendDiv.appendChild(editImg);
-                friendDiv.appendChild(stripDiv);
-
-                // Append the friend container to the main container
-                fBody.appendChild(friendDiv);
-            });
-        }
-    })
-    .catch(error => console.error("Fetch error:", error));
+      fBody.appendChild(friendDiv);
+    });
+  })
+  .catch(error => console.error("Fetch error:", error));
 }
 
+function deleteFriend(id) {
+  const spId = localStorage.getItem("spId");
+  if (!spId) return;
 
-fetchFriends();
+  fetch("https://expirewise.localto.net/api/delete_friend.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ spId, friend_id: id })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      console.log(id);
+      fetchFriends();
+    } else {
+      console.error(data.error);
+    }
+  })
+  .catch(err => console.error("Fetch error:", err));
+}
+
+document.addEventListener("DOMContentLoaded", fetchFriends);
+
 
 
 
