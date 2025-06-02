@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>OCR scanning</title>
+  <title>OCR + Gemini Summary</title>
   <style>
         @font-face { font-family: g; src: url('hwyuenei64.ttf'); }
       .g{
@@ -130,8 +130,12 @@ text-shadow: 0 -1px 0 #fff, 0 1px 0 #2e2e2e, 0 2px 0 #2c2c2c, 0 3px 0 #2a2a2a, 0
 <h2><a style="color: white; position: absolute; top: 15%; right: 5%; font-size: 200%;" href="./profile.html">go back</a></h2>
 	<h2><a style="color: white; position: absolute; top: 25%; right: 5%; font-size: 200%;" onclick="save()">save</a></h2>
   <!-- Results -->
-  <h3>🧾 Scanned Results:</h3>
+  <h3>🧾 OCR Result:</h3>
   <div id="ocr-result">None yet</div>
+
+  <h3>🤖 Gemini Summary:</h3>
+  <div id="summary">None yet</div>
+
 
 
 
@@ -210,7 +214,7 @@ document.addEventListener('DOMContentLoaded', () => {
     idx     = 0;
     results = [];
     if (lines.length) showPlanModal();
-    else console.warn('No text found');
+    else console.warn('No lines found in #summary!');
   }
 
   function showPlanModal() {
@@ -350,7 +354,7 @@ function normalizeAndMatch(rawLines) {
     const canvas = document.getElementById('canvas');
     const preview = document.getElementById('preview');
     const ocrResult = document.getElementById('ocr-result');
-    const summary = document.getElementById('summary');
+    const summary = document.getElementById('ocrResult');
 
     let stream;
 
@@ -445,7 +449,7 @@ function normalizeAndMatch(rawLines) {
         console.log(gemJson);
 const generated = gemJson?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 if (!generated) {
-  ocrResult.textContent = '❌ No content returned.';
+  summary.textContent = '❌ No content returned.';
   return;
 }
 
@@ -453,11 +457,11 @@ if (!generated) {
 const rawLines = generated.split(/\r?\n/);
 const matched  = normalizeAndMatch(rawLines);
 
-ocrResult.textContent = matched.length
+summary.textContent = matched.length
   ? matched.join("\n")
   : '❌ No valid ingredients found.';
       } catch (e) {
-        ocrResult.textContent = '❌ Gemini error: ' + e.message;
+        summary.textContent = '❌ Gemini error: ' + e.message;
       }
     }
 
