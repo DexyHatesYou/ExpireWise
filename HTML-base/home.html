@@ -1,7 +1,32 @@
 <!DOCTYPE html>
 <html>
 <head>
-   
+   <style type="text/css">
+         .sort{
+    height: 6.5%;
+    aspect-ratio: 1 / 1;
+    position: absolute;
+    top: 8%;
+    left: 81%;
+    border-radius: 50px;
+    border: none;
+  outline: none;
+  box-shadow: none;
+}
+.sort:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.sort-icon {
+  display: block;
+  margin: auto;
+  max-width: 80%;
+  max-height: 80%;
+  object-fit: contain;
+}
+
+   </style>
    <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -13,9 +38,11 @@
   <p id="date" class="g"></p>
   <g class="body load">
 <div class="topBar">
-<input type="text" name="search" class="searchBar g">
+<button class="sort">
+  <img src="/img/time.png" alt="Sort icon" class="sort-icon">
+</button>
 <!--<button class="filter"></button>-->
-<button class="sort"></button>
+
 </div>
 <div class="blur1"></div>
 <div class="container">
@@ -140,59 +167,155 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
 
-async function getMeals() {
-  try {
-    
-    //rework, just flour recipes for now
-    var respApi = await fetch('https://www.themealdb.com/api/json/v1/1/filter.php?i=flour');
-    var data = await respApi.json();
+ const sortButton = document.querySelector('.sort');
+  const sortIcon   = sortButton.querySelector('.sort-icon');
 
-    
-    for (const meal of data.meals) {
-      const detailResp = await fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${meal.idMeal}`);
-      const detailData = await detailResp.json();
-      const mealDetails = detailData.meals[0];
+  let showExpiry = true;
+  const ICONS = {
+    time: '/img/time.png',
+    ings: '/img/ings.png'
+  };
 
-      // Counting ingrs 
-      let ingredientCount = 0;
-      for (let i = 1; i <= 20; i++) {
-        if (mealDetails[`strIngredient${i}`]) {
-          ingredientCount++;
-        }
-      }
+async function recipes() {
+  const container = document.querySelector('.container');
+  container.innerHTML = '<br><br>';
 
-      //REWORK!!! just random for now.
-      rnd = Math.floor(Math.random() * (6 - 0 + 1)) + 0;
-      
-      const segment = document.createElement('div');
-      segment.classList.add('segment');
-      segment.setAttribute('onclick', `openrecipe(${meal.idMeal})`);
+  const spId = localStorage.getItem('spId');
+  if (!spId) throw new Error('No session ID in localStorage');
 
-      segment.innerHTML = `
-        <img class="rcp-img" src="${meal.strMealThumb}" alt="recipe photo">
-        <div class="rcp-part onclick="openrecipe(${meal.idMeal})">
-          <h3 class="rcp-name">${meal.strMeal}</h3>
-          <span class="mark ${mealDetails.strCategory.toLowerCase()}">${mealDetails.strCategory}</span>
-          <span class="mark">${mealDetails.strArea}</span><br><p class="spacer"></p>
-          <span class="mark ingr">${ingredientCount} ingredients</span>
-          <span class="mark war">${rnd}!</span><br><p class="spacer"></p>
-          <span class="dexp">Expires in:<span class="dleft">&nbsp;2 Days</span></span>
-        </div>
-      `;
+  // 1) fetch session data & compute daysToExpiry
+  const res = await fetch('https://expirewise.localto.net/api/getData.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ spId })
+  });
+  const { status, ingredients, recipes: yourRecipes } = await res.json();
+  if (status !== 'ok') throw new Error('Session not found or server error');
 
-      
-      container.appendChild(segment);
-    }
-  } catch (error) {
-    console.error(error);
+  const now = Date.now();
+  const daysToExpiry = {};
+  ingredients.forEach(i => {
+    const ms = new Date(i.expiration_date) - now;
+    daysToExpiry[i.ingredient_id] = ms > 0
+      ? ms / (1000 * 60 * 60 * 24)
+      : 0;
+  });
+
+  
+  const scored = yourRecipes.map(r => {
+    const total = r.ingredients.length;
+    const availIds = r.ingredients.filter(id => id in daysToExpiry);
+    const availCnt = availIds.length;
+    const earliest = availCnt
+      ? Math.round(Math.min(...availIds.map(id => daysToExpiry[id])))
+      : null;
+    return {
+      name:           r.name,
+      missingCnt:     total - availCnt,
+      ratio:          total > 0 ? availCnt / total : 0,
+      earliestExpiry: earliest
+    };
+  });
+
+  
+  const topExpiry = scored
+    .filter(r => r.earliestExpiry !== null)
+    .sort((a, b) => a.earliestExpiry - b.earliestExpiry)
+    .slice(0, 15);
+
+  const topAvail = scored
+    .sort((a, b) => b.ratio - a.ratio)
+    .slice(0, 15);
+
+  // 4) fetch meal details cache by name
+  const cache = {};
+  async function fetchMeal(name) {
+    if (cache[name]) return cache[name];
+    const resp = await fetch(
+      `https://www.themealdb.com/api/json/v1/1/search.php?s=${encodeURIComponent(name)}`
+    );
+    const { meals } = await resp.json();
+    cache[name] = meals ? meals[0] : null;
+    return cache[name];
   }
+
+  
+  expiryList = [];
+  for (const r of topExpiry) {
+    const m = await fetchMeal(r.name);
+    if (!m) continue;
+    let ingrCount = 0;
+    for (let i = 1; i <= 20; i++) if (m[`strIngredient${i}`]) ingrCount++;
+    expiryList.push({
+      id: m.idMeal, thumb: m.strMealThumb, name: m.strMeal,
+      category: m.strCategory, area: m.strArea,
+      ingredientCount: ingrCount,
+      missingCnt: r.missingCnt,
+      earliestExpiry: r.earliestExpiry
+    });
+  }
+
+  availList = [];
+  for (const r of topAvail) {
+    const m = await fetchMeal(r.name);
+    if (!m) continue;
+    let ingrCount = 0;
+    for (let i = 1; i <= 20; i++) if (m[`strIngredient${i}`]) ingrCount++;
+    availList.push({
+      id: m.idMeal, thumb: m.strMealThumb, name: m.strMeal,
+      category: m.strCategory, area: m.strArea,
+      ingredientCount: ingrCount,
+      missingCnt: r.missingCnt,
+      earliestExpiry: r.earliestExpiry
+    });
+  }
+
+  renderList();
 }
 
-getMeals();
+function renderList() {
+  const container = document.querySelector('.container');
+  container.innerHTML = '<br><br>';
+  const list = showExpiry ? expiryList : availList;
+
+  list.forEach(item => {
+    const seg = document.createElement('div');
+    seg.className = 'segment';
+    seg.onclick = () => openrecipe(item.id);
+    seg.innerHTML = `
+      <img class="rcp-img" src="${item.thumb}" alt="recipe photo">
+      <div class="rcp-part">
+        <h3 class="rcp-name">${item.name}</h3>
+        <span class="mark ${item.category.toLowerCase()}">${item.category}</span>
+        <span class="mark">${item.area}</span><br><p class="spacer"></p>
+        <span class="mark ingr">${item.ingredientCount} ingredients</span>
+        <span class="mark war">${item.missingCnt}!</span><br><p class="spacer"></p>
+        <span class="mark">expires in: ${item.earliestExpiry !== null ? item.earliestExpiry + 'd' : '—'}</span>
+      </div>
+    `;
+    container.appendChild(seg);
+  });
+}
+
+
+document.querySelector('.sort').addEventListener('click', () => {
+  showExpiry = !showExpiry;
+    sortIcon.src = showExpiry ? ICONS.time : ICONS.ings;
+    renderList();
+});
+
+// run on load
+recipes();
+
 
 function openrecipe(id) {
     window.location.href = `recipes.html?id=${id}`;
      }
+
+
+
+
+
 
 </script>
 </html>

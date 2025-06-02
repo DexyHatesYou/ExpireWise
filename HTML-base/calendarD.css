@@ -200,7 +200,8 @@ opacity: 100%;
 
     .day-box {
       flex-grow: 1;
-      padding: 3px;
+      padding: 0px;
+      font-size: 50%;
       min-height: 50px;
       background-color: #475558;
       overflow-y: auto;

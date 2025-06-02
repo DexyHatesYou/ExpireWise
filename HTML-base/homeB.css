@@ -87,16 +87,7 @@ background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(0,0,0,1) 12%);
       border: inset 2px #525e61;
   }
 
-    .sort{
-    height: 6.5%;
-    aspect-ratio: 1 / 1;
-    position: absolute;
-    top: 8%;
-    left: 81%;
-    border-radius: 50px;
-    background-color: #3d474a;
-      border: inset 2px #525e61;
-  }
+
 
 .container {
     border-top: 3%;

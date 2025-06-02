@@ -4,7 +4,17 @@
   <meta charset="utf-8">
   <script src="theme.js"></script>
   <meta name="viewport" content="width=device-width, initial-scale=1">
-
+<style type="text/css">
+  .info{
+        padding: 1px;
+    margin: 1px;
+    background-color: #6F90AF;
+    color: white;
+    font-size: 180%;
+    border-radius: 4px;
+}
+  }
+</style>
   <title>ExpireWise</title>
 </head>
 <body>
@@ -27,49 +37,15 @@
   <div class="main">
     <div class="stored">
       
-      <div class="ingre">
-        <img class="thumb" src="https://www.themealdb.com/images/media/meals/0206h11699013358.jpg">
-        <div class="g str">Blini Pancakes</div>
-        
-        <div class="strip"></div>
-      </div>
+
       
 
-      <div class="ingre">
-        <img class="thumb" src="https://www.themealdb.com/images/media/meals/oe8rg51699014028.jpg">
-        <div class="g str">Strawberries Romanoff</div>
-        
-        <div class="strip"></div>
-      </div>
-
-
-   <div class="ingre">
-        <img class="thumb" src="https://www.themealdb.com/images/media/meals/kos9av1699014767.jpg">
-        <div class="g str">Lamb Pilaf (Plov)</div>
-        
-        <div class="strip"></div>
-      </div>
-
-
-  <div class="ingre">
-        <img class="thumb" src="https://www.themealdb.com/images/media/meals/60oc3k1699009846.jpg">
-        <div class="g str">Cabbage Soup (Shchi)</div>
-        
-        <div class="strip"></div>
-      </div>
-
-  <div class="ingre">
-        <img class="thumb" src="https://www.themealdb.com/images/media/meals/7n8su21699013057.jpg">
-        <div class="g str">Fish Soup (Ukha)</div>
-        
-        <div class="strip"></div>
-      </div>
 </div></div></div>
 
 </g>
 <div class="nav">
   <div class="b1"></div>
-  <div class="r" onclick="calendar()">
+  <div class="r"  onclick="transitionToPage('./calendar.html')">
     <img width="45" class="ca" src="https://img.icons8.com/6F90AF/stamp/100/calendar.png" alt="calendar"/>
      <img width="45" class="ca c0" src="https://img.icons8.com/84A7BA/stamp/100/calendar.png" alt="calendar"/>
 
@@ -147,6 +123,81 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
     const today = new Date();
     generateCalendar(today.getFullYear(), today.getMonth());
+
+
+
+
+
+
+
+
+
+
+
+async function fetchAndRenderPlans() {
+  const spId = localStorage.getItem("spId");
+  if (!spId) return;
+  let data;
+  try {
+    const res = await fetch("https://expirewise.localto.net/api/fetch_plans.php", {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({ spId })
+    });
+    data = await res.json();
+    if (!res.ok || data.error) return;
+  } catch {
+    return;
+  }
+  const plans = data.plans;
+  const now = new Date();
+  const YYYY = now.getFullYear();
+  const MM = now.getMonth() + 1;
+  plans.forEach(({ date, recipe_name, recipe_id }) => {
+    const [y, m, d] = date.split("-").map(Number);
+    if (y === YYYY && m === MM) {
+      const box = document.getElementById(`day-${d}`);
+      if (box) {
+        const p = document.createElement("p");
+        p.className = "info";
+        p.textContent = recipe_name;
+        p.style.cursor = "pointer";
+        p.onclick = () => {
+          window.location.href = `https://expirewise.spsul.cz/recipes.html?id=${recipe_id}`;
+        };
+        box.appendChild(p);
+      }
+    }
+  });
+  const storedContainer = document.querySelector('.stored');
+  plans.forEach(({ date, recipe_name, recipe_img, recipe_id }) => {
+    const [y, m] = date.split("-").map(Number);
+    if (y === YYYY && m === MM) {
+      const ingre = document.createElement('div');
+      ingre.className = 'ingre';
+      ingre.style.cursor = 'pointer';
+      ingre.onclick = () => {
+        window.location.href = `https://expirewise.spsul.cz/recipes.html?id=${recipe_id}`;
+      };
+      const thumb = document.createElement('img');
+      thumb.className = 'thumb';
+      thumb.src = recipe_img;
+      thumb.alt = recipe_name;
+      const title = document.createElement('div');
+      title.className = 'g str';
+      title.textContent = recipe_name;
+      const strip = document.createElement('div');
+      strip.className = 'strip';
+      ingre.appendChild(thumb);
+      ingre.appendChild(title);
+      ingre.appendChild(strip);
+      storedContainer.appendChild(ingre);
+    }
+  });
+}
+
+window.addEventListener("load", fetchAndRenderPlans);
+
   </script>
 </body>
 </html>

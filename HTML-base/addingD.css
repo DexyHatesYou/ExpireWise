@@ -9,7 +9,23 @@ input::-webkit-inner-spin-button {
 			.g{
 				font-family: g;
 			}
+input[type="radio"],
+input[type="checkbox"] {
+  width: 1.2em;
+  height: 1.2rem;
+  accent-color: green !important;
+  color: #BFCBCE;
+          position: absolute;
+          top: 57%;
+          left: 7%;
+}
 
+    
+    input:disabled {
+      background-color: #eee;
+      color: #666;
+      cursor: not-allowed;
+    }
 			body {
       background-color: #BFCBCE;
       overflow: hidden;
@@ -296,10 +312,10 @@ background: linear-gradient(180deg, rgba(111,144,175,1) 0%, rgba(71,85,88,1) 12%
         }
 
         .nl{
-          color: #BFCBCE;
+          color: #6f90af;
           position: absolute;
-          top: 29%;
-          left: 6%;
+          top: 50%;
+          left: 15%;
         }
 
         .ll{

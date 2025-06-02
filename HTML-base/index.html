@@ -76,7 +76,7 @@ Absolutely not. Your data stays where it belongs—on our local server. Even if 
 Yes, and it’s as dramatic as it sounds. Go to Profile, click Settings, click Delete Account, confirm by retyping your username and password, and BAM—it’s gone. Forever. Not archived, not stored, just gone. No going back even if you beg us.
 <br><br>
 <b class="d1d">Q4: Is this app actually free?</b><br>
-Yes! No hidden fees, no “premium unlocks.” It’s free now, and it’ll stay free. Because seriously, its 2024, f*ck paying for basic simple apps.(even if they take long to develop)
+Yes! No hidden fees, no “ad unblocks.” It’s free now, and it will remain free for all essential functions. Seriously—it's 21st century; why pay for basic, simple apps (even if they take a long time to develop)? However, if this app reaches a wider audience, the receipt-scanning feature may require a small monthly fee (or a one-time payment) to cover the costs of OCR and LLM support. Thanks for understanding; everything else will stay free.
 <br><br>
 <b class="d1d">Q5: Where is my data stored?</b><br>
 On a local database we run ourselves. No clouds, no weird third-party deals. Just good old responsible storage.
@@ -135,6 +135,26 @@ Since we don't track anything, there's no way to recover your account. Just crea
 
   <script>
   var spId = localStorage.getItem("spId");
+    console.log(spId);
+
+  fetch("https://expirewise.localto.net/api/session.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ spId: spId })
+})
+.then(response => response.json())
+.then(data => {
+    if (data.status === "notFound") {
+        alert("notFound");
+        localStorage.setItem("spId", null);
+        
+    } else {
+        alert("Found: " + data.nickname);
+        window.location.href = "home.html";
+        var nickname = data.nickname;
+    }
+})
+.catch(error => console.error("Error:", error));
 
 
 function detectAndSetTheme() {

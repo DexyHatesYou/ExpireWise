@@ -9,6 +9,11 @@
 				font-family: g;
 			}
 
+      .gd{
+        font-family: g;
+        color: white;
+      }
+
 			body {
       background-color: #BFCBCE;
       overflow: hidden;
@@ -231,12 +236,12 @@ opacity: 100%;
 
 
       .main{
-  height: 47%;
+  height: 30%;
   width: 90%;
   background-color: white;
   border-radius: 25px;
   position: absolute;
-  top: 17%;
+  top: 10%;
   z-index: ;
 }
 
@@ -272,7 +277,7 @@ opacity: 100%;
   top: 13%;
   position: absolute;
   width: 98%;
-  height: 100%;
+  height: 170%;
   margin: auto;
   scrollbar-width: none;
   left: 6%;
@@ -362,10 +367,10 @@ background-color: #CEBFBF;
 .instr{
         background-color: white;
       width: 90%;
-      height: 5%;
+      height: 3%;
       border-radius: 25px;
       position: absolute;
-      top: 70%;
+      top: 42%;
       text-align: center;
       border: none;
       color: #BFCBCE;
@@ -379,7 +384,7 @@ background-color: #CEBFBF;
   position: absolute;
   width: 90%;
   border-radius: 25px;
-  top: 78%;
+  top: 47%;
 }
 
 .spac{
@@ -392,12 +397,12 @@ background-color: #CEBFBF;
 
 .blur1 {
   width: 120%;
-  height: 5%;
+  height: 66%;
   background-color: #BFCBCE;
   position: absolute;
   box-shadow: 0px 0px 20px 20px #BFCBCE;
   z-index: -3;
-  top: 16%;
+  top: 25%;
 }
 
 .blur2 {
@@ -452,6 +457,85 @@ background-color: #CEBFBF;
   margin-top: 5%;
 }
 
+
+
+
+
+.plan-modal {
+  position: fixed;
+  top: -30%;
+  left: 0; right: 0;
+  width: 100%; height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  transition: top 1.0s ease-out;
+  z-index: 999;
+  pointer-events: none;
+
+}
+.plan-modal.open {
+  top: 25%;
+}
+
+.plan-box {
+  position: absolute;
+  top: -45%;
+  width: 300px;
+  padding: 1.5rem;
+  background-color: #BFCBCE;
+  border-radius: 30px;
+  box-shadow: 0px 0px 40px #303655;
+  transition: top 0.4s ease;
+}
+.plan-modal.open .plan-box {
+  top: 2rem; 
+  pointer-events: auto;
+}
+
+.plan-header label {
+  display: block;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+}
+.plan-header input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 0.5rem;
+  border: none;
+  margin-top: 0.25rem;
+  font-size: 1rem;
+  color: #BFCBCE !important;
+}
+
+.plan-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1.5rem;
+}
+.plan-actions button {
+  flex: 1;
+  margin: 0 0.25rem;
+  padding: 0.6rem 0;
+  border: none;
+  border-radius: 20px;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.btn-cancel {
+  background-color: transparent;
+}
+.btn-save {
+  background-color: white;
+  color: #BFCBCE !important;
+}
+.btn-delete {
+  background-color: white;
+  color: #BFCBCE !important;
+}
+
+
+
 	</style>
 	<meta charset="utf-8">
   <script src="https://kit.fontawesome.com/2fd69ec569.js" crossorigin="anonymous"></script>
@@ -492,7 +576,7 @@ background-color: #CEBFBF;
 
       
   </ul>
-  <button class="mark g cook" onclick="copy()" style="left: 5% !important;">Share recipe</button>
+  <button class="mark g cook"  id="planIt" onclick="openPlanModal()" style="left: 5% !important;">Plan recipe</button>
   <button class="mark g cook" onclick="scroll()" id="scroller">Start Cooking</button>
 
   
@@ -508,12 +592,12 @@ background-color: #CEBFBF;
 
 <div class="spac"></div>
 
-
+<!--                                  -----video now gone due to bugs
 <div class="video">
   <h4 class="g vidl">Video tutorial:</h4>
   <iframe class="reg" id="video" 
 src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen">
-</iframe>
+</iframe>-->
 </div>
 
 
@@ -540,172 +624,225 @@ src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen
   </div>
   <div class="b2"></div>
 </div>
-<script src="date.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-</body>
+
+ <div id="planModal" class="plan-modal">
+    <div class="plan-box">
+      <div class="plan-header gd">
+        <label>Day<input type="number" class="gd" id="plan-day" min="1" max="31"></label>
+        <label>Month<input type="number" class="gd" id="plan-month" min="1" max="12"></label>
+        <label>Year<input type="number" class="gd" id="plan-year" min="1900"></label>
+      </div>
+      <div class="plan-actions">
+        <button class="btn-cancel gd" onclick="closePlanModal()">Cancel</button>
+        <button class="btn-save gd" onclick="savePlan()">Save Plan</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="planModal2" class="plan-modal">
+    <div class="plan-box">
+      <div class="plan-header gd">
+        <h3>Are you sure you wanna delete plan?</h3>
+      </div>
+      <div class="plan-actions">
+        <button class="btn-cancel gd" onclick="closePlanModal()">Cancel</button>
+        <button class="btn-save gd" onclick="deletePlan()">Delete Plan</button>
+      </div>
+    </div>
+  </div>
+
 <script>
+      function openPlanModal() {
+          const t = new Date();
+          t.setDate(t.getDate() + 1);
+          const dayInput = document.getElementById('plan-day');
+          const monthInput = document.getElementById('plan-month');
+          const yearInput = document.getElementById('plan-year');
+          const defaults = {
+              day: String(t.getDate()),
+              month: String(t.getMonth() + 1),
+              year: String(t.getFullYear())
+          };
+          [
+              [defaults.day, dayInput],
+              [defaults.month, monthInput],
+              [defaults.year, yearInput]
+          ].forEach(([val, input]) => {
+              input.value = val;
+              input.dataset.default = val;
+          });
+          [dayInput, monthInput, yearInput].forEach(input => {
+              if (!input._planHandlersAdded) {
+                  input.addEventListener('focus', () => {
+                      if (input.value === input.dataset.default) input.value = '';
+                  });
+                  input.addEventListener('blur', () => {
+                      if (!input.value.trim()) input.value = input.dataset.default;
+                  });
+                  input._planHandlersAdded = true;
+              }
+          });
+          outsideClickListener = e => {
+              const box = document.querySelector('.plan-box');
+              if (!box.contains(e.target)) {
+                  [dayInput, monthInput, yearInput].forEach(input => {
+                      if (!input.value.trim()) input.value = input.dataset.default;
+                  });
+              }
+          };
+          document.addEventListener('click', outsideClickListener);
+          document.getElementById('planModal').classList.add('open');
+      }
 
-function copy() {
-    const rcpName = document.getElementById("rcp-name").textContent;
-    const url = window.location.href;
-
-    if (navigator.clipboard && navigator.clipboard.writeText) {
-        // Modern asynchronous clipboard API
-        navigator.clipboard.writeText(url)
-            .then(() => {
-                console.log('URL copied to clipboard');
-                alert("Link to " + rcpName + " recipe was copied to your clipboard.");
-            })
-            .catch(err => {
-                console.error('Failed to copy: ', err);
-            });
-    } else {
-        // Fallback method using a temporary textarea
-        const textArea = document.createElement("textarea");
-        textArea.value = url;
-        // Make textarea out of viewport
-        textArea.style.position = "fixed";
-        textArea.style.top = "-1000px";
-        document.body.appendChild(textArea);
-        textArea.select();
-
-        try {
-            const successful = document.execCommand('copy');
-            if (successful) {
-                console.log('URL copied to clipboard (fallback)');
-                alert("Link to " + rcpName + " recipe was copied to your clipboard.");
-            } else {
-                console.error('Fallback: Copy command was unsuccessful');
-            }
-        } catch (err) {
-            console.error('Fallback: Unable to copy', err);
-        }
-        document.body.removeChild(textArea);
-    }
-}
-
-
-    window.transitionToPage = function(href) {
-    document.querySelector('.body').style.opacity = 0
-    setTimeout(function() { 
-        window.location.href = href
-    }, 500)
-}
-
-document.addEventListener('DOMContentLoaded', function(event) {
-    document.querySelector('.body').style.opacity = 1
-})
-
-$(document).ready(function () {
-    $("#scroller").click(function () {
-        var scrollAmount = $(window).height() * 0.6;
-
-        $('.scroll').animate({
-            scrollTop: $('.scroll').scrollTop() + scrollAmount
-        }, 10, 'swing');
-    });
-});
-
-
-function getRecipeId() {
-    const params = new URLSearchParams(window.location.search);
-    const id = params.get('id');
-    if (id) {
-        console.log("Recipe ID:", id);
-    } else {
-        console.log("No Recipe ID found.");
-    }
-}
-
-
-window.onload = getRecipeId;
-
-  function fetchRecipeDetails() {
-    const params = new URLSearchParams(window.location.search);
-    const recipeId = params.get('id');
-
-    if (recipeId) {
-      fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeId}`)
-        .then(response => response.json())
-        .then(data => {
-          const meal = data.meals[0];
-
-          
-          document.getElementById('rcp-name').innerHTML = meal.strMeal;
-
-          
-          document.getElementById('instructions').innerText = meal.strInstructions;
-
-          
-          if (meal.strYoutube) {
-            const youtubeId = meal.strYoutube.split('v=')[1];
-            document.getElementById('video').src = `https://www.youtube.com/embed/${youtubeId}`;
-          }
-
-          
-          document.getElementById('img').src = meal.strMealThumb;
-
-          
-let ingredientsHtml = '';
-let missingIngredientsHtml = '';
-let ingredientCount = 0;
-
-
-for (let i = 1; i <= 20; i++) {
-    const ingredient = meal[`strIngredient${i}`];
-    const measure = meal[`strMeasure${i}`];
-
-    if (ingredient && ingredient.trim()) {      //for now if more than 7 it puts em as you dont have
-        ingredientCount++;
-        
-        if (ingredientCount <= 7) {
-            
-            ingredientsHtml += `<li class="own">${ingredient}</li><li class="ownM">${measure}</li>`;
-        } else {
-            
-            missingIngredientsHtml += `<li class="own">${ingredient}</li><li class="ownM">${measure}</li>`;
-        }
-    }
-}
-
-
-document.getElementById('ingr-count').textContent = `${ingredientCount} ingredients`;
-
-
-document.getElementById('ingredients-list').innerHTML = ingredientsHtml;
-
-
-if (missingIngredientsHtml) {
-    document.getElementById('missing-ingredients').innerHTML = `
-        <li>${missingIngredientsHtml}</li>
-    `;
-} else {
-
-    document.getElementById('missing-ingredients').style.display = 'none';
-}
-
-
-document.getElementById('category').textContent = `${meal.strCategory}`;
-document.getElementById('area').textContent = `${meal.strArea}`;
-
-
-
-
-
-          document.querySelector('.mainy').innerHTML = ingredientsHtml;
-          document.querySelector('.mainn').innerHTML = measurementsHtml;
-        })
-        .catch(error => console.error('Error fetching recipe:', error));
-    } else {
-      console.log("No Recipe ID found.");
-    }
+  function closePlanModal() {
+      document.getElementById('planModal').classList.remove('open');
+      document.removeEventListener('click', outsideClickListener);
   }
 
-  window.onload = fetchRecipeDetails;
+  function savePlan() {
+      const spId = localStorage.getItem('spId');
+      const recipeId = new URLSearchParams(window.location.search).get('id');
+      const payload = {
+          spId,
+          recipeId,
+          recipeName: document.getElementById('rcp-name').textContent.trim(),
+          imgSrc: document.getElementById('img').src,
+          date: `${document.getElementById('plan-year').value}-${String(document.getElementById('plan-month').value).padStart(2,'0')}-${String(document.getElementById('plan-day').value).padStart(2,'0')}`
+      };
+      fetch('https://expirewise.localto.net/api/save-plan.php', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json'
+              },
+              body: JSON.stringify(payload)
+          })
+          .then(r => r.json()).then(data => {
+              if (data.error) {
+                  alert('Error saving plan: ' + data.error);
+              } else {
+                  alert('Plan saved successfully!');
+                  closePlanModal();
+                  checkUserPlan();
+              }
+          });
+  }
 
+  function deletePlan() {
+      const spId = localStorage.getItem('spId');
+      const recipeId = new URLSearchParams(window.location.search).get('id');
+      fetch('https://expirewise.localto.net/api/delete-plan.php', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: new URLSearchParams({
+                  spId,
+                  recipeId
+              })
+          })
+          .then(r => r.json()).then(data => {
+              closePlanModal();
+              window.location.reload();
+          });
+  }
 
+  function openDeleteModal() {
+      document.getElementById('planModal2').classList.add('open');
+  }
 
+  function outsideClickListener() {}
+
+  function transitionToPage(href) {
+      document.querySelector('.body').style.opacity = 0;
+      setTimeout(() => window.location.href = href, 500);
+  }
+  window.addEventListener('DOMContentLoaded', () => {
+      document.querySelector('.body').style.opacity = 1;
+  });
+
+  function fetchRecipeDetails() {
+      const recipeId = new URLSearchParams(window.location.search).get('id');
+      const spId = localStorage.getItem('spId');
+      if (!recipeId || !spId) return;
+      fetch('https://expirewise.localto.net/api/fetch_ingredients.php', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: new URLSearchParams({
+                  spId
+              })
+          })
+          .then(r => r.json()).then(userData => {
+              const ownedSet = new Set(userData.ingredients.map(ing => ing.name.trim().toLowerCase()));
+              return fetch(`https://www.themealdb.com/api/json/v1/1/lookup.php?i=${recipeId}`).then(r => r.json()).then(data => ({
+                  meal: data.meals[0],
+                  ownedSet
+              }));
+          })
+          .then(({
+              meal,
+              ownedSet
+          }) => {
+              document.getElementById('rcp-name').textContent = meal.strMeal;
+              document.getElementById('instructions').innerText = meal.strInstructions;
+              document.getElementById('img').src = meal.strMealThumb;
+              document.getElementById('category').textContent = meal.strCategory;
+              document.getElementById('area').textContent = meal.strArea;
+              let haveHtml = '',
+                  missingHtml = '',
+                  totalCount = 0;
+              for (let i = 1; i <= 20; i++) {
+                  const rawName = meal[`strIngredient${i}`];
+                  const measure = meal[`strMeasure${i}`] || '';
+                  if (!rawName || !rawName.trim()) continue;
+                  totalCount++;
+                  const name = rawName.trim();
+                  if (ownedSet.has(name.toLowerCase())) {
+                      haveHtml += `<li class="own">${name}</li><li class="ownM">${measure}</li>`;
+                  } else {
+                      missingHtml += `<li class="own">${name}</li><li class="ownM">${measure}</li>`;
+                  }
+              }
+              document.getElementById('ingr-count').textContent = `${totalCount} ingredients`;
+              document.getElementById('ingredients-list').innerHTML = haveHtml;
+              if (missingHtml) {
+                  document.getElementById('missing-ingredients').innerHTML = missingHtml;
+                  document.getElementById('missing-ingredients').style.display = '';
+              } else {
+                  document.getElementById('missing-ingredients').style.display = 'none';
+              }
+              document.querySelector('.mainy').innerHTML = haveHtml;
+              document.querySelector('.mainn').innerHTML = missingHtml;
+          });
+  }
+
+  function checkUserPlan() {
+      const recipeId = new URLSearchParams(window.location.search).get('id');
+      const spId = localStorage.getItem('spId');
+      if (!recipeId || !spId) return;
+      fetch('https://expirewise.localto.net/api/fetch_plans.php', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/x-www-form-urlencoded'
+              },
+              body: new URLSearchParams({
+                  spId
+              })
+          })
+          .then(r => r.json()).then(data => {
+              if (data.plans.some(p => String(p.recipe_id) === recipeId)) {
+                  const btn = document.getElementById('planIt');
+                  btn.textContent = 'Delete plan';
+                  btn.onclick = openDeleteModal;
+                  
+              }
+          });
+  }
+  window.addEventListener('load', () => {
+      fetchRecipeDetails();
+      checkUserPlan();
+  }); 
 </script>
 </html>
