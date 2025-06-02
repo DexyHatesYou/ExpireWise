@@ -202,7 +202,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function save(event) {
     if (event) event.preventDefault();
     console.log('save() called');
-    const text = document.getElementById('summary')
+    const text = document.getElementById('ocrResult')
                        .innerText
                        .trim();
     lines = text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l);
@@ -210,7 +210,7 @@ document.addEventListener('DOMContentLoaded', () => {
     idx     = 0;
     results = [];
     if (lines.length) showPlanModal();
-    else console.warn('No lines found in #summary!');
+    else console.warn('No text found');
   }
 
   function showPlanModal() {
