@@ -206,7 +206,7 @@ document.addEventListener('DOMContentLoaded', () => {
   function save(event) {
     if (event) event.preventDefault();
     console.log('save() called');
-    const text = document.getElementById('ocrResult')
+    const text = document.getElementById('summary')
                        .innerText
                        .trim();
     lines = text.split(/\r?\n/).map(l=>l.trim()).filter(l=>l);
@@ -354,7 +354,7 @@ function normalizeAndMatch(rawLines) {
     const canvas = document.getElementById('canvas');
     const preview = document.getElementById('preview');
     const ocrResult = document.getElementById('ocr-result');
-    const summary = document.getElementById('ocrResult');
+    const summary = document.getElementById('summary');
 
     let stream;
 
@@ -449,7 +449,7 @@ function normalizeAndMatch(rawLines) {
         console.log(gemJson);
 const generated = gemJson?.candidates?.[0]?.content?.parts?.[0]?.text || '';
 if (!generated) {
-  summary.textContent = '❌ No content returned.';
+  summary.textContent = '❌ No content returned from Gemini.';
   return;
 }
 
