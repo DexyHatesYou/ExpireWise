@@ -148,10 +148,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
 // In your <script> or separate .js file:
 function fetchIngredients() {
   const spId = localStorage.getItem("spId");
-  if (!spId) {
-    console.error("No session found.");
-    return;
-  }
+  if (!spId) return;
 
   fetch("https://expirewise.localto.net/api/fetch_ingredients.php", {
     method: "POST",
@@ -160,39 +157,29 @@ function fetchIngredients() {
   })
   .then(r => r.json())
   .then(data => {
-    if (data.error) {
-      console.error(data.error);
-      return;
-    }
-
+    if (data.error) return;
     const container = document.querySelector(".stored");
-    container.innerHTML = "";  // clear old
-
-    // split finite vs infinite
-    const finiteIngs  = data.ingredients.filter(ing => !ing.infinite);
+    container.innerHTML = "";
+    const finiteIngs = data.ingredients.filter(ing => !ing.infinite);
     const infiniteIngs = data.ingredients.filter(ing => ing.infinite);
     const allIngs = [...finiteIngs, ...infiniteIngs];
-
     allIngs.forEach(ing => {
       let html;
-
       if (!ing.infinite) {
-        // compute days‐left badge
         const days = ing.days_left;
         const displayDays = days < 0 ? 0 : days;
-  let spanClass = "left";          // default
+        let spanClass = "left";
         if (displayDays === 1) {
-          spanClass = "leftW";           // exactly 1 day
+          spanClass = "leftW";
         } else if (displayDays < 5 && displayDays > 0) {
-          spanClass = "leftO";           // 2–4 days
+          spanClass = "leftO";
         } else if (displayDays > 30) {
-          spanClass = "leftY";           // more than 30 days
+          spanClass = "leftY";
         } else if (displayDays < 1) {
-          spanClass = "leftD";           // 2–4 days
+          spanClass = "leftD";
         }
-
         html = `
-          <div class="ingre">
+          <div class="ingre" id="ingre-${ing.stored_ing_id}">
             <div class="g str">${ing.name}</div>
             <div class="g ${spanClass}">
               ${displayDays}
@@ -200,44 +187,51 @@ function fetchIngredients() {
                 ${displayDays === 1 ? "Day" : "Days"} left
               </span>
             </div>
-            <!--<img class="edit img" width="30"
-                 src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png"
-                 alt="edit" />-->
-            <img class="delete img" width="30"
-                 src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
-                 alt="delete" />
+            <img
+              class="delete img"
+              id="delete-${ing.stored_ing_id}"
+              width="30"
+              src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
+              alt="delete"
+              onclick="deleteIngredient(${ing.stored_ing_id})"
+            />
             <div class="strip"></div>
           </div>
         `;
       } else {
-        // infinite: no badge, “No expiration”
         html = `
-<div class="ingre">
+          <div class="ingre" id="ingre-${ing.stored_ing_id}">
             <div class="g str">${ing.name}</div>
             <div class="g infinity">
               <span class="leftct">
-                 This ingredient won't expire
+                This ingredient won't expire
               </span>
             </div>
-            <!--<img class="edit img" width="30"
-                 src="https://img.icons8.com/BFCBCE/ios-glyphs/100/pencil--v1.png"
-                 alt="edit" />-->
-            <img class="delete img" width="30"
-                 src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
-                 alt="delete" />
+            <img
+              class="delete img"
+              id="delete-${ing.stored_ing_id}"
+              width="30"
+              src="https://img.icons8.com/BFCBCE/material-rounded/100/waste.png"
+              alt="delete"
+              onclick="deleteIngredient(${ing.stored_ing_id})"
+            />
             <div class="strip"></div>
           </div>
         `;
       }
-
       container.insertAdjacentHTML("beforeend", html);
     });
   })
   .catch(err => console.error("Fetch error:", err));
 }
 
-// Call on page load
+function deleteIngredient(id) {
+  console.log(id);
+}
+
+
 document.addEventListener("DOMContentLoaded", fetchIngredients);
+
 
 
 </script>
