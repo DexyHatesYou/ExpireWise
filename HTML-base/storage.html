@@ -226,8 +226,27 @@ function fetchIngredients() {
 }
 
 function deleteIngredient(id) {
+  const spId = localStorage.getItem("spId");
+  if (!spId) return;
   console.log(id);
+
+  fetch("https://expirewise.localto.net/api/delete_ingredient.php", {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body: new URLSearchParams({ spId, stored_ing_id: id })
+  })
+  .then(r => r.json())
+  .then(data => {
+    if (data.success) {
+      console.log(id);
+      fetchIngredients();
+    } else {
+      console.error(data.error);
+    }
+  })
+  .catch(err => console.error("Fetch error:", err));
 }
+
 
 
 document.addEventListener("DOMContentLoaded", fetchIngredients);
