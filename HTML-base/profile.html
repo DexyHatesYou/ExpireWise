@@ -67,6 +67,26 @@
 </div>
 
 
+
+ <div id="planModal" class="plan-modal">
+    <div class="plan-box">
+      <div class="plan-header gd">
+        <label>Day<input type="number" class="gd"  min="1" max="31"></label>
+        <label>Month<input type="number" class="gd" id="plan-month" min="1" max="12"></label>
+        <label>Year<input type="number" class="gd" id="plan-year" min="1900"></label>
+      </div>
+      <div class="plan-actions">
+        <button class="btn-cancel gd" onclick="closePlanModal()">Cancel</button>
+        <button class="btn-save gd" onclick="savePlan()">Save Plan</button>
+      </div>
+    </div>
+  </div>
+
+
+
+
+
+
 </g>
 <div class="nav">
   <div class="b1"></div>
@@ -88,19 +108,6 @@
 </div>
 
 
- <div id="planModal" class="plan-modal">
-    <div class="plan-box">
-      <div class="plan-header gd">
-        <label>Day<input type="number" class="gd" id="nickname" min="1" max="31"></label>
-        <label>Month<input type="number" class="gd" id="plan-month" min="1" max="12"></label>
-        <label>Year<input type="number" class="gd" id="plan-year" min="1900"></label>
-      </div>
-      <div class="plan-actions">
-        <button class="btn-cancel gd" onclick="closePlanModal()">Cancel</button>
-        <button class="btn-save gd" onclick="savePlan()">Save Plan</button>
-      </div>
-    </div>
-  </div>
 
 
 
