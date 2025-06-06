@@ -111,7 +111,7 @@
   var spId = localStorage.getItem("spId");
   console.log(spId);
 
-fetch("https://expirewise.localto.net/api/session.php", {
+fetch("https://expirewise.localto.net/api/user-info.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ spId: spId })
