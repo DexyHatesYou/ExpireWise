@@ -13,17 +13,17 @@
 <g  class="body load">
 
 <div class="profile">
-  <div class="pfp"></div>
+  <div class="pfp" id="pfp"></div>
   <span id="nickname" class="name g"></span>
-  <span class="since g">Saving food for 46days</span>
-  <span class="rank g vipP">VIP+</span>
-  <span class="bio g">
+  <span class="since g" id="saving">Saving food for 46days</span>
+  <span class="rank g vipP" id="rank">VIP+</span>
+  <span class="bio g" id="bio">
   Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
   </span>
   <div class="">
     <img class="qr" onclick="transitionToPage('./ocr.html')" src="https://img.icons8.com/ffffff/pastel-glyph/100/qr-code--v2.png" alt="qr-code--v2"/>
   </div>
-  <span class="edit g">
+  <span class="edit g" onclick="editOpen()">
     <img style="height: 75%; position: absolute; bottom: 15%; right: 75%" src="https://img.icons8.com/ffffff/material-sharp/100/pencil--v1.png" alt="pencil--v1"/>
     Edit profile
   </span>
@@ -86,14 +86,32 @@
   </div>
   <div class="b2"></div>
 </div>
+
+
+ <div id="planModal" class="plan-modal">
+    <div class="plan-box">
+      <div class="plan-header gd">
+        <label>Day<input type="number" class="gd" id="nickname" min="1" max="31"></label>
+        <label>Month<input type="number" class="gd" id="plan-month" min="1" max="12"></label>
+        <label>Year<input type="number" class="gd" id="plan-year" min="1900"></label>
+      </div>
+      <div class="plan-actions">
+        <button class="btn-cancel gd" onclick="closePlanModal()">Cancel</button>
+        <button class="btn-save gd" onclick="savePlan()">Save Plan</button>
+      </div>
+    </div>
+  </div>
+
+
+
 <script src="date.js"></script>
 </body>
 <script>
 
   var spId = localStorage.getItem("spId");
   console.log(spId);
-/*
-  fetch("https://expirewise.localto.net/api/session.php", {
+
+fetch("https://expirewise.localto.net/api/session.php", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ spId: spId })
@@ -105,13 +123,56 @@
         localStorage.setItem("spId", null);
         window.location.href = "index.html";
     } else {
-        var nickname = data.nickname;
-        document.getElementById("nickname").textContent = nickname;
+        // 1. nickname
+        document.getElementById("nickname").textContent = data.nickname;
 
+        // 2. pfp (if not null)
+        if (data.pfp) {
+            const pfpDiv = document.getElementById("pfp");
+            pfpDiv.innerHTML = `<img src="${data.pfp}" alt="Profile Picture" />`;
+        }
+
+        // 3. rank
+        document.getElementById("rank").textContent = data.rank;
+
+        // 4. bio
+        document.getElementById("bio").textContent = data.bio;
+
+        // 5. calculate "saving" days from creation_date
+        if (data.creation_date) {
+            // Extract just the date portion (YYYY-MM-DD) in case of a DATETIME
+            const dateOnly = data.creation_date.split(" ")[0];
+            const [year, month, day] = dateOnly.split("-").map(Number);
+            
+            // Create a UTC Date for the creation_date at midnight UTC
+            const createdUTC = new Date(Date.UTC(year, month - 1, day));
+            
+            // Create a UTC Date for today at midnight UTC
+            const now = new Date();
+            const todayUTC = new Date(Date.UTC(
+                now.getUTCFullYear(),
+                now.getUTCMonth(),
+                now.getUTCDate()
+            ));
+            
+            // Difference in milliseconds, then convert to full days
+            const msPerDay = 1000 * 60 * 60 * 24;
+            const diffMs = todayUTC - createdUTC;
+            const diffDays = Math.floor(diffMs / msPerDay);
+            
+            // First day counts as 1
+            const daysCount = diffDays + 1;
+            const dayLabel = (daysCount === 1) ? "day" : "days";
+            
+            document.getElementById("saving").textContent =
+                `Saving food for ${daysCount} ${dayLabel}`;
+        }
     }
 })
 .catch(error => console.error("Error:", error));
-*/
+
+
+
 
 function logout() {
     fetch("https://expirewise.localto.net/api/logout.php", {
@@ -139,5 +200,20 @@ function logout() {
 document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
+
+
+
+function editOpen() {
+
+          
+
+          document.getElementById('planModal').classList.add('open');
+      }
+
+  function closePlanModal() {
+      document.getElementById('planModal').classList.remove('open');
+
+  }
+
 </script>
 </html>
