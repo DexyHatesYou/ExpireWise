@@ -259,7 +259,8 @@ fetch("https://expirewise.localto.net/api/user-info.php", {
         document.getElementById("rank").textContent = data.rank;
 
         
-        document.getElementById("bio").textContent = data.bio;
+       document.getElementById("bio").innerHTML = data.bio.replace(/\n/g, "<br>");
+
         document.getElementById("bioE").textContent = data.bio;
         
         if (data.creation_date) {
