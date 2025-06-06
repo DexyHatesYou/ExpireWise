@@ -119,10 +119,10 @@
 <div class="profile">
   <div class="pfp" id="pfp"></div>
   <span id="nickname" class="name g"></span>
-  <span class="since g" id="saving">Saving food for 46days</span>
-  <span class="rank g vipP" id="rank">VIP+</span>
+  <span class="since g" id="saving"></span>
+  <span class="rank g vipP" id="rank"></span>
   <span class="bio g" id="bio">
-  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam.
+
   </span>
   <div class="">
     <img class="qr" onclick="transitionToPage('./ocr.html')" src="https://img.icons8.com/ffffff/pastel-glyph/100/qr-code--v2.png" alt="qr-code--v2"/>
@@ -264,8 +264,9 @@ fetch("https://expirewise.localto.net/api/user-info.php", {
         
         document.getElementById("rank").textContent = data.rank;
 
-        
+        if (data.pfp) {
        document.getElementById("bio").innerHTML = data.bio.replace(/\n/g, "<br>");
+       }
 
         document.getElementById("bioE").textContent = data.bio;
         
