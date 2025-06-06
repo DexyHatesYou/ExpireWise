@@ -173,8 +173,8 @@
  <div id="planModal" class="plan-modal">
     <div class="plan-box">
       <div class="plan-header gd">
-        <label>Profile Picture<input type="url" class="gd"></label>
-        <label>Bio <textarea class="gd" id="bio" rows="3"></textarea></label>
+        <label>Profile Picture<input type="url" class="gd" id="pfpE"></label>
+        <label>Bio <textarea class="gd" id="bioE" rows="3"></textarea></label>
       </div>
       <div class="plan-actions">
         <button class="btn-cancel gd" onclick="closePlanModal()">Cancel</button>
@@ -250,6 +250,8 @@ fetch("https://expirewise.localto.net/api/user-info.php", {
         if (data.pfp) {
             const pfpDiv = document.getElementById("pfp");
             pfpDiv.innerHTML = `<img src="${data.pfp}" alt="Profile Picture" />`;
+            const pfpDivE = document.getElementById("pfpE");
+            pfpDiv.innerText = `<img src="${data.pfp}" alt="Profile Picture" />`;
         }
 
         
