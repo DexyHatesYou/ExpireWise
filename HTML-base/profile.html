@@ -2,8 +2,16 @@
 <html>
 <head>
   <style type="text/css">
-    
+        @font-face { font-family: g; src: url('hwyuenei64.ttf'); }
+      
 
+      .g{
+        font-family: g;
+      }
+      .gd{
+        font-family: g;
+        color: white;
+      }
 .plan-modal {
   position: fixed;
   top: -30%;
@@ -148,13 +156,12 @@
  <div id="planModal" class="plan-modal">
     <div class="plan-box">
       <div class="plan-header gd">
-        <label>Day<input type="number" class="gd"  min="1" max="31"></label>
-        <label>Month<input type="number" class="gd" id="plan-month" min="1" max="12"></label>
-        <label>Year<input type="number" class="gd" id="plan-year" min="1900"></label>
+        <label>Profile Picture<input type="url" class="gd"></label>
+        <label>Bio<input type="number" class="gd" id="bio"></label>
       </div>
       <div class="plan-actions">
         <button class="btn-cancel gd" onclick="closePlanModal()">Cancel</button>
-        <button class="btn-save gd" onclick="savePlan()">Save Plan</button>
+        <button class="btn-save gd" onclick="savePlan()">Update Profile</button>
       </div>
     </div>
   </div>
