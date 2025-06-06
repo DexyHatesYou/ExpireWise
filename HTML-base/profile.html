@@ -3,7 +3,7 @@
 <head>
   <style type="text/css">
         @font-face { font-family: g; src: url('hwyuenei64.ttf'); }
-      img{
+      #tot{
 
     object-fit: scale-down;
     width: 100%;
@@ -250,9 +250,9 @@ fetch("https://expirewise.localto.net/api/user-info.php", {
         
         if (data.pfp) {
             const pfpDiv = document.getElementById("pfp");
-            pfpDiv.innerHTML = `<img src="${data.pfp}" alt="Profile Picture" />`;
+            pfpDiv.innerHTML = `<img src="${data.pfp}" alt="Profile Picture" id="tot" />`;
             const pfpDivE = document.getElementById("pfpE");
-            pfpDivE.innerText = `<img src="${data.pfp}" alt="Profile Picture" />`;
+            pfpDivE.innerText = `<img src="${data.pfp}" alt="Profile Picture" id="tot" />`;
         }
 
         
