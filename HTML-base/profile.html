@@ -181,7 +181,7 @@
       </div>
       <div class="plan-actions">
         <button class="btn-cancel gd" onclick="closePlanModal()">Cancel</button>
-        <button class="btn-save gd" onclick="savePlan()">Update Profile</button>
+        <button class="btn-save gd" onclick="saveUpdate()">Update Profile</button>
       </div>
     </div>
   </div>
@@ -332,7 +332,42 @@ document.addEventListener('DOMContentLoaded', function(event) {
 
 
 
+  function saveUpdate() {
+    const pfp   = document.getElementById("pfpE").value.trim();
+    const bio   = document.getElementById("bioE").value.trim();
+    const spId  = localStorage.getItem("spId"); 
 
+    if (!spId) {
+      alert("You are not logged in.");
+      return;
+    }
+
+    fetch("https://expirewise.localto.net/api/update_user.php", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ spId: spId, pfp: pfp, bio: bio })
+    })
+    .then(response => response.json())
+    .then(data => {
+      if (data.status === "success") {
+        alert("Successfully changed!");
+      } else if (data.status === "notFound") {
+        alert("Session not found. Please log in again.");
+        // Optionally clear localStorage and redirect:
+        localStorage.removeItem("spId");
+        window.location.href = "index.html";
+      } else {
+        // any other error
+        alert("Error: " + (data.message || "Unknown error"));
+      }
+    })
+    .catch(error => {
+      console.error("Fetch error:", error);
+      alert("An error occurred while saving. Check console for details.");
+    });
+  }
 
 </script>
 </html>
