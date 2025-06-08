@@ -632,69 +632,57 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
 
-    function getQueryParam(key) {
-      return new URLSearchParams(location.search).get(key);
-    }
+function getQueryParam(key) {
+  return new URLSearchParams(location.search).get(key);
+}
 
-    function daysSince(dateString) {
-      const then = new Date(dateString);
-      const now = new Date();
-      const diff = now - then;
-      return Math.floor(diff / (1000*60*60*24)) + 1;
-    }
+function daysSince(dateString) {
+  const then = new Date(dateString);
+  const now = new Date();
+  const diff = now - then;
+  return Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+}
 
 function fetchUserInfo(nick) {
-   const params = new URLSearchParams({ nickname: nick });
+  const params = new URLSearchParams();
+  params.append('nick', nick);
 
-  
   fetch("https://expirewise.localto.net/api/fetch-info.php", {
     method: "POST",
-    body: formData
+    body: params
   })
     .then(response => {
-      if (!response.ok) {
-        throw new Error("Network response not ok");
-      }
+      if (!response.ok) throw new Error("Network response not ok");
       return response.json();
     })
     .then(data => {
       if (data.error) {
-         console.error("Error:", data.error);
-         alert("Error fetching user info: " + data.error);
-         return;
+        alert("Error fetching user info: " + data.error);
+        return;
       }
-      
-      
       const creationDate = new Date(data.creation_date);
-      const currentDate = new Date();
-      const diffTime = currentDate - creationDate;
-      const diffDays = Math.floor((diffTime / (1000 * 60 * 60 * 24))+1);
-      const friendId = data.user_id;
-      console.log(friendId);
-      localStorage.setItem("friendId", friendId);
+      const diffDays = Math.floor((new Date() - creationDate) / (1000 * 60 * 60 * 24)) + 1;
+      localStorage.setItem("friendId", data.user_id);
       if (data.pfp) {
-            const pfpDiv = document.getElementById("pfp");
-            pfpDiv.innerHTML = `<img src="${data.pfp}" alt="Profile Picture" id="tot" />`;
-        }
+        document.getElementById("pfp").innerHTML = `<img src="${data.pfp}" alt="Profile Picture" id="tot" />`;
+      }
       document.getElementById("rank").textContent = data.rank;
-     if (data.pfp) { document.getElementById("bio").innerHTML = data.bio.replace(/\n/g, "<br>"); }
+      document.getElementById("bio").innerHTML = data.bio.replace(/\n/g, "<br>");
       document.getElementById("since").textContent = `Saving food for ${diffDays} days`;
     })
-    .catch(error => {
-      console.error("Error fetching user info:", error);
+    .catch(() => {
       alert("An error occurred while fetching user info.");
     });
 }
 
+document.addEventListener("DOMContentLoaded", () => {
+  const nick = getQueryParam("nick");
+  if (!nick) {
+    alert("No user specified.");
+    return;
+  }
+  fetchUserInfo(nick);
+});
 
-
-    document.addEventListener("DOMContentLoaded", () => {
-      const nick = getQueryParam("nick");
-      if (!nick) {
-        alert("No user specified.");
-        return;
-      }
-      fetchUserInfo(nick);
-    });
 </script>
 </html>
