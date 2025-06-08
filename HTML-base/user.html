@@ -644,8 +644,8 @@ document.addEventListener('DOMContentLoaded', function(event) {
     }
 
 function fetchUserInfo(nick) {
-  const formData = new URLSearchParams();
-  formData.append("nickname", nickname);
+   const params = new URLSearchParams({ nickname: nick });
+
   
   fetch("https://expirewise.localto.net/api/fetch-info.php", {
     method: "POST",
