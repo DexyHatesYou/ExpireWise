@@ -484,7 +484,7 @@ opacity: 100%;
       }, 500);
     };
 
-   function fetchFriends() {
+ function fetchFriends() {
   const spId = localStorage.getItem('spId');
   if (!spId) return;
 
@@ -499,12 +499,14 @@ opacity: 100%;
         console.error('Error fetching friends:', data.error);
         return;
       }
+
       const friends = data.friends;
       const fBody = document.getElementById('fBody');
       fBody.innerHTML = '';
 
       friends.forEach((friend) => {
         const id = friend.friend_id;
+        const nickname = friend.nickname || '';
 
         const friendDiv = document.createElement('div');
         friendDiv.classList.add('ingre');
@@ -512,27 +514,26 @@ opacity: 100%;
 
         const pfpImg = document.createElement('img');
         pfpImg.classList.add('pfp');
-        pfpImg.src =
-          friend.pfp !== null
-            ? friend.pfp
-            : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+        pfpImg.src = friend.pfp
+          ? friend.pfp
+          : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
 
         const nicknameDiv = document.createElement('div');
         nicknameDiv.classList.add('g', 'str');
-        nicknameDiv.textContent = friend.nickname || '';
-        // Navigate to user page with query parameter
+        nicknameDiv.textContent = nickname;
         nicknameDiv.onclick = () => {
-          // If you have a transition function:
-          transitionToPage(`./user.html?id=${id}`);
-          // Or, if you don't use transitionToPage:
-          // window.location.href = `./user.html?id=${id}`;
+          const url = `./user.html?nick=${encodeURIComponent(nickname)}`;
+          if (typeof transitionToPage === 'function') {
+            transitionToPage(url);
+          } else {
+            window.location.href = url;
+          }
         };
 
         const deleteImg = document.createElement('img');
         deleteImg.classList.add('delete', 'img');
         deleteImg.width = 30;
-        deleteImg.src =
-          'https://img.icons8.com/BFCBCE/material-rounded/100/waste.png';
+        deleteImg.src = 'https://img.icons8.com/BFCBCE/material-rounded/100/waste.png';
         deleteImg.alt = 'delete';
         deleteImg.id = `delete-${id}`;
         deleteImg.onclick = () => deleteFriend(id);
@@ -550,6 +551,7 @@ opacity: 100%;
     })
     .catch((error) => console.error('Fetch error:', error));
 }
+
 
 
     function deleteFriend(id) {
