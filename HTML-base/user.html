@@ -506,7 +506,14 @@ opacity: 100%;
 .newB{
   background-color: #aac49d;
 }
+      #tot{
 
+    object-fit: cover;
+    width: 100%;
+    height: 100%;
+     border-radius: 1000px;
+     display: block;
+}
 	</style>
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
@@ -626,5 +633,42 @@ opacity: 100%;
 document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
+
+
+ function getQueryParam(param) {
+      return new URLSearchParams(window.location.search).get(param);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const nickname = getQueryParam('nick');
+      if (!nickname) {
+        document.getElementById('userProfile').textContent = 'No user specified.';
+        return;
+      }
+
+      fetch('https://expirewise.localto.net/api/fetch_user.php', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+        body: new URLSearchParams({ nickname })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.error) {
+          document.getElementById('userProfile').textContent = 'User not found.';
+          return;
+        }
+
+        const u = data.user;
+        document.querySelector('.profile .pfp').src = u.pfp || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+        document.querySelector('.profile .name').textContent = u.nickname;
+        document.querySelector('.profile .since').textContent = `Saving food for ${u.daysSaving} days`;
+        document.querySelector('.profile .rank').textContent = u.rank;
+        document.querySelector('.profile .bio').textContent = u.bio || '';
+      })
+      .catch(err => {
+        console.error('Fetch error:', err);
+        document.getElementById('userProfile').textContent = 'Error loading user.';
+      });
+    });
 </script>
 </html>
