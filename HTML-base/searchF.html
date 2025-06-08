@@ -761,7 +761,7 @@ function fetchUserInfo(nickname) {
             pfpDiv.innerHTML = `<img src="${data.pfp}" alt="Profile Picture" id="tot" />`;
         }
       document.getElementById("rank").textContent = data.rank;
-      document.getElementById("bio").textContent = data.bio.replace(/\n/g, "<br>");
+      document.getElementById("bio").innerHTML = data.bio.replace(/\n/g, "<br>");
       document.getElementById("since").textContent = `Saving food for ${diffDays} days`;
     })
     .catch(error => {
