@@ -634,41 +634,85 @@ document.addEventListener('DOMContentLoaded', function(event) {
     document.querySelector('.body').style.opacity = 1
 })
 
-
- function getQueryParam(param) {
-      return new URLSearchParams(window.location.search).get(param);
+    function getQueryParam(key) {
+      return new URLSearchParams(location.search).get(key);
     }
 
-    document.addEventListener('DOMContentLoaded', () => {
-      const nickname = getQueryParam('nick');
-      if (!nickname) {
-        document.getElementById('userProfile').textContent = 'No user specified.';
-        return;
-      }
+    function daysSince(dateString) {
+      const then = new Date(dateString);
+      const now = new Date();
+      const diff = now - then;
+      return Math.floor(diff / (1000*60*60*24)) + 1;
+    }
 
-      fetch('https://expirewise.localto.net/api/fetch-info.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ nickname })
+    function fetchUserInfo(nick) {
+      const params = new URLSearchParams({ nickname: nick });
+      fetch("https://expirewise.localto.net/api/fetch-info.php", {
+        method: "POST",
+        body: params
       })
-      .then(res => res.json())
+      .then(r => {
+        if (!r.ok) throw new Error("Network error");
+        return r.json();
+      })
       .then(data => {
-        if (data.error) {
-          document.getElementById('userProfile').textContent = 'User not found.';
+        if (!data || data.error) {
+          alert("User not found: " + (data?.error || ""));
           return;
         }
 
-        const u = data.user;
-        document.querySelector('.profile .pfp').src = u.pfp || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
-        document.querySelector('.profile .name').textContent = u.nickname;
-        document.querySelector('.profile .since').textContent = `Saving food for ${u.daysSaving} days`;
-        document.querySelector('.profile .rank').textContent = u.rank;
-        document.querySelector('.profile .bio').textContent = u.bio || '';
+        
+        const pfpDiv = document.getElementById("pfp");
+        pfpDiv.innerHTML = `<img
+          class="pfp"
+          src="${data.pfp || 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png'}"
+          alt="Profile Picture"
+        />`;
+
+        
+        const nameEl = document.getElementById("name");
+        if (nameEl) nameEl.textContent = nick;
+
+       
+        const sinceEl = document.getElementById("since");
+        if (sinceEl && data.creation_date) {
+          const d = daysSince(data.creation_date);
+          sinceEl.textContent = `Saving food for ${d} day${d!==1?'s':''}`;
+        }
+
+       
+        const rankEl = document.getElementById("rank");
+        if (rankEl && data.rank) {
+         
+          rankEl.textContent = data.rank
+            .toLowerCase()
+            .replace(/\b\w/g, c => c.toUpperCase());
+        }
+
+        
+        const bioEl = document.getElementById("bio");
+        if (bioEl && data.bio) {
+          bioEl.innerHTML = data.bio
+            .split("\n")
+            .map(line => `<p>${line}</p>`)
+            .join("");
+        }
+
+        
       })
       .catch(err => {
-        console.error('Fetch error:', err);
-        document.getElementById('userProfile').textContent = 'Error loading user.';
+        console.error("Fetch error:", err);
+        alert("Error loading user info.");
       });
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      const nick = getQueryParam("nick");
+      if (!nick) {
+        alert("No user specified.");
+        return;
+      }
+      fetchUserInfo(nick);
     });
 </script>
 </html>
