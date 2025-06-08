@@ -524,7 +524,7 @@ opacity: 100%;
 <p id="date" class="g"></p>
 <g class="body">
 <div class="profile">
-  <img class="pfp" id="pfp" src="https://stormclub.cz/wp-content/uploads/2024/12/hq720.jpg">
+  <div class="pfp" id="pfp"></div>
   <span class="name g" id="nickname">SteveSniff</span>
   <span class="since g" id="since">Saving food for 11days</span>
   <span class="rank g newB" id="rank">Newbie</span>
@@ -681,6 +681,7 @@ document.addEventListener("DOMContentLoaded", () => {
     alert("No user specified.");
     return;
   }
+   document.getElementById("nickname").textContent = nick;
   fetchUserInfo(nick);
 });
 
