@@ -570,7 +570,7 @@ opacity: 100%;
 
 
 <div class="profile">
-  <div class="pfp"></div>
+  <div class="pfp" id="pfp"></div>
   <span id="selected-option" class="name g" ></span>
   <span class="since g" id="since"></span>
   <span class="rank g vipP"  id="rank"></span>
@@ -612,10 +612,10 @@ opacity: 100%;
 <script src="date.js"></script>
 </body>
 <script>
-// Get the stored session ID
+
 const spId = localStorage.getItem("spId");
 
-// Assume you have the friendId from somewhere (e.g., user input)
+
 
 function test() {
   const friendId = localStorage.getItem("friendId");
@@ -644,14 +644,14 @@ fetch("https://expirewise.localto.net/api/addFriend.php", {
     }, 500)
 }
 
-// Global variable to store the selected nickname
+
 let selected = null;
 
-// When the DOM is ready, fetch nicknames and populate the dropdown
+
 document.addEventListener("DOMContentLoaded", () => {
   const optionsContainer = document.getElementById("options");
 
-  // Fetch nicknames from the API endpoint (list.php)
+
   fetch("https://expirewise.localto.net/api/list.php")
     .then(response => {
       if (!response.ok) {
@@ -660,19 +660,17 @@ document.addEventListener("DOMContentLoaded", () => {
       return response.json();
     })
     .then(data => {
-      // data is expected to be an array of nicknames
+
       data.forEach(nickname => {
         const optionDiv = document.createElement("div");
         optionDiv.classList.add("dropdown-option");
         optionDiv.textContent = nickname;
-        
-        // When an option is clicked, update the search bar, selected display,
-        // and then fetch additional user info based on that nickname.
+     
         optionDiv.addEventListener("click", () => {
           document.querySelector(".search-bar").value = nickname;
           selected = nickname;
           document.getElementById("selected-option").textContent = selected;
-          // Call fetchUserInfo to get and display extra details
+
           fetchUserInfo(selected);
           optionsContainer.classList.remove("show");
         });
@@ -686,13 +684,13 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-// Show the dropdown when the search bar is clicked
+
 function showDropdown() {
   const options = document.getElementById("options");
   options.classList.add("show");
 }
 
-// Filter options based on user input in the search bar
+
 function filterOptions() {
   const input = document.querySelector(".search-bar").value.toLowerCase();
   const options = document.querySelectorAll(".dropdown-option");
@@ -708,7 +706,7 @@ function filterOptions() {
   });
 }
 
-// Hide the dropdown when clicking outside of it
+
 document.addEventListener("click", function(event) {
   const dropdown = document.querySelector(".dropdown");
   const options = document.getElementById("options");
@@ -717,12 +715,12 @@ document.addEventListener("click", function(event) {
   }
 });
 
-// Attach event listeners to the search bar input
+
 const searchBar = document.querySelector(".search-bar");
 searchBar.addEventListener("click", showDropdown);
 searchBar.addEventListener("keyup", filterOptions);
 
-// Function to fetch additional user info based on the selected nickname
+
 function fetchUserInfo(nickname) {
   const formData = new URLSearchParams();
   formData.append("nickname", nickname);
@@ -744,17 +742,22 @@ function fetchUserInfo(nickname) {
          return;
       }
       
-      // Compute the number of days since creation_date
+      
       const creationDate = new Date(data.creation_date);
       const currentDate = new Date();
-      const diffTime = currentDate - creationDate;  // in milliseconds
+      const diffTime = currentDate - creationDate;
       const diffDays = Math.floor((diffTime / (1000 * 60 * 60 * 24))+1);
       const friendId = data.user_id;
       console.log(friendId);
       localStorage.setItem("friendId", friendId);
-      // Update the separate elements with the fetched info
+      if (data.pfp) {
+            const pfpDiv = document.getElementById("pfp");
+            pfpDiv.innerHTML = `<img src="${data.pfp}" alt="Profile Picture" id="tot" />`;
+            const pfpDivE = document.getElementById("pfpE");
+            pfpDivE.textContent = data.pfp;
+        }
       document.getElementById("rank").textContent = data.rank;
-      document.getElementById("bio").textContent = data.bio;
+      document.getElementById("bio").textContent = data.bio.replace(/\n/g, "<br>");
       document.getElementById("since").textContent = `Saving food for ${diffDays} days`;
     })
     .catch(error => {

@@ -264,7 +264,7 @@ fetch("https://expirewise.localto.net/api/user-info.php", {
         
         document.getElementById("rank").textContent = data.rank;
 
-        if (data.pfp) {
+        if (data.bio) {
        document.getElementById("bio").innerHTML = data.bio.replace(/\n/g, "<br>");
        }
 
