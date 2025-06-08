@@ -645,61 +645,50 @@ document.addEventListener('DOMContentLoaded', function(event) {
       return Math.floor(diff / (1000*60*60*24)) + 1;
     }
 
-    function fetchUserInfo(nick) {
-      const params = new URLSearchParams({ nickname: nick });
-      fetch("https://expirewise.localto.net/api/fetch-info.php", {
-        method: "POST",
-        body: params
-      })
-      .then(r => {
-        if (!r.ok) throw new Error("Network error");
-        return r.json();
-      })
-      .then(data => {
-        if (!data || data.error) {
-          alert("User not found: " + (data?.error || ""));
-          return;
+function fetchUserInfo(nick) {
+  const formData = new URLSearchParams();
+  formData.append("nickname", nickname);
+  
+  fetch("https://expirewise.localto.net/api/fetch-info.php", {
+    method: "POST",
+    body: formData
+  })
+    .then(response => {
+      if (!response.ok) {
+        throw new Error("Network response not ok");
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data.error) {
+         console.error("Error:", data.error);
+         alert("Error fetching user info: " + data.error);
+         return;
+      }
+      
+      
+      const creationDate = new Date(data.creation_date);
+      const currentDate = new Date();
+      const diffTime = currentDate - creationDate;
+      const diffDays = Math.floor((diffTime / (1000 * 60 * 60 * 24))+1);
+      const friendId = data.user_id;
+      console.log(friendId);
+      localStorage.setItem("friendId", friendId);
+      if (data.pfp) {
+            const pfpDiv = document.getElementById("pfp");
+            pfpDiv.innerHTML = `<img src="${data.pfp}" alt="Profile Picture" id="tot" />`;
         }
+      document.getElementById("rank").textContent = data.rank;
+     if (data.pfp) { document.getElementById("bio").innerHTML = data.bio.replace(/\n/g, "<br>"); }
+      document.getElementById("since").textContent = `Saving food for ${diffDays} days`;
+    })
+    .catch(error => {
+      console.error("Error fetching user info:", error);
+      alert("An error occurred while fetching user info.");
+    });
+}
 
-        
-        
 
-        
-        const nameEl = document.getElementById("name");
-        if (nameEl) nameEl.textContent = nick;
-
-       
-        const sinceEl = document.getElementById("since");
-        if (sinceEl && data.creation_date) {
-          const d = daysSince(data.creation_date);
-          sinceEl.textContent = `Saving food for ${d} day${d!==1?'s':''}`;
-        }
-
-       
-        const rankEl = document.getElementById("rank");
-        if (rankEl && data.rank) {
-         
-          rankEl.textContent = data.rank
-            .toLowerCase()
-            .replace(/\b\w/g, c => c.toUpperCase());
-        }
-
-        
-        const bioEl = document.getElementById("bio");
-        if (bioEl && data.bio) {
-          bioEl.innerHTML = data.bio
-            .split("\n")
-            .map(line => `<p>${line}</p>`)
-            .join("");
-        }
-
-        
-      })
-      .catch(err => {
-        console.error("Fetch error:", err);
-        alert("Error loading user info.");
-      });
-    }
 
     document.addEventListener("DOMContentLoaded", () => {
       const nick = getQueryParam("nick");
