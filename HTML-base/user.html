@@ -646,7 +646,7 @@ document.addEventListener('DOMContentLoaded', function(event) {
         return;
       }
 
-      fetch('https://expirewise.localto.net/api/fetch_user.php', {
+      fetch('https://expirewise.localto.net/api/fetch-info.php', {
         method: 'POST',
         headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
         body: new URLSearchParams({ nickname })
