@@ -444,7 +444,7 @@ opacity: 100%;
       />
     </div>
     <div class="c"></div>
-    <div class="ct" onclick="transitionToPage('./recipe.html')">
+    <div class="ct" onclick="transitionToPage('./home.html')">
       <img
         width="70"
         class="re"
@@ -484,67 +484,73 @@ opacity: 100%;
       }, 500);
     };
 
-    function fetchFriends() {
-      const spId = localStorage.getItem('spId');
-      if (!spId) return;
+   function fetchFriends() {
+  const spId = localStorage.getItem('spId');
+  if (!spId) return;
 
-      fetch('https://expirewise.localto.net/api/fetch_friends.php', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-        body: new URLSearchParams({ spId })
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.error) {
-            console.error('Error fetching friends:', data.error);
-            return;
-          }
-          const friends = data.friends;
-          const fBody = document.getElementById('fBody');
-          fBody.innerHTML = '';
+  fetch('https://expirewise.localto.net/api/fetch_friends.php', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({ spId })
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      if (data.error) {
+        console.error('Error fetching friends:', data.error);
+        return;
+      }
+      const friends = data.friends;
+      const fBody = document.getElementById('fBody');
+      fBody.innerHTML = '';
 
-          friends.forEach((friend) => {
-            // Use the exact field name returned by fetch_friends.php
-            const id = friend.friend_id;
+      friends.forEach((friend) => {
+        const id = friend.friend_id;
 
-            const friendDiv = document.createElement('div');
-            friendDiv.classList.add('ingre');
-            friendDiv.id = `friend-${id}`;
+        const friendDiv = document.createElement('div');
+        friendDiv.classList.add('ingre');
+        friendDiv.id = `friend-${id}`;
 
-            const pfpImg = document.createElement('img');
-            pfpImg.classList.add('pfp');
-            pfpImg.src =
-              friend.pfp !== null
-                ? friend.pfp
-                : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
+        const pfpImg = document.createElement('img');
+        pfpImg.classList.add('pfp');
+        pfpImg.src =
+          friend.pfp !== null
+            ? friend.pfp
+            : 'https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_960_720.png';
 
-            const nicknameDiv = document.createElement('div');
-            nicknameDiv.classList.add('g', 'str');
-            nicknameDiv.textContent = friend.nickname || '';
-            nicknameDiv.onclick = () => transitionToPage('./user.html');
+        const nicknameDiv = document.createElement('div');
+        nicknameDiv.classList.add('g', 'str');
+        nicknameDiv.textContent = friend.nickname || '';
+        // Navigate to user page with query parameter
+        nicknameDiv.onclick = () => {
+          // If you have a transition function:
+          transitionToPage(`./user.html?id=${id}`);
+          // Or, if you don't use transitionToPage:
+          // window.location.href = `./user.html?id=${id}`;
+        };
 
-            const deleteImg = document.createElement('img');
-            deleteImg.classList.add('delete', 'img');
-            deleteImg.width = 30;
-            deleteImg.src =
-              'https://img.icons8.com/BFCBCE/material-rounded/100/waste.png';
-            deleteImg.alt = 'delete';
-            deleteImg.id = `delete-${id}`;
-            deleteImg.onclick = () => deleteFriend(id);
+        const deleteImg = document.createElement('img');
+        deleteImg.classList.add('delete', 'img');
+        deleteImg.width = 30;
+        deleteImg.src =
+          'https://img.icons8.com/BFCBCE/material-rounded/100/waste.png';
+        deleteImg.alt = 'delete';
+        deleteImg.id = `delete-${id}`;
+        deleteImg.onclick = () => deleteFriend(id);
 
-            const stripDiv = document.createElement('div');
-            stripDiv.classList.add('strip');
+        const stripDiv = document.createElement('div');
+        stripDiv.classList.add('strip');
 
-            friendDiv.appendChild(pfpImg);
-            friendDiv.appendChild(nicknameDiv);
-            friendDiv.appendChild(deleteImg);
-            friendDiv.appendChild(stripDiv);
+        friendDiv.appendChild(pfpImg);
+        friendDiv.appendChild(nicknameDiv);
+        friendDiv.appendChild(deleteImg);
+        friendDiv.appendChild(stripDiv);
 
-            fBody.appendChild(friendDiv);
-          });
-        })
-        .catch((error) => console.error('Fetch error:', error));
-    }
+        fBody.appendChild(friendDiv);
+      });
+    })
+    .catch((error) => console.error('Fetch error:', error));
+}
+
 
     function deleteFriend(id) {
       const spId = localStorage.getItem('spId');
