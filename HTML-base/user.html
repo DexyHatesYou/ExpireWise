@@ -645,7 +645,7 @@ function daysSince(dateString) {
 
 function fetchUserInfo(nick) {
   const params = new URLSearchParams();
-  params.append('nick', nick);
+  params.append('nickname', nick);
 
   fetch("https://expirewise.localto.net/api/fetch-info.php", {
     method: "POST",
