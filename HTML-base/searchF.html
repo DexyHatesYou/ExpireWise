@@ -759,8 +759,6 @@ function fetchUserInfo(nickname) {
       if (data.pfp) {
             const pfpDiv = document.getElementById("pfp");
             pfpDiv.innerHTML = `<img src="${data.pfp}" alt="Profile Picture" id="tot" />`;
-            const pfpDivE = document.getElementById("pfpE");
-            pfpDivE.textContent = data.pfp;
         }
       document.getElementById("rank").textContent = data.rank;
       document.getElementById("bio").textContent = data.bio.replace(/\n/g, "<br>");
