@@ -575,7 +575,7 @@ background-color: #CEBFBF;
 
 <div class="scroll" id="scroll">
 <div class="main">
-  <div class="book" onclick="bookmark()" ><img class="bok" src="https://img.icons8.com/BFCBCE/sf-regular/100/bookmark-ribbon.png" alt="bookmark-ribbon"/></div>
+  <div class="book"  onclick="bookmarkToggle()" ><img class="bok" src="https://img.icons8.com/BFCBCE/sf-regular/100/bookmark-ribbon.png" alt="bookmark-ribbon"/></div>
   <img class="img" id="img" src="https://media.tenor.com/YtAOA9y7VG0AAAAM/loading.gif">
   <span class="mark g ingr" style="top: 3%;" id="ingr-count"></span>
   <span class="mark g country" id="area"></span>
@@ -859,45 +859,44 @@ src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen
       checkUserPlan();
   }); 
 
+ const spId     = localStorage.getItem('spId');
+  const recipeId = new URLSearchParams(window.location.search).get('id');
+  const bokImg   = document.querySelector('.bok');
 
-
-
-  const spId      = localStorage.getItem('spId');
-const recipeId  = new URLSearchParams(window.location.search).get('id');
-const recipeName= document.querySelector('#rcp-name').innerText;
-const recipeImg = document.querySelector('#img').src;
-
-
-fetch('https://expirewise.localto.net/api/bookmark.php', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ spId, recipeId, check: true })
-})
-.then(r => r.json())
-.then(data => {
-  const img = document.querySelector('.bok');
-  if (data.bookmarked) {
-    img.src = 'https://img.icons8.com/sf-regular-filled/48/bookmark-ribbon.png';
-  }
-});
-
-
-function bookmark() {
-  fetch('https://expirewise.localto.net/api/bookmark.php', {
+  fetch('https://expirewise.localto.net/api/check-bookmark.php', {
     method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ spId, recipeId, recipeName, recipeImg })
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ spId, recipeId })
   })
-  .then(r => r.json())
+  .then(r=>r.json())
   .then(data => {
-    const img = document.querySelector('.bok');
-    if (data.status === 'added') {
-      img.src = 'https://img.icons8.com/sf-regular-filled/48/bookmark-ribbon.png';
-    } else {
-      img.src = 'https://img.icons8.com/BFCBCE/sf-regular/100/bookmark-ribbon.png';
+    if (data.bookmarked) {
+      bokImg.src = 'https://img.icons8.com/sf-regular-filled/48/bookmark-ribbon.png';
     }
-  });
-}
+  })
+  .catch(console.error);
+
+
+  function bookmarkToggle() {
+    const recipeName = document.querySelector('#rcp-name').innerText;
+    const recipeImg  = document.querySelector('#img').src;
+
+    fetch('https://expirewise.localto.net/api/toggle-bookmark.php', {
+      method: 'POST',
+      headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({ spId, recipeId, recipeName, recipeImg })
+    })
+    .then(r=>r.json())
+    .then(data => {
+      if (data.status==='added') {
+        bokImg.src = 'https://img.icons8.com/sf-regular-filled/48/bookmark-ribbon.png';
+      } else if (data.status==='removed') {
+        bokImg.src = 'https://img.icons8.com/BFCBCE/sf-regular/100/bookmark-ribbon.png';
+      }
+    })
+    .catch(console.error);
+  }
+
 
 </script>
 </html>
