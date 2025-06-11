@@ -130,7 +130,8 @@ document.getElementById('testALG').addEventListener('click', async () => {
     const spId = localStorage.getItem('spId');
     if (!spId) throw new Error('No session ID in localStorage');
 
-    // 1 fetch
+   
+  
     const res = await fetch('https://expirewise.localto.net/api/getData.php', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -144,28 +145,28 @@ document.getElementById('testALG').addEventListener('click', async () => {
 
     const { ingredients, recipes } = data;
 
-    // Build map: ingredient_id → daysToExpiry
+    
     const now = Date.now();
     const daysToExpiry = {};
     ingredients.forEach(i => {
       const ms = new Date(i.expiration_date) - now;
       daysToExpiry[i.ingredient_id] = ms > 0 
         ? ms / (1000 * 60 * 60 * 24)
-        : 0;  // past expiry treated as 0 days
+        : 0; 
     });
 
-    // Score each recipe
+   
     const scored = recipes.map(r => {
       const totalCount   = r.ingredients.length;
       const availableIds = r.ingredients.filter(id => id in daysToExpiry);
       const availableCnt = availableIds.length;
 
-      // ratio of ingredients you have
+      
       const ratio = totalCount > 0
         ? availableCnt / totalCount
         : 0;
 
-      // earliest expiry among available (or Infinity if none)
+      
       const earliestExpiry = availableCnt > 0
         ? Math.min(...availableIds.map(id => daysToExpiry[id]))
         : Infinity;
@@ -181,7 +182,7 @@ document.getElementById('testALG').addEventListener('click', async () => {
       };
     });
 
-    // Sort by: 1) ratio DESC, 2) earliestExpiry ASC (nulls go last)
+    
     scored.sort((a, b) => {
       if (b.ratio !== a.ratio) {
         return b.ratio - a.ratio;

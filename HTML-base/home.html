@@ -183,7 +183,7 @@ async function recipes() {
   const spId = localStorage.getItem('spId');
   if (!spId) throw new Error('No session ID in localStorage');
 
-  // 1) fetch session data & compute daysToExpiry
+
   const res = await fetch('https://expirewise.localto.net/api/getData.php', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -227,7 +227,7 @@ async function recipes() {
     .sort((a, b) => b.ratio - a.ratio)
     .slice(0, 15);
 
-  // 4) fetch meal details cache by name
+
   const cache = {};
   async function fetchMeal(name) {
     if (cache[name]) return cache[name];
