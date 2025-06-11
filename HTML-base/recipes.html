@@ -871,7 +871,7 @@ src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen
   .then(r=>r.json())
   .then(data => {
     if (data.bookmarked) {
-      bokImg.src = 'https://img.icons8.com/sf-regular-filled/48/bookmark-ribbon.png';
+      bokImg.src = 'https://img.icons8.com/BFCBCE/sf-regular-filled/48/bookmark-ribbon.png';
     }
   })
   .catch(console.error);
@@ -889,7 +889,7 @@ src="https://www.youtube.com/embed/cS3Yn-y5uVg" allowfullscreen="allowfullscreen
     .then(r=>r.json())
     .then(data => {
       if (data.status==='added') {
-        bokImg.src = 'https://img.icons8.com/sf-regular-filled/48/bookmark-ribbon.png';
+        bokImg.src = 'https://img.icons8.com/BFCBCE/sf-regular-filled/48/bookmark-ribbon.png';
       } else if (data.status==='removed') {
         bokImg.src = 'https://img.icons8.com/BFCBCE/sf-regular/100/bookmark-ribbon.png';
       }
