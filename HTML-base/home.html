@@ -194,12 +194,13 @@ async function recipes() {
 
   const now = Date.now();
   const daysToExpiry = {};
-  ingredients.forEach(i => {
-    const ms = new Date(i.expiration_date) - now;
-    daysToExpiry[i.ingredient_id] = ms > 0
-      ? ms / (1000 * 60 * 60 * 24)
-      : 0;
-  });
+ingredients.forEach(i => {
+  const ms = new Date(i.expiration_date) - now;
+  const days = ms > 0
+    ? ms / (1000 * 60 * 60 * 24)
+    : 0;
+  daysToExpiry[i.ingredient_id] = days + 1;
+});
 
   
   const scored = yourRecipes.map(r => {
@@ -290,7 +291,7 @@ function renderList() {
         <span class="mark">${item.area}</span><br><p class="spacer"></p>
         <span class="mark ingr">${item.ingredientCount} ingredients</span>
         <span class="mark war">${item.missingCnt}!</span><br><p class="spacer"></p>
-        <span class="mark">expires in: ${item.earliestExpiry !== null ? item.earliestExpiry + 1 + 'd' : '—'}</span>
+        <span class="mark">expires in: ${item.earliestExpiry !== null ? item.earliestExpiry + 'd' : '—'}</span>
       </div>
     `;
     container.appendChild(seg);
