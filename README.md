@@ -6,7 +6,9 @@ ExpireWise is a free, open-source recipe planner designed for simplicity as scho
 - Ingredient management with expiration date tracking.  
 - Recipe planning and filtering based on available ingredients.
 - Decent UI made using pure css.
-- Android app as .apk file *(download alpha releases)*
+- Android app as .apk file *(download beta release)*
+- iOS app as .ipa file *(download alpha release)*
+- Windows app as .exe file *(download beta release)*
 ## Privacy Policy  
 We prioritize privacy: no tracking, no third-party sharing, and complete data deletion upon account removal.  
 ## Installation  
