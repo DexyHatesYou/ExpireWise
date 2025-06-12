@@ -290,7 +290,7 @@ function renderList() {
         <span class="mark">${item.area}</span><br><p class="spacer"></p>
         <span class="mark ingr">${item.ingredientCount} ingredients</span>
         <span class="mark war">${item.missingCnt}!</span><br><p class="spacer"></p>
-        <span class="mark">expires in: ${item.earliestExpiry !== null ? item.earliestExpiry + 'd' : '—'}</span>
+        <span class="mark">expires in: ${item.earliestExpiry !== null ? item.earliestExpiry + 1 + 'd' : '—'}</span>
       </div>
     `;
     container.appendChild(seg);
