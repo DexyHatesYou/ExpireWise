@@ -145,11 +145,11 @@ Since we don't track anything, there's no way to recover your account. Just crea
 .then(response => response.json())
 .then(data => {
     if (data.status === "notFound") {
-        alert("notFound");
+        
         localStorage.setItem("spId", null);
         
     } else {
-        alert("Found: " + data.nickname);
+        
         window.location.href = "home.html";
         var nickname = data.nickname;
     }
@@ -221,12 +221,12 @@ document.head.appendChild(link);
             const result = await response.json();
 
             if (result.status === 'OKAY') {
-                // Show an alert with the sessionId
+               
               localStorage.setItem("spId", result.sessionId);
               console.log(spId);
-                alert(`Login successful! Your sessionId is: ${result.sessionId}`);
+                
 
-                // Optionally, you can redirect the user to the home page
+                
                 window.location.href = 'home.html';
             } else {
                 alert(result.message || 'Login failed');
